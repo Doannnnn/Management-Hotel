@@ -62,7 +62,7 @@
             <li class="active"><a href="../hotel/index.jsp">Home</a></li>
             <li><a href="../hotel/rooms.jsp">Rooms</a></li>
             <li><a href="../hotel/about-us.jsp">About Us</a></li>
-            <li><a href="../hotel/pages.jsp">Pages</a>
+            <li><a href="../hotel/room-details.jsp">Pages</a>
                 <ul class="dropdown">
                     <li><a href="../hotel/room-details.jsp">Room Details</a></li>
                     <li><a href="../hotel/blog-details.jsp">Blog Details</a></li>
@@ -140,7 +140,7 @@
                                 <li><a href="../hotel/index.jsp">Home</a></li>
                                 <li><a href="../hotel/rooms.jsp">Rooms</a></li>
                                 <li><a href="../hotel/about-us.jsp">About Us</a></li>
-                                <li><a href="../hotel/pages.jsp">Pages</a>
+                                <li><a href="../hotel/room-details.jsp">Pages</a>
                                     <ul class="dropdown">
                                         <li><a href="../hotel/room-details.jsp">Room Details</a></li>
                                         <li><a href="../hotel/blog-details.jsp">Blog Details</a></li>

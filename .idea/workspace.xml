@@ -9,7 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0248f7de-ea0f-45cd-acd1-13e3905b8bdb" name="Changes" comment="" />
+    <list default="true" id="0248f7de-ea0f-45cd-acd1-13e3905b8bdb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/hotel/contact.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/managementhotel/controller/HotelController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/hotel/about-us.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/hotel/about-us.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/hotel/blog-details.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/hotel/blog-details.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/hotel/blog.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/hotel/blog.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/hotel/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/hotel/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/hotel/room-details.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/hotel/room-details.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/hotel/rooms.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/hotel/rooms.jsp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,6 +33,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
@@ -34,23 +47,27 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2W3YW2miOSBrwMqLbLJarSZK9mZ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Management-Hotel/src/main/webapp/hotel&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/Management-Hotel",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Management-Hotel\src\main\webapp\hotel" />
@@ -165,7 +182,9 @@
       <workItem from="1695963480429" duration="260000" />
       <workItem from="1695969535259" duration="23000" />
       <workItem from="1695969586828" duration="4252000" />
-      <workItem from="1695974800423" duration="615000" />
+      <workItem from="1695974800423" duration="826000" />
+      <workItem from="1695976756917" duration="93000" />
+      <workItem from="1695976857544" duration="2019000" />
     </task>
     <servers />
   </component>

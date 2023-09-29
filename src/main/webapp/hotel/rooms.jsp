@@ -61,17 +61,17 @@
         <ul>
             <li class="active"><a href="../hotel/index.jsp">Home</a></li>
             <li><a href="../hotel/rooms.jsp">Rooms</a></li>
-            <li><a href="./about-us.html">About Us</a></li>
-            <li><a href="./pages.html">Pages</a>
+            <li><a href="../hotel/about-us.jsp">About Us</a></li>
+            <li><a href="#">Pages</a>
                 <ul class="dropdown">
-                    <li><a href="./room-details.html">Room Details</a></li>
-                    <li><a href="./blog-details.html">Blog Details</a></li>
+                    <li><a href="../hotel/room-details.jsp">Room Details</a></li>
+                    <li><a href="../hotel/blog-details.jsp">Blog Details</a></li>
                     <li><a href="#">Family Room</a></li>
                     <li><a href="#">Premium Room</a></li>
                 </ul>
             </li>
-            <li><a href="./blog.html">News</a></li>
-            <li><a href="./contact.html">Contact</a></li>
+            <li><a href="../hotel/blog.jsp">News</a></li>
+            <li><a href="../hotel/contact.jsp">Contact</a></li>
         </ul>
     </nav>
     <div id="mobile-menu-wrap"></div>
