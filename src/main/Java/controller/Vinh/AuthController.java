@@ -38,7 +38,6 @@ public class AuthController extends HttpServlet {
     }
 
     private void showRegister(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        req.setAttribute("roles", roleService.getRoles());
         req.setAttribute("message", req.getParameter("message"));
         req.getRequestDispatcher("/auth/login.jsp").forward(req,resp);
     }
@@ -68,8 +67,9 @@ public class AuthController extends HttpServlet {
     private Auth getUserByRequest(HttpServletRequest req){
         String name = req.getParameter("name");
         String email = req.getParameter("email");
+        String address=req.getParameter("address");
         String password = req.getParameter("password");
-        return new Auth(name,email,password);
+        return new Auth(name,email,address,password);
     }
     @Override
     public void init() throws ServletException {

@@ -4,22 +4,35 @@ public class Auth {
     private int id;
     private String name;
     private String email;
+    private String address;
     private String password;
     private Role role;
 
     public Auth() {
     }
-    public Auth(String name, String email, String password) {
+
+    public Auth( String name, String email, String address, String password) {
         this.name = name;
         this.email = email;
+        this.address = address;
         this.password = password;
     }
-    public Auth(int id, String name, String email, String password, Role role) {
+
+    public Auth(int id, String name, String email, String address, String password, Role role) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.address = address;
         this.password = password;
         this.role = role;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEmail() {

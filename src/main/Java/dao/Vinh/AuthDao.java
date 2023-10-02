@@ -11,13 +11,14 @@ import java.sql.SQLException;
 
 public class AuthDao extends DatabaseConnection{
     public void register(Auth auth){
-        final String REGISTER_USER = "INSERT INTO `login`.`logins` (`name`, `email`, `password` ) VALUES (?,?,?)";
+        final String REGISTER_USER = "INSERT INTO `quanlykhachsan`.`user` (`name`, `email`,`address`, `password` ) VALUES (?,?,?,?)";
         try {
             Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER);
             preparedStatement.setString(1, auth.getName());
             preparedStatement.setString(2, auth.getEmail());
-            preparedStatement.setString(3, auth.getPassword());
+            preparedStatement.setString(3, auth.getAddress());
+            preparedStatement.setString(4, auth.getPassword());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -25,10 +26,10 @@ public class AuthDao extends DatabaseConnection{
     }
 
     public Auth findByUsernameOrEmail(String usernameOrEmail){
-        var SELECT_BY_ID = "SELECT l.*, r.name role_name " +
-                " FROM logins l JOIN roles r on " +
-                " l.role_id = r.id " +
-                " WHERE  l.email = ? ";
+        var SELECT_BY_ID = "SELECT u.*, r.name role_name " +
+                " FROM user u JOIN roles r on " +
+                " u.role_id = r.id " +
+                " WHERE  u.email = ? ";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
             preparedStatement.setString(1, usernameOrEmail);
@@ -39,6 +40,7 @@ public class AuthDao extends DatabaseConnection{
                 auth.setId(rs.getInt("id"));
                 auth.setName(rs.getString("name"));
                 auth.setEmail(rs.getString("email"));
+                auth.setAddress(rs.getString("address"));
                 auth.setPassword(rs.getString("password"));
                 auth.setRole(new Role(rs.getInt("id"), rs.getString("role_name")));
                 return auth;

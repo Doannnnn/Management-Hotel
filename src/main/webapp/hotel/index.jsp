@@ -203,7 +203,8 @@
                                 <option value="">2 Room</option>
                             </select>
                         </div>
-                        <button type="submit">Check Availability</button>
+<%--                        chuyển hướng sang trang đăng nhập đăng kí--%>
+                        <button type="submit"> <a href="/auth/login.jsp">Check Availability</a> </button>
                     </form>
                 </div>
             </div>
