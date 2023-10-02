@@ -144,7 +144,7 @@
                                     <ul class="dropdown">
                                         <li><a href="../hotel/room-details.jsp">Room Details</a></li>
                                         <li><a href="../hotel/blog-details.jsp">Blog Details</a></li>
-                                        <li><a href="#">Family Room</a></li>
+                                        <li><a href="../hotel/bills.jsp">Bill</a></li>
                                         <li><a href="#">Premium Room</a></li>
                                     </ul>
                                 </li>
