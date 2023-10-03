@@ -73,12 +73,13 @@ public class RoomDAO extends DatabaseConnection {
     }
 
     public Room findById(int id){
-        String SELECT_ALL_ROOMS = "SELECT r.*, group_concat(i.url) as images FROM rooms r JOIN images i ON r.id = i.room_id where ( r.id = ? ) group by r.id;";
+        String SELECT_ROOMS_BY_ID = "SELECT r.*, group_concat(i.url) as images FROM rooms r JOIN images i ON r.id = i.room_id where (r.id = ?) group by r.id;";
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ROOMS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ROOMS_BY_ID)) {
             preparedStatement.setInt(1, id);
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()){
                 Room room = new Room();
                 room.setId(rs.getInt("id"));
                 room.setName(rs.getString("name"));
@@ -98,9 +99,11 @@ public class RoomDAO extends DatabaseConnection {
                 room.setImages(imageList);
                 room.setStatus(EStatus.valueOf(rs.getString("status")));
                 return room;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
     public String getToString(List<EAmenities> eAmenities) {
