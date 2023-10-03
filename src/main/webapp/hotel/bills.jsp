@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="../hotel/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
 <body>
@@ -64,7 +65,7 @@
             <li class="active"><a href="../hotel/index.jsp">Home</a></li>
             <li><a href="../hotel/rooms.jsp">Rooms</a></li>
             <li><a href="../hotel/about-us.jsp">About Us</a></li>
-            <li><a href="#">Pages</a>
+            <li><a href="../hotel/room-details.jsp">Pages</a>
                 <ul class="dropdown">
                     <li><a href="../hotel/room-details.jsp">Room Details</a></li>
                     <li><a href="../hotel/blog-details.jsp">Blog Details</a></li>
@@ -91,7 +92,7 @@
 <!-- Offcanvas Menu Section End -->
 
 <!-- Header Section Begin -->
-<header class="header-section header-normal">
+<header class="header-section">
     <div class="top-nav">
         <div class="container">
             <div class="row">
@@ -140,18 +141,18 @@
                         <nav class="mainmenu">
                             <ul>
                                 <li><a href="../hotel/index.jsp">Home</a></li>
-                                <li class="active"><a href="../hotel/rooms.jsp">Rooms</a></li>
-                                <li><a href="./about-us.html">About Us</a></li>
-                                <li><a href="./pages.html">Pages</a>
+                                <li><a href="../hotel/rooms.jsp">Rooms</a></li>
+                                <li><a href="../hotel/about-us.jsp">About Us</a></li>
+                                <li><a href="../hotel/room-details.jsp">Pages</a>
                                     <ul class="dropdown">
-                                        <li><a href="./room-details.html">Room Details</a></li>
-                                        <li><a href="./blog-details.html">Blog Details</a></li>
+                                        <li><a href="../hotel/room-details.jsp">Room Details</a></li>
+                                        <li><a href="../hotel/blog-details.jsp">Blog Details</a></li>
                                         <li><a href="#">Family Room</a></li>
                                         <li><a href="#">Premium Room</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="./blog.html">News</a></li>
-                                <li><a href="./hotel?action=create">Contact</a></li>
+                                <li class="active"><a href="../hotel/blog.jsp">News</a></li>
+                                <li><a href="../hotel/contact.jsp">Contact</a></li>
                             </ul>
                         </nav>
                         <div class="nav-right search-switch">
@@ -165,149 +166,64 @@
 </header>
 <!-- Header End -->
 
-<!-- Breadcrumb Section Begin -->
-<div class="breadcrumb-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb-text">
-                    <h2>Our Rooms</h2>
-                    <div class="bt-option">
-                        <a href="./home.html">Home</a>
-                        <span>Rooms</span>
-                    </div>
-                </div>
-            </div>
+<!-- Table -->
+<div class="container">
+    <form action="hotel?action=create" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
-    </div>
-</div>
-<!-- Breadcrumb Section End -->
-
-<!-- Rooms Section Begin -->
-<section class="rooms-section spad">
-    <div class="container">
-        <div class="row">
-            <c:forEach var="room" items="${rooms}">
-                <div class="col-lg-4 col-md-6">
-                    <div class="room-item">
-                        <img src="../hotel/img/room/${room.images[0].url}" alt="">
-                        <div class="ri-text">
-                            <h4>${room.name}</h4>
-                            <h3>${room.price}$</h3>
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td class="r-o">RoomClass:</td>
-                                    <td>${room.roomClass}</td>
-                                </tr>
-                                <tr>
-                                    <td class="r-o">Type:</td>
-                                    <td>${room.type}</td>
-                                </tr>
-                                <tr>
-                                    <td class="r-o">Description:</td>
-                                    <td>${room.description}</td>
-                                </tr>
-                                <tr>
-                                    <td class="r-o">Amenities:</td>
-                                    <td>${room.amenities}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <a href="#" class="primary-btn">More Details</a>
-                        </div>
-                    </div>
-                </div>
+        <div class="mb-3">
+            <label for="roomClass" class="form-label">RoomClass</label>
+            <select class="form-control" id="roomClass" name="roomClass" required>
+                <c:forEach var="roomClass" items="${roomClass}">
+                    <option value="${roomClass}">${roomClass}</option>
+                </c:forEach>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="type" class="form-label">Type</label>
+            <select class="form-control" id="type" name="type" required>
+                <c:forEach var="type" items="${types}">
+                    <option value="${type}">${type}</option>
+                </c:forEach>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="price" name="price" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="img" class="form-label">Image</label>
+            <input type="text" class="form-control" id="img" name="img" required>
+        </div>
+        <div class="mb-3">
+            <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label>
+            <c:forEach var="amenity" items="${amenities}">
+                <input type="checkbox" name="selectedAmenities" value="${amenity}" id="${amenity}">
+                <label for="${amenity}">${amenity}</label>
+                <br>
             </c:forEach>
-            <div class="col-lg-12">
-                <div class="room-pagination">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
-                </div>
-            </div>
         </div>
-    </div>
-</section>
-<!-- Rooms Section End -->
 
-<!-- Footer Section Begin -->
-<footer class="footer-section">
-    <div class="container">
-        <div class="footer-text">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="ft-about">
-                        <div class="logo">
-                            <a href="#">
-                                <img src="../hotel/img/footer-logo.png" alt="">
-                            </a>
-                        </div>
-                        <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
-                        <div class="fa-social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-tripadvisor"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 offset-lg-1">
-                    <div class="ft-contact">
-                        <h6>Contact Us</h6>
-                        <ul>
-                            <li>(12) 345 67890</li>
-                            <li>info.colorlib@gmail.com</li>
-                            <li>856 Cordia Extension Apt. 356, Lake, United State</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 offset-lg-1">
-                    <div class="ft-newslatter">
-                        <h6>New latest</h6>
-                        <p>Get the latest updates and offers.</p>
-                        <form action="#" class="fn-form">
-                            <input type="text" placeholder="Email">
-                            <button type="submit"><i class="fa fa-send"></i></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-control" id="status" name="status" required>
+                <c:forEach var="status" items="${status}">
+                    <option value="${status}">${status}</option>
+                </c:forEach>
+            </select>
         </div>
-    </div>
-    <div class="copyright-option">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-7">
-                    <ul>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Terms of use</a></li>
-                        <li><a href="#">Privacy</a></li>
-                        <li><a href="#">Environmental Policy</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-5">
-                    <div class="co-text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- Footer Section End -->
-
-<!-- Search model Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch"><i class="icon_close"></i></div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
+        <button type="submit" class="btn btn-primary">Tạo phòng</button>
+    </form>
 </div>
-<!-- Search model end -->
+
+
+<!-- Table End -->
 
 <!-- Js Plugins -->
 <script src="../hotel/js/jquery-3.3.1.min.js"></script>
