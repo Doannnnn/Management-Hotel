@@ -2,8 +2,10 @@ package model.Vinh;
 
 public class Auth {
     private int id;
+    private String img;
     private String name;
     private String email;
+    private String phone;
     private String address;
     private String password;
     private Role role;
@@ -11,20 +13,42 @@ public class Auth {
     public Auth() {
     }
 
-    public Auth( String name, String email, String address, String password) {
+
+
+    public Auth( String img, String name, String email, String phone, String address, String password) {
+        this.img = img;
         this.name = name;
         this.email = email;
+        this.phone = phone;
         this.address = address;
         this.password = password;
     }
 
-    public Auth(int id, String name, String email, String address, String password, Role role) {
+    public Auth(int id, String img, String name, String email, String phone, String address, String password, Role role) {
         this.id = id;
+        this.img = img;
         this.name = name;
         this.email = email;
+        this.phone = phone;
         this.address = address;
         this.password = password;
         this.role = role;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {

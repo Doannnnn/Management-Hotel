@@ -12,6 +12,8 @@
     <title>Title</title>
   <link rel="stylesheet" href="/auth/assets/css/style.css"></link>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
   <style>
@@ -28,7 +30,7 @@
   <h6 class="d-none" id="message">${message}</h6>
 </c:if>
 <div class="container" id="container">
-  <div class="form-container sign-up-container">
+  <div class="container sign-up-container">
     <form action="/auth?action=register" method="POST">
       <h1>Create Account</h1>
       <div class="social-container">
@@ -37,10 +39,16 @@
         <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
       </div>
       <span>or use your email for registration</span>
-      <input type="text" placeholder="Name"  name="name"  required/>
-      <input type="email" placeholder="Email" name="email" required/>
-      <input type="text" placeholder="Address" name="address" required/>
-      <input type="password" placeholder="Password" id="re_password" name="re_password" >
+      <input type="text" placeholder="Name"  name="name" id="name" required/>
+      <div id="nameError" class="error-message" style="display: none;"></div>
+      <input type="email" placeholder="Email" name="email" id="email"  required/>
+      <div id="emailError" class="error-message" style="display: none;"></div>
+      <input type="text" placeholder="Phone number" name="phone" id="phone" required/>
+      <div id="phoneError" class="error-message" style="display: none;"></div>
+      <input type="text" placeholder="Address" name="address" id="address" required/>
+      <div id="addressError" class="error-message" style="display: none;"></div>
+      <input type="password" placeholder="Password" id="re_password" name="re_password"  required>
+      <div id="passwordError" class="error-message" style="display: none;"></div>
       <input type="password" placeholder="Re_Password" id="password" name="password" onblur="checkPassword()" required />
       <div id="passwordMatchError" class="error-message">Mật khẩu không trùng khớp</div>
       <button>Sign Up</button>
@@ -57,7 +65,7 @@
       <span>or use your account</span>
       <input type="email" placeholder="Email" name="username" required/>
       <input type="password" placeholder="Password" name="password" required/>
-      <a href="#">Forgot your password?</a>
+      <a href="/auth/ForgotPassword.jsp">Forgot your password?</a>
       <button>Sign In</button>
     </form>
   </div>
@@ -76,36 +84,6 @@
     </div>
   </div>
 </div>
-<script>
-  const message = document.getElementById('message');
-  if (message !== null && message.innerHTML) {
-    toastr.success(message.innerHTML);
-  }
-</script>
-<script>
-  const signUpButton = document.getElementById('signUp');
-  const signInButton = document.getElementById('signIn');
-  const container = document.getElementById('container');
-
-  signUpButton.addEventListener('click', () => {
-    container.classList.add('right-panel-active');
-  });
-
-  signInButton.addEventListener('click', () => {
-    container.classList.remove('right-panel-active');
-  });
-
-  function checkPassword() {
-    var password = document.getElementById('password').value;
-    var rePassword = document.getElementById('re_password').value;
-    var errorDiv = document.getElementById('passwordMatchError');
-
-    if (rePassword !== password) {
-      errorDiv.style.display = 'block';
-    } else {
-      errorDiv.style.display = 'none';
-    }
-  }
-</script>
+<script src="/auth/assets/js/validate.js"></script>
 </body>
 </html>
