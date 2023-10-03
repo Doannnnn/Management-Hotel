@@ -213,7 +213,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <a href="/hotel-bill-detail?id=${room.id}" class="primary-btn">More Details</a>
+                            <a href="/hotel-page?action=room-detail&id=${room.id}" class="primary-btn">More Details</a>
                         </div>
                     </div>
                 </div>
