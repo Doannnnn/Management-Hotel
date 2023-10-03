@@ -71,6 +71,37 @@ public class RoomDAO extends DatabaseConnection {
         return -1;
     }
 
+    public Room findById(int id){
+        String SELECT_ALL_ROOMS = "SELECT r.*, group_concat(i.url) as images FROM rooms r JOIN images i ON r.id = i.room_id where ( r.id = ? ) group by r.id;";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ROOMS)) {
+            preparedStatement.setInt(1, id);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+                Room room = new Room();
+                room.setId(rs.getInt("id"));
+                room.setName(rs.getString("name"));
+                room.setRoomClass(ERoomClass.valueOf(rs.getString("roomclass")));
+                room.setType(EType.valueOf(rs.getString("type")));
+                room.setPrice(rs.getBigDecimal("price"));
+                room.setDescription(rs.getString("description"));
+                String amenitiesString = rs.getString("amenities");
+                String[] amnetArray = amenitiesString.split(",");
+                List<EAmenities> amenitiesList = Arrays.stream(amnetArray).map(EAmenities::valueOf).collect(Collectors.toList());
+                room.setAmenities(amenitiesList);
+                String imageUrl = rs.getString("images");
+                List<Image> imageList = new ArrayList<>();
+                for (var item : imageUrl.split(",")) {
+                    imageList.add(new Image(item));
+                }
+                room.setImages(imageList);
+                room.setStatus(EStatus.valueOf(rs.getString("status")));
+                return room;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public String getToString(List<EAmenities> eAmenities) {
         return Arrays.stream(EAmenities.values())
                 .map(Enum::name)

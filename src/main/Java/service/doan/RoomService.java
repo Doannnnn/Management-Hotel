@@ -50,4 +50,8 @@ public class RoomService {
         int roomId = roomDAO.create(room);
         imageDAO.create(imageList, roomId);
     }
+    public Room findById(HttpServletRequest req){
+        int id = Integer.parseInt(req.getParameter("id"));
+        return roomDAO.findById(id);
+    }
 }
