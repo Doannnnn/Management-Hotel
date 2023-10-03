@@ -84,6 +84,6 @@
     </div>
   </div>
 </div>
-<script src="/auth/assets/js/validate.js"></script>
+<script src="/auth/assets/js/validex.js"></script>
 </body>
 </html>

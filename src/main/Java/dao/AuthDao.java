@@ -2,7 +2,11 @@ package dao;
 
 
 
+<<<<<<< Updated upstream
 import dao.DatabaseConnection;
+=======
+
+>>>>>>> Stashed changes
 import model.Auth;
 import model.Role;
 
