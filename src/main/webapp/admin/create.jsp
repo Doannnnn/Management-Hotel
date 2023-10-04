@@ -84,7 +84,7 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="/admin" class="dropdown-item active">Room</a>
+                        <a href="/admin" class="dropdown-item">Room</a>
                         <a href="admin?action=create" class="dropdown-item">Create</a>
                         <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
@@ -244,7 +244,6 @@
                         <label style="margin-left: 5px" for="${amenity}">${amenity}</label>
                     </c:forEach>
                 </div>
-
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-control" id="status" name="status" required>

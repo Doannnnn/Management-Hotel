@@ -10,6 +10,10 @@ public class Booking {
     private int numberRoom;
     private Auth auth;
 
+    public Booking(){
+
+    }
+
     public Booking(int id, Date checkInDate, Date checkOutDate, int numberGuests, int numberRoom, Auth auth) {
         this.id = id;
         this.checkInDate = checkInDate;
