@@ -80,19 +80,19 @@
                 </div>
             </div>
             <div class="navbar-nav w-100">
-                <a href="/admin" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Rooms</a>
-                <a href="admin?action=create" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Create</a>
-                <a href="admin/edit.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Edit</a>
+                <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                     <div class="dropdown-menu bg-transparent border-0">
-                        <a href="button.html" class="dropdown-item">Buttons</a>
-                        <a href="typography.html" class="dropdown-item">Typography</a>
-                        <a href="element.html" class="dropdown-item">Other Elements</a>
+                        <a href="/admin" class="dropdown-item active">Room</a>
+                        <a href="admin?action=create" class="dropdown-item">Create</a>
+                        <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
                 </div>
-                <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
+                <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
+                <a href="table.html" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Tables</a>
+                <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                     <div class="dropdown-menu bg-transparent border-0">
@@ -235,7 +235,14 @@
                 <div class="mb-3">
                     <label for="img" class="form-label">Image</label>
                     <input type="file" class="form-control" id="img" name="img" accept="image/*" multiple required>
-                    <div id="image-preview"></div>
+                    <div id="image-preview">
+                        <c:forEach items="${room.images}" var="image">
+                            <div class="img-container">
+                                <img src="../hotel/img/room/${image.url}" style="width: 100px; height: auto">
+                                <span class="delete-icon">x</span>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label> <br>
