@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DASHMIN - Admin</title>
+    <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -32,24 +32,6 @@
     <!-- Template Stylesheet -->
     <link href="/admin/css/style.css" rel="stylesheet">
     <link href="/admin/css/app.css" rel="stylesheet">
-        <style>
-        .img-container {
-            display: inline-block;
-            position: relative;
-            margin: 10px;
-        }
-
-        .delete-icon {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: #ffffff;
-            color: #ff0000;
-            padding: 2px 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-    </style>
 </head>
 
 <body>
@@ -67,7 +49,7 @@
     <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-light navbar-light">
             <a href="index.html" class="navbar-brand mx-4 mb-3">
-                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>ADMIN</h3>
+                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
             </a>
             <div class="d-flex align-items-center ms-4 mb-4">
                 <div class="position-relative">
@@ -82,7 +64,7 @@
             <div class="navbar-nav w-100">
                 <a href="/admin" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Rooms</a>
                 <a href="admin?action=create" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Create</a>
-                <a href="admin/edit.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Edit</a>
+                <a href="edit.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Edit</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                     <div class="dropdown-menu bg-transparent border-0">
@@ -140,7 +122,7 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
                                     <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                     <small>15 minutes ago</small>
@@ -150,7 +132,7 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
                                     <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                     <small>15 minutes ago</small>
@@ -211,7 +193,7 @@
                 <div class="mb-3">
                     <label for="roomClass" class="form-label">RoomClass</label>
                     <select class="form-control" id="roomClass" name="roomClass" required>
-                        <c:forEach var="roomClassItem" items="${roomClass}">
+                        <c:forEach var="roomClassItem" items="${roomClasses}">
                             <option value="${roomClassItem}" ${room.roomClass == roomClassItem ? 'selected' : ''}>${roomClassItem}</option>
                         </c:forEach>
                     </select>
@@ -234,20 +216,19 @@
                 </div>
                 <div class="mb-3">
                     <label for="img" class="form-label">Image</label>
-                    <input type="file" class="form-control" id="img" name="img" accept="image/*" multiple required>
-                    <div id="image-preview"></div>
+                    <input type="text" class="form-control" id="img" name="img" value="${room.img}" required>
                 </div>
                 <div class="mb-3">
                     <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label> <br>
                     <c:forEach var="amenity" items="${amenities}">
-                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}" ${room.amenities.contains(amenity) ? 'checked' : ''}>
+                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}" ${room.selectedAmenities.contains(amenity) ? 'checked' : ''}>
                         <label style="margin-left: 5px" for="${amenity}">${amenity}</label>
                     </c:forEach>
                 </div>
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-control" id="status" name="status" required>
-                        <c:forEach var="statusItem" items="${status}">
+                        <c:forEach var="statusItem" items="${statuses}">
                             <option value="${statusItem}" ${room.status == statusItem ? 'selected' : ''}>${statusItem}</option>
                         </c:forEach>
                     </select>
@@ -278,6 +259,7 @@
 
 
     <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 <!-- JavaScript Libraries -->
@@ -293,53 +275,6 @@
 
 <!-- Template Javascript -->
 <script src="/admin/js/main.js"></script>
-<script>
-    function previewImages() {
-        var preview = document.getElementById("image-preview");
-        var files = document.querySelector('input[type=file]').files;
-
-        preview.innerHTML = ""; // Xóa các hình ảnh trước đó (nếu có)
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            var reader = new FileReader();
-
-            reader.onload = function (event) {
-                var imgContainer = document.createElement("div");
-                imgContainer.classList.add("img-container");
-
-                var img = document.createElement("img");
-                img.src = event.target.result;
-                img.style.width = "100px"; // Kích thước hình ảnh xem trước
-                img.style.height = "auto";
-
-                var deleteIcon = document.createElement("span");
-                deleteIcon.classList.add("delete-icon");
-                deleteIcon.innerHTML = "&times;";
-
-                // Gắn sự kiện click vào biểu tượng "x" để xóa hình ảnh và tệp tin
-                deleteIcon.addEventListener("click", function () {
-                    imgContainer.remove();
-                    var input = document.getElementById("img");
-                    var files = Array.from(input.files);
-                    var index = files.indexOf(file);
-                    if (index !== -1) {
-                        files.splice(index, 1);
-                    }
-                    input.files = new FileList(...files);
-                });
-
-                imgContainer.appendChild(img);
-                imgContainer.appendChild(deleteIcon);
-                preview.appendChild(imgContainer);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    }
-
-    document.getElementById("img").addEventListener("change", previewImages);
-</script>
 </body>
 
 </html>

@@ -30,16 +30,11 @@ public class RoomController extends HttpServlet {
                 showEdit(req, resp);
                 break;
             case "delete":
-                delete(req, resp);
+                showCreate(req, resp);
                 break;
             default:
                 showRoom(req, resp);
         }
-    }
-
-    private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        roomService.delete(req);
-        req.getRequestDispatcher("admin/room.jsp").forward(req,resp);
     }
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -75,8 +70,8 @@ public class RoomController extends HttpServlet {
                 roomService.create(req);
                 resp.sendRedirect("/admin");
                 break;
-            case "edit":
-                roomService.update(req);
+            case "eidt":
+                roomService.create(req);
                 resp.sendRedirect("/admin");
                 break;
         }
