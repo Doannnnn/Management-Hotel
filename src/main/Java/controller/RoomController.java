@@ -37,6 +37,14 @@ public class RoomController extends HttpServlet {
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        roomService.delete(req);
+        req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
+    }
+
+>>>>>>> Stashed changes
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("room", roomService.findById(req));
         req.setAttribute("roomClass", ERoomClass.values());
@@ -55,8 +63,14 @@ public class RoomController extends HttpServlet {
     }
 
     private void showRoom(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pageString = req.getParameter("page");
+        if (pageString == null) {
+            pageString = "1";
+        }
+        req.setAttribute("page", roomService.(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("rooms", roomService.findAllRoom());
-        req.getRequestDispatcher("admin/room.jsp").forward(req,resp);
+        req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
     }
 
     @Override

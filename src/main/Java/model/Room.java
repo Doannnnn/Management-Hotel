@@ -15,7 +15,7 @@ public class Room {
     private String description;
     private List<Image> images;
     private List<EAmenities> amenities;
-        private EStatus status;
+    private EStatus status;
 
     public Room(){};
 

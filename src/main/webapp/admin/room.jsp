@@ -211,7 +211,7 @@
                             <td>${room.price}</td>
                             <td>${room.description}</td>
                             <td><img src="../hotel/img/room/${room.images[0].url}" style="width: 100px; height: auto"></td>
-                            <td>${room.amenities}</td>
+                            <td>${room.getStringList()}</td>
                             <td>${room.status}</td>
                             <td>
                                 <div class="text-right">
