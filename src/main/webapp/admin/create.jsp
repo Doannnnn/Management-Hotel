@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DASHMIN - Bootstrap Admin Template</title>
+    <title>DASHMIN - Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -49,7 +49,7 @@
     <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-light navbar-light">
             <a href="index.html" class="navbar-brand mx-4 mb-3">
-                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
+                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>ADMIN</h3>
             </a>
             <div class="d-flex align-items-center ms-4 mb-4">
                 <div class="position-relative">
@@ -64,7 +64,7 @@
             <div class="navbar-nav w-100">
                 <a href="/admin" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Rooms</a>
                 <a href="admin?action=create" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Create</a>
-                <a href="edit.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Edit</a>
+                <a href="admin/edit.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Edit</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                     <div class="dropdown-menu bg-transparent border-0">
@@ -122,7 +122,7 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
                                     <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                     <small>15 minutes ago</small>
@@ -132,7 +132,7 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
                                     <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                     <small>15 minutes ago</small>
@@ -216,7 +216,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="img" class="form-label">Image</label>
-                    <input type="text" class="form-control" id="img" name="img" required>
+                    <input type="file" class="form-control" id="img" name="img" accept="image/*" multiple required>
                 </div>
                 <div class="mb-3">
                     <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label> <br>
@@ -259,7 +259,6 @@
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 <!-- JavaScript Libraries -->
