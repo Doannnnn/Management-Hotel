@@ -87,10 +87,10 @@ public class AuthDao extends DatabaseConnection {
             if (rs.next()) {
                 Auth auth = new Auth();
                 auth.setId(rs.getInt("id"));
-                auth.setName(rs.getString("img"));
+                auth.setImg(rs.getString("img"));
                 auth.setName(rs.getString("name"));
                 auth.setEmail(rs.getString("email"));
-                auth.setEmail(rs.getString("phone"));
+                auth.setPhone(rs.getString("phone"));
                 auth.setAddress(rs.getString("address"));
                 auth.setPassword(rs.getString("password"));
                 auth.setRole(new Role(rs.getInt("id"), rs.getString("role_name")));
@@ -132,5 +132,27 @@ public class AuthDao extends DatabaseConnection {
         } else {
             System.out.println("Email does not exist in the database");
         }
+    }
+    public Auth findByID(int id){
+        var SELECT_BY_ID = "SELECT u.* FROM user u WHERE u.id= ? ;";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            System.out.println(preparedStatement);
+            var rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                Auth auth = new Auth();
+                auth.setId(rs.getInt("id"));
+                auth.setImg(rs.getString("img"));
+                auth.setName(rs.getString("name"));
+                auth.setEmail(rs.getString("email"));
+                auth.setPhone(rs.getString("phone"));
+                auth.setAddress(rs.getString("address"));
+                return auth;
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }

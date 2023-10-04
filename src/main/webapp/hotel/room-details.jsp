@@ -207,7 +207,7 @@
                                     <i class="icon_star"></i>
                                     <i class="icon_star-half_alt"></i>
                                 </div>
-                                <a href="#">Booking Now</a>
+                                <a href="/hotel-page?action=bill-detail&id=${room.id}">Booking Now</a>
                             </div>
                         </div>
                         <h2>${room.price}$<span>/Pernight</span></h2>

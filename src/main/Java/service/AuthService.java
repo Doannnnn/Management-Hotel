@@ -82,4 +82,7 @@ public class AuthService {
             req.getRequestDispatcher("/auth/change-password.jsp");
         }
     }
+    public Auth findByID(int id){
+        return authDao.findByID(id);
+    }
 }

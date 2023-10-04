@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -24,6 +26,9 @@
     <link rel="stylesheet" href="../hotel/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
+    <link rel="stylesheet" href="../bill/snippet.css" type="text/css">
+    <link rel="stylesheet" href="../owlcarousel/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="../owlcarousel/assets/owl.theme.default.min.css">
 </head>
 
 <body>
@@ -129,7 +134,7 @@
                 <div class="col-lg-2">
                     <div class="logo">
                         <a href="../hotel/index.jsp">
-                            <img src="img/logo.png" alt="">
+                            <img src="../hotel/img/logo.png" alt="">
                         </a>
                     </div>
                 </div>
@@ -169,11 +174,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <h2>Our Rooms</h2>
-                    <div class="bt-option">
-                        <a href="../hotel/index.jsp">Home</a>
-                        <span>Rooms</span>
-                    </div>
+                    <h2>YOUR ORDER</h2>
                 </div>
             </div>
         </div>
@@ -183,161 +184,144 @@
 
 <!-- Room Details Section Begin -->
 <section class="room-details-section spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="room-details-item">
-                    <img src="../hotel/img/room/room-details.jpg" alt="">
-                    <div class="rd-text">
-                        <div class="rd-title">
-                            <h3>Premium King Room</h3>
-                            <div class="rdt-right">
-                                <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
+                <div class="containers d-lg-flex">
+                    <div class="box-1 bg-light user">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="../hotel/img/room/avatar/${user.img}"
+                                 class="pic rounded-circle" alt="">
+                            <p class="ps-2 name">${user.name}</p>
+                        </div>
+                        <div class="box-inner-1 pb-3 mb-3 ">
+                            <div class="d-flex justify-content-between mb-3 user details">
+                                <p class="fw-bold">${room.name}</p>
+                                <p class="fw-lighter"><span class="fas fa-dollar-sign"></span>${room.price}$</p>
+                            </div>
+                            <div class="owl-carousel owl-theme">
+                                <c:forEach var="img" items="${room.images}">
+                                    <img class="owl-lazy" data-src="../hotel/img/room/${img.url}" alt="" style="width: 100%; height: 100%;">
+                                </c:forEach>
+                            </div>
+
+
+                            <p class="dis info my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate quos ipsa
+                                sed officiis odio
+                            </p>
+                            <div class="radiobtn">
+                                <input type="radio" name="box" id="one">
+                                <input type="radio" name="box" id="two">
+                                <input type="radio" name="box" id="three">
+                                <label for="one" class="box py-2 first">
+                                    <div class="d-flex align-items-start">
+                                        <span class="circle"></span>
+                                        <div class="course">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="fw-bold">
+                                        Collection 01
+                                    </span>
+                                                <span class="fas fa-dollar-sign">29</span>
+                                            </div>
+                                            <span>10 x Presets. Released in 2018</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label for="two" class="box py-2 second">
+                                    <div class="d-flex">
+                                        <span class="circle"></span>
+                                        <div class="course">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="fw-bold">
+                                        Collection 01
+                                    </span>
+                                                <span class="fas fa-dollar-sign">29</span>
+                                            </div>
+                                            <span>10 x Presets. Released in 2018</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label for="three" class="box py-2 third">
+                                    <div class="d-flex">
+                                        <span class="circle"></span>
+                                        <div class="course">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="fw-bold">
+                                        Collection 01
+                                    </span>
+                                                <span class="fas fa-dollar-sign">29</span>
+                                            </div>
+                                            <span>10 x Presets. Released in 2018</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-2">
+                        <div class="box-inner-2">
+                            <div>
+                                <p class="fw-bold">Payment Details</p>
+                                <p class="dis mb-3">Complete your purchase by providing your payment details</p>
+                            </div>
+                            <form action="">
+                                <div class="mb-3">
+                                    <p class="dis fw-bold mb-2">Email address</p>
+                                    <input class="form-control" type="email" value="luke@skywalker.com">
                                 </div>
-                                <a href="#">Booking Now</a>
-                            </div>
-                        </div>
-                        <h2>159$<span>/Pernight</span></h2>
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td class="r-o">Size:</td>
-                                <td>30 ft</td>
-                            </tr>
-                            <tr>
-                                <td class="r-o">Capacity:</td>
-                                <td>Max persion 5</td>
-                            </tr>
-                            <tr>
-                                <td class="r-o">Bed:</td>
-                                <td>King Beds</td>
-                            </tr>
-                            <tr>
-                                <td class="r-o">Services:</td>
-                                <td>Wifi, Television, Bathroom,...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <p class="f-para">Motorhome or Trailer that is the question for you. Here are some of the
-                            advantages and disadvantages of both, so you will be confident when purchasing an RV.
-                            When comparing Rvs, a motorhome or a travel trailer, should you buy a motorhome or fifth
-                            wheeler? The advantages and disadvantages of both are studied so that you can make your
-                            choice wisely when purchasing an RV. Possessing a motorhome or fifth wheel is an
-                            achievement of a lifetime. It can be similar to sojourning with your residence as you
-                            search the various sites of our great land, America.</p>
-                        <p>The two commonly known recreational vehicle classes are the motorized and towable.
-                            Towable rvs are the travel trailers and the fifth wheel. The rv travel trailer or fifth
-                            wheel has the attraction of getting towed by a pickup or a car, thus giving the
-                            adaptability of possessing transportation for you when you are parked at your campsite.
-                        </p>
-                    </div>
-                </div>
-                <div class="rd-reviews">
-                    <h4>Reviews</h4>
-                    <div class="review-item">
-                        <div class="ri-pic">
-                            <img src="../hotel/img/room/avatar/avatar-1.jpg" alt="">
-                        </div>
-                        <div class="ri-text">
-                            <span>27 Aug 2019</span>
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star-half_alt"></i>
-                            </div>
-                            <h5>Brandon Kelley</h5>
-                            <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                magnam.</p>
-                        </div>
-                    </div>
-                    <div class="review-item">
-                        <div class="ri-pic">
-                            <img src="../hotel/img/room/avatar/avatar-2.jpg" alt="">
-                        </div>
-                        <div class="ri-text">
-                            <span>27 Aug 2019</span>
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star-half_alt"></i>
-                            </div>
-                            <h5>Brandon Kelley</h5>
-                            <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                magnam.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="review-add">
-                    <h4>Add Review</h4>
-                    <form action="#" class="ra-form">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <input type="text" placeholder="Name*">
-                            </div>
-                            <div class="col-lg-6">
-                                <input type="text" placeholder="Email*">
-                            </div>
-                            <div class="col-lg-12">
                                 <div>
-                                    <h5>You Rating:</h5>
-                                    <div class="rating">
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star-half_alt"></i>
+                                    <p class="dis fw-bold mb-2">Card details</p>
+                                    <div class="d-flex align-items-center justify-content-between card-atm border rounded">
+                                        <div class="fab fa-cc-visa ps-3"></div>
+                                        <input type="text" class="form-control" placeholder="Card Details">
+                                        <div class="d-flex w-50">
+                                            <input type="text" class="form-control px-0" placeholder="MM/YY">
+                                            <input type="password" maxlength=3 class="form-control px-0" placeholder="CVV">
+                                        </div>
+                                    </div>
+                                    <div class="my-3 cardname">
+                                        <p class="dis fw-bold mb-2">Cardholder name</p>
+                                        <input class="form-control" type="text">
+                                    </div>
+                                    <div class="address">
+                                        <p class="dis fw-bold mb-3">Billing address</p>
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected hidden>United States</option>
+                                            <option value="1">India</option>
+                                            <option value="2">Australia</option>
+                                            <option value="3">Canada</option>
+                                        </select>
+                                        <div class="d-flex">
+                                            <input class="form-control zip" type="text" placeholder="ZIP">
+                                            <input class="form-control state" type="text" placeholder="State">
+                                        </div>
+                                        <div class=" my-3">
+                                            <p class="dis fw-bold mb-2">VAT Number</p>
+                                            <div class="inputWithcheck">
+                                                <input class="form-control" type="text" value="GB012345B9">
+                                                <span class="fas fa-check"></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column dis">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <p>Subtotal</p>
+                                                <p><span class="fas fa-dollar-sign"></span>33.00</p>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <p>VAT<span>(20%)</span></p>
+                                                <p><span class="fas fa-dollar-sign"></span>2.80</p>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <p class="fw-bold">Total</p>
+                                                <p class="fw-bold"><span class="fas fa-dollar-sign"></span>35.80</p>
+                                            </div>
+                                            <div class="btn btn-primary mt-2">Pay<span class="fas fa-dollar-sign px-1"></span>35.80
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <textarea placeholder="Your Review"></textarea>
-                                <button type="submit">Submit Now</button>
-                            </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="room-booking">
-                    <h3>Your Reservation</h3>
-                    <form action="#">
-                        <div class="check-date">
-                            <label for="date-in">Check In:</label>
-                            <input type="text" class="date-input" id="date-in">
-                            <i class="icon_calendar"></i>
-                        </div>
-                        <div class="check-date">
-                            <label for="date-out">Check Out:</label>
-                            <input type="text" class="date-input" id="date-out">
-                            <i class="icon_calendar"></i>
-                        </div>
-                        <div class="select-option">
-                            <label for="guest">Guests:</label>
-                            <select id="guest">
-                                <option value="">3 Adults</option>
-                            </select>
-                        </div>
-                        <div class="select-option">
-                            <label for="room">Room:</label>
-                            <select id="room">
-                                <option value="">1 Room</option>
-                            </select>
-                        </div>
-                        <button type="submit">Check Availability</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </section>
 <!-- Room Details Section End -->
 
@@ -353,7 +337,7 @@
                                 <img src="../hotel/img/footer-logo.png" alt="">
                             </a>
                         </div>
-                        <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
+                        <p>We inspire and reach millions of travelers<br/> across 90 local websites</p>
                         <div class="fa-social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -398,9 +382,14 @@
                     </ul>
                 </div>
                 <div class="col-lg-5">
-                    <div class="co-text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                    <div class="co-text">
+                        <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                            All rights reserved | This template is made with <i class="fa fa-heart"
+                                                                                aria-hidden="true"></i> by <a
+                                    href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -428,6 +417,16 @@
 <script src="../hotel/js/jquery.slicknav.js"></script>
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
+<script src="../owlcarousel/jquery.min.js"></script>
+<script src="../owlcarousel/owl.carousel.min.js"></script>
+<script>
+    $('.owl-carousel').owlCarousel({
+        items:1,
+        lazyLoad:true,
+        loop:true,
+        margin:10
+    });
+</script>
 </body>
 
 </html>

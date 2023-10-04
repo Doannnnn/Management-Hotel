@@ -1,5 +1,6 @@
 package controller;
 
+import service.AuthService;
 import service.RatingService;
 import service.RoomService;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 public class HotelController extends HttpServlet {
     private RoomService roomService;
     private RatingService ratingService;
+    private AuthService authService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -24,7 +26,7 @@ public class HotelController extends HttpServlet {
             case "room"-> showRoom(req,resp);
             case "room-detail"-> showRoomDetail(req,resp);
             case "about-us"-> showAboutUS(req,resp);
-            case "bill"-> showBill(req,resp);
+            case "bill-detail"-> showBill(req,resp);
             case "blog-details"-> showBlogDetail(req,resp);
             case "blog"-> showBlog(req,resp);
             case "contact"-> showContact(req,resp);
@@ -52,7 +54,9 @@ public class HotelController extends HttpServlet {
     }
 
     private void showBill(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("hotel/bill-detail.jsp").forward(req,resp);
+        req.setAttribute("user",authService.findByID(7));
+        req.setAttribute("room",roomService.findById(req));
+        req.getRequestDispatcher("bill/bill-detail.jsp").forward(req,resp);
     }
 
     private void showAboutUS(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -77,5 +81,6 @@ public class HotelController extends HttpServlet {
     public void init() throws ServletException {
         roomService = new RoomService();
         ratingService = new RatingService();
+        authService = new AuthService();
     }
 }
