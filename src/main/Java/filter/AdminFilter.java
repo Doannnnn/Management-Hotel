@@ -10,21 +10,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/admin/*", "/bill/*"})
+@WebFilter("/admin/*")
 public class AdminFilter implements Filter {
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpSession session = ((HttpServletRequest)servletRequest).getSession();
-        Auth auth = (Auth) session.getAttribute("user");
-        if(auth == null){
-            ((HttpServletResponse)servletResponse).sendRedirect("/auth");
-            return;
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpSession session = ((HttpServletRequest)request).getSession();
+        Auth auth = (Auth) session.getAttribute("auth");
+        String url = ((HttpServletRequest) request).getRequestURI();
+        if(url.contains("css") || url.contains("lib")|| url.contains("img")|| url.contains("js")|| url.contains("scss")){
+            chain.doFilter(request, response);
+        }else{
+            if(auth == null){
+                ((HttpServletResponse)response).sendRedirect("/auth?message=You_need_Login");
+                return;
+            }
+            if(!auth.getRole().getName().equalsIgnoreCase("ADMIN")){
+                ((HttpServletResponse)response).sendRedirect("/auth?message=You_need_Login");
+                return;
+            }
         }
-        if(!auth.getRole().getName().equals("ADMIN")){
-            ((HttpServletResponse)servletResponse).sendRedirect("/auth");
-            return;
-        }
-        filterChain.doFilter(servletRequest, servletResponse);
-
+        chain.doFilter(request, response);
     }
 }

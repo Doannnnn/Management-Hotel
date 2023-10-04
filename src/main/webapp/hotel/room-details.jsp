@@ -28,6 +28,23 @@
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
     <link rel="stylesheet" href="../owlcarousel/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="../owlcarousel/assets/owl.theme.default.min.css">
+    <style>
+        .rating {
+            color: gray;
+        }
+
+        .rating .icon_star {
+            font-size: 24px;
+            cursor: pointer;
+            color: gray;
+            transition: color 0.2s;
+        }
+
+        .rating .icon_star.active,
+        .rating .icon_star:hover {
+            color: yellow;
+        }
+    </style>
 </head>
 
 <body>
@@ -282,14 +299,16 @@
                             </div>
                             <div class="col-lg-12">
                                 <div>
-                                    <h5>You Rating:</h5>
                                     <div class="rating">
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star-half_alt"></i>
+                                        <i class="icon_star" onclick="rateStar(1)" onmouseover="highlightStars(1)" onmouseleave="clearStars()"></i>
+                                        <i class="icon_star" onclick="rateStar(2)" onmouseover="highlightStars(2)" onmouseleave="clearStars()"></i>
+                                        <i class="icon_star" onclick="rateStar(3)" onmouseover="highlightStars(3)" onmouseleave="clearStars()"></i>
+                                        <i class="icon_star" onclick="rateStar(4)" onmouseover="highlightStars(4)" onmouseleave="clearStars()"></i>
+                                        <i class="icon_star" onclick="rateStar(5)" onmouseover="highlightStars(5)" onmouseleave="clearStars()"></i>
                                     </div>
+
+                                    <div class="average-rating">Đánh giá trung bình: <span id="average-rating-value">0</span></div>
+                                    <div class="user-rating">Đánh giá của bạn: <span id="user-rating-value">0</span></div>
                                 </div>
                                 <textarea placeholder="Your Review"></textarea>
                                 <button type="submit">Submit Now</button>
@@ -429,6 +448,53 @@
         loop:true,
         margin:10
     });
+    const stars = document.querySelectorAll('.icon_star');
+    let rating = 0;
+
+    function clearStars() {
+        if (rating === 0) {
+            stars.forEach(star => {
+                star.classList.remove('active');
+            });
+        }
+    }
+
+    function highlightStars(count) {
+        stars.forEach((star, index) => {
+            if (index < count) {
+                star.classList.add('active');
+            }
+        });
+    }
+
+    function rateStar(selectedRating) {
+        rating = selectedRating;
+
+        clearStars();
+        highlightStars(rating);
+
+        // Gửi yêu cầu đánh giá đến máy chủ hoặc thực hiện các xử lý khác
+        console.log(`Người dùng đã đánh giá ${rating} sao`);
+
+        // Cập nhật giá trị hiển thị đánh giá trung bình
+        const averageRatingValue = document.getElementById('average-rating-value');
+        averageRatingValue.textContent = rating;
+
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        const loggedIn = checkUserLoggedIn();
+
+        if (loggedIn) {
+            // Cập nhật giá trị hiển thị đánh giá của người dùng đã đăng nhập
+            const userRatingValue = document.getElementById('user-rating-value');
+            userRatingValue.textContent = rating;
+        }
+    }
+
+    function checkUserLoggedIn() {
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        // Trả về true nếu người dùng đã đăng nhập, ngược lại trả về false
+        return true; // Giả sử người dùng đã đăng nhập
+    }
 </script>
 </body>
 

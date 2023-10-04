@@ -123,3 +123,59 @@ function validatePassword() {
 
 // Xử lý sự kiện khi người dùng rời khỏi trường mật khẩu
 document.getElementById("re_password").addEventListener("blur", validatePassword);
+
+function validateForm() {
+    var name = document.getElementById("name").value;
+    var email = document.getElementById("email").value;
+    var phone = document.getElementById("phone").value;
+    var address = document.getElementById("address").value;
+    var password = document.getElementById("password").value;
+    var rePassword = document.getElementById("re_password").value;
+
+    // Kiểm tra điều kiện hợp lệ cho từng trường
+    var isValid = true;
+
+    if (name === "") {
+        document.getElementById("nameError").innerHTML = "Vui lòng nhập tên";
+        document.getElementById("nameError").style.display = "block";
+        isValid = false;
+    }
+
+    if (email === "") {
+        document.getElementById("emailError").innerHTML = "Vui lòng nhập email";
+        document.getElementById("emailError").style.display = "block";
+        isValid = false;
+    }
+
+    if (phone === "") {
+        document.getElementById("phoneError").innerHTML = "Vui lòng nhập số điện thoại";
+        document.getElementById("phoneError").style.display = "block";
+        isValid = false;
+    }
+
+    if (address === "") {
+        document.getElementById("addressError").innerHTML = "Vui lòng nhập địa chỉ";
+        document.getElementById("addressError").style.display = "block";
+        isValid = false;
+    }
+
+    if (password === "") {
+        document.getElementById("passwordError").innerHTML = "Vui lòng nhập mật khẩu";
+        document.getElementById("passwordError").style.display = "block";
+        isValid = false;
+    }
+
+    if (password !== rePassword) {
+        document.getElementById("passwordMatchError").style.display = "block";
+        isValid = false;
+    }
+
+    // Nếu các trường không hợp lệ, ngăn chặn gửi dữ liệu đến máy chủ và vô hiệu hóa nút "Sign Up"
+    var signUpButton = document.getElementById("signUpButton");
+    if (!isValid) {
+        signUpButton.disabled = true;
+        return false;
+    } else {
+        signUpButton.disabled = false;
+    }
+}

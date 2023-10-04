@@ -44,8 +44,8 @@ public class AuthService {
             HttpSession session = req.getSession();
             session.setAttribute("auth", auth); // luu vo kho
             if (auth.getRole().getName().equals("ADMIN")) {
-                session.setAttribute("auth",getAuth("username") );
-                req.getRequestDispatcher("/admin/room.jsp").forward(req,resp);
+                session.setAttribute("auth",getAuth("username"));
+                req.getRequestDispatcher("/admin/index.jsp").forward(req,resp);
 //                Chuyển hướng trang admin
             } else {
                 //Chuyển hướng trang người dùng
@@ -65,7 +65,7 @@ public class AuthService {
             req.getRequestDispatcher("/auth/change-password.jsp");
         } else {
             // Email không tồn tại, hiển thị thông báo lỗi
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/auth/ForgotPassword.jsp");
+            req.getRequestDispatcher("/auth/ForgotPassword.jsp");
 
         }
         return emailExists;
