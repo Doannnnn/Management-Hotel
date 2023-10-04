@@ -13,15 +13,28 @@ public class Auth {
     public Auth() {
     }
 
+    public Auth(String img, String name) {
+        this.img = img;
+        this.name = name;
+    }
 
-
-    public Auth( String img, String name, String email, String phone, String address, String password) {
+    public Auth(String img, String name, String email, String phone, String address, String password) {
         this.img = img;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.password = password;
+    }
+
+    public Auth( String img, String name, String email, String phone, String address, String password, Role role) {
+        this.img = img;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.password = password;
+        this.role = role;
     }
 
     public Auth(int id, String img, String name, String email, String phone, String address, String password, Role role) {

@@ -26,11 +26,11 @@ public class RoomController extends HttpServlet {
             case "create":
                 showCreate(req, resp);
                 break;
-            case "edit":
+            case "eidt":
                 showEdit(req, resp);
                 break;
             case "delete":
-                delete(req, resp);
+                showCreate(req, resp);
                 break;
             default:
                 showRoom(req, resp);
@@ -64,7 +64,10 @@ public class RoomController extends HttpServlet {
         if (pageString == null) {
             pageString = "1";
         }
+        req.setAttribute("page", roomService.(Integer.parseInt(pageString), req.getParameter("search")));
         req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("search", req.getParameter("search"));
+        req.setAttribute("rooms", roomService.findAllRoom());
         req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
     }
 
@@ -79,8 +82,8 @@ public class RoomController extends HttpServlet {
                 roomService.create(req);
                 resp.sendRedirect("/admin");
                 break;
-            case "edit":
-                roomService.update(req);
+            case "eidt":
+                roomService.create(req);
                 resp.sendRedirect("/admin");
                 break;
         }

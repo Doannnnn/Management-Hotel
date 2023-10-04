@@ -1,5 +1,7 @@
 package dao;
-import dao.DatabaseConnection;
+
+
+
 
 import model.Auth;
 import model.Role;
@@ -8,8 +10,36 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AuthDao extends DatabaseConnection {
+
+    public List<Auth> getAllAuth(){
+        List<Auth> results = new ArrayList<>();
+        final String query = "SELECT * FROM `quanlykhachsan`.`user`";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Auth auth=new Auth();
+                auth.setId(rs.getInt("id"));
+                auth.setImg(rs.getString("img"));
+                auth.setName(rs.getString("name"));
+                auth.setEmail(rs.getString("email"));
+                auth.setPhone(rs.getString("phone"));
+                auth.setAddress(rs.getString("address"));
+                auth.setPassword(rs.getString("password"));
+                auth.setRole(new Role(rs.getInt("id"),rs.getString("name")));
+                results.add(auth);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return results;
+    }
+
     public void register(Auth auth){
         final String REGISTER_USER = "INSERT INTO `quanlykhachsan`.`user` (`img`,`name`, `email`,`phone`,`address`, `password` ) VALUES (?,?,?,?,?,?)";
         try {
@@ -26,7 +56,23 @@ public class AuthDao extends DatabaseConnection {
             System.out.println(e.getMessage());
         }
     }
-
+    public void registerAdmin(Auth auth){
+        final String REGISTER_USER = "INSERT INTO `quanlykhachsan`.`user` (`img`,`name`, `email`,`phone`,`address`, `password`,`role_id` ) VALUES (?,?,?,?,?,?,?)";
+        try {
+            Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER);
+            preparedStatement.setString(1, auth.getImg());
+            preparedStatement.setString(2, auth.getName());
+            preparedStatement.setString(3, auth.getEmail());
+            preparedStatement.setString(4, auth.getPhone());
+            preparedStatement.setString(5, auth.getAddress());
+            preparedStatement.setString(6, auth.getPassword());
+            preparedStatement.setInt(7, auth.getRole().getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
     public Auth findByUsernameOrEmail(String usernameOrEmail){
         var SELECT_BY_ID = "SELECT u.*, r.name role_name " +
                 " FROM user u JOIN roles r on " +

@@ -1,5 +1,6 @@
 package controller;
 
+import service.RatingService;
 import service.RoomService;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import java.io.IOException;
 @WebServlet(name = "hotelController" , urlPatterns = "/hotel-page")
 public class HotelController extends HttpServlet {
     private RoomService roomService;
+    private RatingService ratingService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -32,7 +34,8 @@ public class HotelController extends HttpServlet {
 
     private void showRoomDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-
+        req.setAttribute("room",roomService.findById(req));
+        req.setAttribute("ratings",ratingService.findAll(id));
         req.getRequestDispatcher("hotel/room-details.jsp").forward(req,resp);
 
     }
@@ -73,5 +76,6 @@ public class HotelController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         roomService = new RoomService();
+        ratingService = new RatingService();
     }
 }

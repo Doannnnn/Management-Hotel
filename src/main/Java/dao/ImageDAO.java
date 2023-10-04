@@ -22,14 +22,4 @@ public class ImageDAO extends DatabaseConnection {
             System.out.println(e.getMessage());;
         }
     }
-    public void delete(int id){
-        String DELETE_IMAGE_ROOM = "DELETE FROM `case3`.`images` WHERE (`room_id` = ?)";
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_IMAGE_ROOM)) {
-            preparedStatement.setInt(1,id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }

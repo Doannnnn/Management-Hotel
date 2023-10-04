@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DASHMIN - Admin</title>
+    <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -49,7 +49,7 @@
     <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-light navbar-light">
             <a href="index.html" class="navbar-brand mx-4 mb-3">
-                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>ADMIN</h3>
+                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
             </a>
             <div class="d-flex align-items-center ms-4 mb-4">
                 <div class="position-relative">
@@ -64,7 +64,7 @@
             <div class="navbar-nav w-100">
                 <a href="/admin" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Rooms</a>
                 <a href="admin?action=create" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Create</a>
-                <a href="admin/edit.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Edit</a>
+                <a href="edit.jsp" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Edit</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                     <div class="dropdown-menu bg-transparent border-0">
@@ -122,7 +122,7 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
                                     <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                     <small>15 minutes ago</small>
@@ -132,7 +132,7 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
                                     <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                     <small>15 minutes ago</small>
@@ -175,7 +175,7 @@
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                         <a href="#" class="dropdown-item">My Profile</a>
                         <a href="#" class="dropdown-item">Settings</a>
-                        <a href="#" class="dropdown-item">Log Out</a>
+                        <a href="/auth" class="dropdown-item">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -193,17 +193,17 @@
                         <th style="padding-left: 50px;">NAME</th>
                         <th style="padding-left: 22px;">ROOMCLASS</th>
                         <th style="padding-left: 32px;">TYPE</th>
-                        <th style="padding-left: 6px;">PRICE</th>
+                        <th style="padding-left: 13px;">PRICE</th>
                         <th style="padding-left: 30px;">DESCRIPTION</th>
                         <th style="padding-left: 22px;">IMAGE</th>
                         <th >AMENITIES</th>
                         <th style="padding-left: 10px;">STATUS</th>
-                        <th style="padding-left: 34px;">ACTION</th>
+                        <th style="padding-left: 50px;">ACTION</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="room" items="${page.content}">
-                        <tr style="vertical-align: middle;">
+                    <c:forEach var="room" items="${rooms}">
+                        <tr>
                             <td>${room.id}</td>
                             <td>${room.name}</td>
                             <td>${room.roomClass}</td>
@@ -211,16 +211,12 @@
                             <td>${room.price}</td>
                             <td>${room.description}</td>
                             <td><img src="../hotel/img/room/${room.images[0].url}" style="width: 100px; height: auto"></td>
-                            <td>${room.amenities}</td>
+                            <td>${room.getStringList()}</td>
                             <td>${room.status}</td>
                             <td>
                                 <div class="text-right">
-                                    <a href="/admin?action=edit&id=${room.id}" class="icon-link">
-                                        <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
-                                    </a>
-                                    <a href="/admin?action=delete&id=${room.id}" class="icon-link" onclick="return confirmDelete()">
-                                        <i class="fas fa-trash-alt"  style="font-size: 24px; margin-left: 20px"></i>
-                                    </a>
+                                    <a href="/admin?action=edit&id=${room.id}" class="btn btn-primary">EDIT</a>
+                                    <a href="/admin?action=delete&id=${room.id}" class="btn btn-danger" onclick="return confirmDelete()">DELETE</a>
                                 </div>
                             </td>
                         </tr>
@@ -229,33 +225,6 @@
                 </table>
             </div>
         </div>
-        <nav aria-label="...">
-            <c:set var="url" value="/admin?page="/>
-            <c:if test="${isShowRestore}">
-                <c:set var="url" value="/admin?action=restore&page="/>
-            </c:if>
-            <ul class="pagination" style="padding: 12px">
-                <li class="page-item <c:if test="${page.currentPage == 1}">disabled</c:if>">
-                    <a class="page-link" href="${url}${(page.currentPage - 1)}" tabindex="-1"
-                       aria-disabled="true">Previous</a>
-                </li>
-                <c:forEach var="number" begin="1" end="${page.totalPage}">
-                    <c:if test="${number == page.currentPage}">
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="${url}${number}">${number}</a>
-                        </li>
-                    </c:if>
-                    <c:if test="${number != page.currentPage}">
-                        <li class="page-item">
-                            <a class="page-link" href="${url}${number}">${number}</a>
-                        </li>
-                    </c:if>
-                </c:forEach>
-                <li class="page-item <c:if test="${page.currentPage == page.totalPage}">disabled</c:if>">
-                    <a class="page-link" href="${url}${(page.currentPage + 1)}">Next</a>
-                </li>
-            </ul>
-        </nav>
         <!-- Table End -->
 
         <!-- Footer Start -->
@@ -278,6 +247,7 @@
 
 
     <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 <!-- JavaScript Libraries -->
