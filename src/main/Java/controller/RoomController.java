@@ -26,7 +26,7 @@ public class RoomController extends HttpServlet {
             case "create":
                 showCreate(req, resp);
                 break;
-            case "edit":
+            case "eidt":
                 showEdit(req, resp);
                 break;
             case "delete":
@@ -39,7 +39,7 @@ public class RoomController extends HttpServlet {
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         roomService.delete(req);
-        req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
+        req.getRequestDispatcher("admin/room.jsp").forward(req,resp);
     }
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -60,12 +60,8 @@ public class RoomController extends HttpServlet {
     }
 
     private void showRoom(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pageString = req.getParameter("page");
-        if (pageString == null) {
-            pageString = "1";
-        }
-        req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
-        req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
+        req.setAttribute("rooms", roomService.findAllRoom());
+        req.getRequestDispatcher("admin/room.jsp").forward(req,resp);
     }
 
     @Override

@@ -4,6 +4,7 @@ import model.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Room {
     private int id;
@@ -100,6 +101,10 @@ public class Room {
 
     public void setStatus(EStatus status) {
         this.status = status;
+    }
+
+    public String getStringList(){
+        return this.amenities.stream().map(EAmenities::name).collect(Collectors.joining(", "));
     }
 
 }

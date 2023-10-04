@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -24,6 +26,8 @@
     <link rel="stylesheet" href="../hotel/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
+    <link rel="stylesheet" href="../owlcarousel/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="../owlcarousel/assets/owl.theme.default.min.css">
 </head>
 
 <body>
@@ -186,10 +190,15 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="room-details-item">
-                    <img src="../hotel/img/room/room-details.jpg" alt="">
+                    <div class="owl-carousel owl-theme">
+                        <c:forEach var="img" items="${room.images}">
+                            <img class="owl-lazy" data-src="../hotel/img/room/${img.url}" alt="" style="width: 100%;height: 100%;">
+                        </c:forEach>
+
+                    </div>
                     <div class="rd-text">
                         <div class="rd-title">
-                            <h3>Premium King Room</h3>
+                            <h3>${room.name}</h3>
                             <div class="rdt-right">
                                 <div class="rating">
                                     <i class="icon_star"></i>
@@ -201,7 +210,7 @@
                                 <a href="#">Booking Now</a>
                             </div>
                         </div>
-                        <h2>159$<span>/Pernight</span></h2>
+                        <h2>${room.price}$<span>/Pernight</span></h2>
                         <table>
                             <tbody>
                             <tr>
@@ -210,15 +219,15 @@
                             </tr>
                             <tr>
                                 <td class="r-o">Capacity:</td>
-                                <td>Max persion 5</td>
+                                <td>${room.roomClass}</td>
                             </tr>
                             <tr>
                                 <td class="r-o">Bed:</td>
-                                <td>King Beds</td>
+                                <td>${room.type}</td>
                             </tr>
                             <tr>
                                 <td class="r-o">Services:</td>
-                                <td>Wifi, Television, Bathroom,...</td>
+                                <td>${room.getStringList()}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -239,43 +248,27 @@
                 <div class="rd-reviews">
                     <h4>Reviews</h4>
                     <div class="review-item">
-                        <div class="ri-pic">
-                            <img src="../hotel/img/room/avatar/avatar-1.jpg" alt="">
-                        </div>
-                        <div class="ri-text">
-                            <span>27 Aug 2019</span>
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star-half_alt"></i>
+                        <c:forEach var="rating" items="${ratings}">
+                            <div class="review-item">
+                                <div class="ri-pic">
+                                    <img src="../hotel/img/room/avatar/${rating.auth.img}" alt="">
+                                </div>
+                                <div class="ri-text">
+                                    <span>${rating.date}</span>
+                                    <div class="rating">
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star-half_alt"></i>
+                                    </div>
+                                    <h5>${rating.auth.name}</h5>
+                                    <p>${rating.comment}</p>
+                                </div>
                             </div>
-                            <h5>Brandon Kelley</h5>
-                            <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                magnam.</p>
-                        </div>
+                        </c:forEach>
                     </div>
-                    <div class="review-item">
-                        <div class="ri-pic">
-                            <img src="../hotel/img/room/avatar/avatar-2.jpg" alt="">
-                        </div>
-                        <div class="ri-text">
-                            <span>27 Aug 2019</span>
-                            <div class="rating">
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star"></i>
-                                <i class="icon_star-half_alt"></i>
-                            </div>
-                            <h5>Brandon Kelley</h5>
-                            <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                magnam.</p>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="review-add">
                     <h4>Add Review</h4>
@@ -427,6 +420,16 @@
 <script src="../hotel/js/jquery.slicknav.js"></script>
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
+<script src="../owlcarousel/jquery.min.js"></script>
+<script src="../owlcarousel/owl.carousel.min.js"></script>
+<script>
+    $('.owl-carousel').owlCarousel({
+        items:1,
+        lazyLoad:true,
+        loop:true,
+        margin:10
+    });
+</script>
 </body>
 
 </html>
