@@ -84,6 +84,7 @@ function validateEmail() {
 
 // Xử lý sự kiện khi người dùng rời khỏi trường email
 document.getElementById("email").addEventListener("blur", validateEmail);
+// Kiểm tra tính hợp lệ của địa chỉ
 function validateAddress() {
     var addressInput = document.getElementById("address");
     var addressError = document.getElementById("addressError");
@@ -99,3 +100,26 @@ function validateAddress() {
         return true;
     }
 }
+
+// Xử lý sự kiện khi người dùng rời khỏi trường địa chỉ
+document.getElementById("address").addEventListener("blur", validateAddress);
+// Kiểm tra tính hợp lệ của mật khẩu
+function validatePassword() {
+    var passwordInput = document.getElementById("re_password");
+    var passwordError = document.getElementById("passwordError");
+    var passwordPattern = /^\d{6,}$/;
+
+    if (!passwordPattern.test(passwordInput.value)) {
+        passwordInput.classList.add("invalid");
+        passwordError.innerText = "Password must contain at least 6 digits.";
+        passwordError.style.display = "block";
+        return false;
+    } else {
+        passwordInput.classList.remove("invalid");
+        passwordError.style.display = "none";
+        return true;
+    }
+}
+
+// Xử lý sự kiện khi người dùng rời khỏi trường mật khẩu
+document.getElementById("re_password").addEventListener("blur", validatePassword);
