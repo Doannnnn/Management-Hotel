@@ -27,6 +27,16 @@ public class Auth {
         this.password = password;
     }
 
+    public Auth( String img, String name, String email, String phone, String address, String password, Role role) {
+        this.img = img;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.password = password;
+        this.role = role;
+    }
+
     public Auth(int id, String img, String name, String email, String phone, String address, String password, Role role) {
         this.id = id;
         this.img = img;

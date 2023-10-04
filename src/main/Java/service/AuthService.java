@@ -26,13 +26,17 @@ public class AuthService {
         auth.setPassword(PasswordEncryptionUtil.encryptPassword(auth.getPassword()));
         authDao.register(auth);
     }
-
-    public List<Auth> getAuth(String email) {
-        List<Auth> auths = new ArrayList<>();
-        return auths.stream().filter(auth -> auth.getEmail().equals(email)).collect(Collectors.toList());
+    public void registerAdmin(Auth auth) {
+        auth.setPassword(PasswordEncryptionUtil.encryptPassword(auth.getPassword()));
+        authDao.registerAdmin(auth);
     }
 
-    public boolean login(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public Auth getAuth(String email) {
+        List<Auth> auths=authDao.getAllAuth();
+        return auths.stream().filter(auth -> auth.getEmail().equals(email)).findFirst().orElse(null);
+    }
+
+    public boolean login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String usernameOrEmail = req.getParameter("username");
         String password = req.getParameter("password");
         var auth = authDao.findByUsernameOrEmail(usernameOrEmail);
@@ -41,11 +45,12 @@ public class AuthService {
             session.setAttribute("auth", auth); // luu vo kho
             if (auth.getRole().getName().equals("ADMIN")) {
                 session.setAttribute("auth",getAuth("username") );
+                req.getRequestDispatcher("/admin/room.jsp").forward(req,resp);
 //                Chuyển hướng trang admin
             } else {
                 //Chuyển hướng trang người dùng
                 session.setAttribute("auth",getAuth("username") );
-                resp.sendRedirect("/hotel?message=Login Success");
+                req.getRequestDispatcher("/hotel/").forward(req,resp);
             }
             return true;
         }
@@ -57,11 +62,11 @@ public class AuthService {
         boolean emailExists = authDao.checkEmailExists(email);
         if (emailExists) {
             // Email tồn tại, chuyển hướng đến trang thay đổi mật khẩu
-            req.getRequestDispatcher("/auth/change-password.jsp").forward(req, resp);
+            req.getRequestDispatcher("/auth/change-password.jsp");
         } else {
             // Email không tồn tại, hiển thị thông báo lỗi
             RequestDispatcher dispatcher = req.getRequestDispatcher("/auth/ForgotPassword.jsp");
-            dispatcher.forward(req, resp);
+
         }
         return emailExists;
     }

@@ -23,29 +23,20 @@
             <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
             <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
         </div>
-        <span>or use your email for registration</span>
+        <span>Enter your new password</span>
         <div class="form-group" style=" text-align: center">
             <label for="email">Địa chỉ email:</label>
             <input type="email" class="form-control" id="email" name="email" value="${param.email}" required readonly>
         </div>
         <input type="password" placeholder="Password" id="re_password" name="re_password" required>
+        <div id="passwordError" class="error-message" style="display: none;"></div>
         <input type="password" placeholder="Re_Password" id="password" name="password" onblur="checkPassword()" required />
         <div id="passwordMatchError" class="error-message">Mật khẩu không trùng khớp</div>
         <button>Đổi mật khẩu</button>
     </form>
 </div>
 <script>
-    function checkPassword() {
-        var password = document.getElementById('password').value;
-        var rePassword = document.getElementById('re_password').value;
-        var errorDiv = document.getElementById('passwordMatchError');
-
-        if (rePassword !== password) {
-            errorDiv.style.display = 'block';
-        } else {
-            errorDiv.style.display = 'none';
-        }
-    }
+    <script src="/auth/assets/js/validex.js"></script>
 </script>
 </body>
 </html>
