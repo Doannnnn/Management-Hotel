@@ -1,8 +1,11 @@
 package service;
 
 import dao.RatingDAO;
+import model.Auth;
 import model.Rating;
+import model.Room;
 
+import java.sql.Date;
 import java.util.List;
 
 
@@ -15,5 +18,9 @@ public class RatingService {
     }
     public List<Rating> findAll(int id) {
         return ratingDAO.selectAll(id);
+    }
+
+    public void saveRating(Rating rating ,int id) {
+        ratingDAO.saveRating(rating,id);
     }
 }

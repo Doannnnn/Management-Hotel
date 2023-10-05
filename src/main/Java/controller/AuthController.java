@@ -6,6 +6,7 @@ import model.Role;
 import service.AuthService;
 import service.RoleService;
 
+import javax.net.ssl.HandshakeCompletedEvent;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +30,7 @@ public class AuthController extends HttpServlet {
         switch (action) {
             case "register" -> showRegister(req, resp);
             case "register_admin" -> showRegisterAdmin(req, resp);
-//            case "reset-password" -> showForgotPassword(req, resp);
+            case "check-login" -> checkLogin(req, resp);
 //            case "log out" -> logout(req,resp);
             default -> logout(req,resp);
 //            default -> start(req, resp);
@@ -37,9 +38,26 @@ public class AuthController extends HttpServlet {
         }
     }
 
-    private void start(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("auth/admin.jsp").forward(req, resp);
+    private void checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession();
+        Auth auth = (Auth) session.getAttribute("auth");
+
+        if (auth != null) {
+            // Người dùng đã đăng nhập
+            String username = auth.getEmail();
+            // Xử lý tương ứng khi người dùng đã đăng nhập
+            // Gửi phản hồi thành công (ví dụ: mã HTTP 200)
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().println("User is logged in");
+        } else {
+            // Người dùng chưa đăng nhập, xử lý tương ứng
+            // Gửi phản hồi không thành công (ví dụ: mã HTTP 401 - Unauthorized)
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().println("User is not logged in");
+        }
     }
+
+
 
     private void showRegisterAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("roles", roleService.getRoles());

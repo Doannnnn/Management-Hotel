@@ -43,6 +43,7 @@ public class AuthService {
         if (auth != null && PasswordEncryptionUtil.checkPassword(password, auth.getPassword())) {
             HttpSession session = req.getSession();
             session.setAttribute("auth", auth); // luu vo kho
+            session.setAttribute("isLoggedIn", true);
             if (auth.getRole().getName().equals("ADMIN")) {
                 session.setAttribute("auth",getAuth("username"));
                 req.getRequestDispatcher("/admin/index.jsp").forward(req,resp);
@@ -55,6 +56,11 @@ public class AuthService {
             return true;
         }
         return false;
+    }
+
+    public boolean isLoggedIn(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
     }
 
     public boolean checkEmail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -84,5 +90,8 @@ public class AuthService {
     }
     public Auth findByID(int id){
         return authDao.findByID(id);
+    }
+    public Auth findByNameAndEmail(String name,String email){
+        return authDao.findByUsernameAndEmail(name,email);
     }
 }

@@ -13,6 +13,13 @@ public class Rating {
 
     public Rating() {
     }
+    public Rating(Room room, Auth auth, double scores, String comment, Date date) {
+        this.auth = auth;
+        this.room = room;
+        this.date = date;
+        this.comment = comment;
+        this.scores = scores;
+    }
 
     public Rating(int id, Auth auth, Room room, Date date, String comment, double scores) {
         this.id = id;

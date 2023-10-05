@@ -29,21 +29,19 @@
     <link rel="stylesheet" href="../owlcarousel/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="../owlcarousel/assets/owl.theme.default.min.css">
     <style>
-        .rating {
-            color: gray;
-        }
-
-        .rating .icon_star {
+        .icon_star_alt {
+            /* Màu mặc định là xám */
             font-size: 24px;
+            color: rgb(128, 128, 128);
             cursor: pointer;
-            color: gray;
-            transition: color 0.2s;
         }
 
-        .rating .icon_star.active,
-        .rating .icon_star:hover {
+        .icon_star {
+            /* Màu vàng cho ngôi sao được đánh giá hoặc đã được nhấp vào */
             color: yellow;
         }
+
+
     </style>
 </head>
 
@@ -272,12 +270,51 @@
                                 </div>
                                 <div class="ri-text">
                                     <span>${rating.date}</span>
-                                    <div class="rating">
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star-half_alt"></i>
+                                    <div class="review-rating" >
+                                        <c:choose>
+                                            <c:when test="${rating.scores == 1}">
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                            </c:when>
+                                            <c:when test="${rating.scores == 2}">
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                            </c:when>
+                                            <c:when test="${rating.scores == 3}">
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                            </c:when>
+                                            <c:when test="${rating.scores == 4}">
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star_alt"></i>
+                                            </c:when>
+                                            <c:when test="${rating.scores == 5}">
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                                <i class="icon_star"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                                <i class="icon_star_alt"></i>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                     <h5>${rating.auth.name}</h5>
                                     <p>${rating.comment}</p>
@@ -289,29 +326,28 @@
                 </div>
                 <div class="review-add">
                     <h4>Add Review</h4>
-                    <form action="#" class="ra-form">
+                    <form id="comment-form" action="/hotel-page?action=comment" class="ra-form" method="POST">
                         <div class="row">
+                            <input type="hidden" name="room_id" value="${room.id}">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Name*">
+                                <input type="text" placeholder="Name*" name="usernhap" value="${auth.name}">
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Email*">
+                                <input type="text" placeholder="Email*" name="emailnhap" value="${auth.email}">
                             </div>
                             <div class="col-lg-12">
                                 <div>
-                                    <div class="rating">
-                                        <i class="icon_star" onclick="rateStar(1)" onmouseover="highlightStars(1)" onmouseleave="clearStars()"></i>
-                                        <i class="icon_star" onclick="rateStar(2)" onmouseover="highlightStars(2)" onmouseleave="clearStars()"></i>
-                                        <i class="icon_star" onclick="rateStar(3)" onmouseover="highlightStars(3)" onmouseleave="clearStars()"></i>
-                                        <i class="icon_star" onclick="rateStar(4)" onmouseover="highlightStars(4)" onmouseleave="clearStars()"></i>
-                                        <i class="icon_star" onclick="rateStar(5)" onmouseover="highlightStars(5)" onmouseleave="clearStars()"></i>
+                                    <div class="rating" id="ratingStars">
+                                        <i class="icon_star_alt"  onclick="rateStar(1)"></i>
+                                        <i class="icon_star_alt" onclick="rateStar(2)"></i>
+                                        <i class="icon_star_alt" onclick="rateStar(3)"></i>
+                                        <i class="icon_star_alt" onclick="rateStar(4)"></i>
+                                        <i class="icon_star_alt" onclick="rateStar(5)"></i>
                                     </div>
-
-                                    <div class="average-rating">Đánh giá trung bình: <span id="average-rating-value">0</span></div>
-                                    <div class="user-rating">Đánh giá của bạn: <span id="user-rating-value">0</span></div>
+                                    <input type="hidden" id="ratingValue" name="rating" value="">
                                 </div>
-                                <textarea placeholder="Your Review"></textarea>
-                                <button type="submit">Submit Now</button>
+                                <textarea placeholder="Your Review" name="comment"></textarea>
+                                <button type="submit" >Submit Now</button>
                             </div>
                         </div>
                     </form>
@@ -323,12 +359,12 @@
                     <form action="#">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
-                            <input type="text" class="date-input" id="date-in">
+                            <input type="text" class="date-input" id="date-in" >
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="check-date">
                             <label for="date-out">Check Out:</label>
-                            <input type="text" class="date-input" id="date-out">
+                            <input type="text" class="date-input" id="date-out" >
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="select-option">
@@ -448,52 +484,21 @@
         loop:true,
         margin:10
     });
-    const stars = document.querySelectorAll('.icon_star');
-    let rating = 0;
+    function rateStar(starIndex) {
+        const stars = document.querySelectorAll('#ratingStars i');
+        const ratingValueField = document.getElementById('ratingValue');
 
-    function clearStars() {
-        if (rating === 0) {
-            stars.forEach(star => {
-                star.classList.remove('active');
-            });
-        }
-    }
-
-    function highlightStars(count) {
-        stars.forEach((star, index) => {
-            if (index < count) {
-                star.classList.add('active');
+        for (let i = 0; i < stars.length; i++) {
+            if (i < starIndex) {
+                stars[i].classList.remove('icon_star_alt');
+                stars[i].classList.add('icon_star');
+            } else {
+                stars[i].classList.remove('icon_star');
+                stars[i].classList.add('icon_star_alt');
             }
-        });
-    }
-
-    function rateStar(selectedRating) {
-        rating = selectedRating;
-
-        clearStars();
-        highlightStars(rating);
-
-        // Gửi yêu cầu đánh giá đến máy chủ hoặc thực hiện các xử lý khác
-        console.log(`Người dùng đã đánh giá ${rating} sao`);
-
-        // Cập nhật giá trị hiển thị đánh giá trung bình
-        const averageRatingValue = document.getElementById('average-rating-value');
-        averageRatingValue.textContent = rating;
-
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
-        const loggedIn = checkUserLoggedIn();
-
-        if (loggedIn) {
-            // Cập nhật giá trị hiển thị đánh giá của người dùng đã đăng nhập
-            const userRatingValue = document.getElementById('user-rating-value');
-            userRatingValue.textContent = rating;
         }
-    }
 
-    function checkUserLoggedIn() {
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
-        // Trả về true nếu người dùng đã đăng nhập, ngược lại trả về false
-        return true; // Giả sử người dùng đã đăng nhập
+        ratingValueField.value = starIndex;
     }
 </script>
 </body>

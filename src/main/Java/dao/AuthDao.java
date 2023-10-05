@@ -155,4 +155,31 @@ public class AuthDao extends DatabaseConnection {
         }
         return null;
     }
+
+    public Auth findByUsernameAndEmail(String name,String Email){
+        var SELECT_BY_ID = "SELECT * FROM user " +
+                " WHERE name= ? AND email = ? ";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, Email);
+            System.out.println(preparedStatement);
+            var rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                Auth auth = new Auth();
+                auth.setId(rs.getInt("id"));
+                auth.setImg(rs.getString("img"));
+                auth.setName(rs.getString("name"));
+                auth.setEmail(rs.getString("email"));
+                auth.setPhone(rs.getString("phone"));
+                auth.setAddress(rs.getString("address"));
+                auth.setPassword(rs.getString("password"));
+                auth.setRole(new Role(rs.getInt("id"), rs.getString("name")));
+                return auth;
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }

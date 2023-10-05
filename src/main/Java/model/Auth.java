@@ -12,6 +12,9 @@ public class Auth {
 
     public Auth() {
     }
+    public Auth(int id) {
+        this.id=id;
+    }
 
     public Auth(String img, String name) {
         this.img = img;

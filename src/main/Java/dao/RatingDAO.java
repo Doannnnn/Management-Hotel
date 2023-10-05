@@ -36,4 +36,19 @@ public class RatingDAO extends DatabaseConnection {
         return null;
     }
 
+    public void saveRating(Rating rating ,int id) {
+        String query = "INSERT INTO rating (room_id, user_id, scores, comment, date) VALUES (?, ?, ?, ?, ?)";
+        try {Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            statement.setInt(2, rating.getAuth().getId());
+            statement.setDouble(3, rating.getScores());
+            statement.setString(4, rating.getComment());
+            statement.setDate(5,rating.getDate());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

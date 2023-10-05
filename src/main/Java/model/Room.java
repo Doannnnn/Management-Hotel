@@ -18,7 +18,9 @@ public class Room {
     private EStatus status;
 
     public Room(){};
-
+    public Room(int id){
+        this.id=id;
+    };
     public Room(int id, String name, ERoomClass roomClass, EType type, BigDecimal price, String description, List<Image> images, List<EAmenities> amenities, EStatus status) {
         this.id = id;
         this.name = name;
