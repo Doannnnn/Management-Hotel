@@ -65,7 +65,7 @@ public class RoomDAO extends DatabaseConnection {
                 "WHERE (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?) group by r.id  " +
                 " LIMIT ? OFFSET ?";
 
-        var SELECT_COUNT = "SELECT COUNT(1) cnt FROM rooms r JOIN images i ON r.id = i.room_id  " +
+        var SELECT_COUNT = "SELECT COUNT(1) cnt FROM rooms r   " +
                 "WHERE (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL)) {

@@ -195,13 +195,13 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th style="padding-left: 50px;">NAME</th>
+                        <th style="padding-left: 50px;">CODE</th>
                         <th style="padding-left: 22px;">ROOMCLASS</th>
                         <th style="padding-left: 32px;">TYPE</th>
                         <th style="padding-left: 6px;">PRICE</th>
                         <th style="padding-left: 30px;">DESCRIPTION</th>
                         <th style="padding-left: 22px;">IMAGE</th>
-                        <th >AMENITIES</th>
+                        <th>AMENITIES</th>
                         <th style="padding-left: 10px;">STATUS</th>
                         <th style="padding-left: 34px;">ACTION</th>
                     </tr>
@@ -215,7 +215,7 @@
                             <td>${room.type}</td>
                             <td>${room.price}</td>
                             <td>${room.description}</td>
-                            <td><img src="/image${room.images[0].url}" style="width: 100px; height: auto"></td>
+                            <td><img src="../hotel/img/room/${room.images[0].url}" style="width: 100px; height: auto"></td>
                             <td>${room.getStringList()}</td>
                             <td>${room.status}</td>
                             <td>
@@ -236,6 +236,9 @@
         </div>
         <nav aria-label="...">
             <c:set var="url" value="/admin?page="/>
+            <c:if test="${isShowRestore}">
+                <c:set var="url" value="/admin?action=restore&page="/>
+            </c:if>
             <ul class="pagination" style="padding: 12px">
                 <li class="page-item <c:if test="${page.currentPage == 1}">disabled</c:if>">
                     <a class="page-link" href="${url}${(page.currentPage - 1)}" tabindex="-1"

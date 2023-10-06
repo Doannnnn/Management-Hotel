@@ -45,7 +45,7 @@
             right: 0;
             background-color: #ffffff;
             color: #ff0000;
-            padding: 2px 5px;
+            padding: 0px 5px;
             cursor: pointer;
             font-size: 16px;
         }
@@ -118,8 +118,13 @@
             <a href="#" class="sidebar-toggler flex-shrink-0">
                 <i class="fa fa-bars"></i>
             </a>
-            <form class="d-none d-md-flex ms-4">
-                <input class="form-control border-0" type="search" placeholder="Search">
+            <form class="d-none d-md-flex ms-4" action="/admin?page=${page.currentPage}">
+                <div class="input-group">
+                    <input class="form-control border-0" type="text" value="${search}" name="search" style="width: 300px" placeholder="Search">
+                    <button id="searchButton" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </form>
             <div class="navbar-nav align-items-center ms-auto">
                 <div class="nav-item dropdown">
@@ -203,7 +208,7 @@
         <!-- Table Start -->
         <div class="container">
             <h3 class="text-center" style="margin: 1.5rem">EDIT ROOM</h3>
-            <form action="admin?action=edit&id=${room.id}" method="post">
+            <form action="admin?action=edit&id=${room.id}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" value="${room.name}" required>
@@ -234,15 +239,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="img" class="form-label">Image</label>
-                    <input type="file" class="form-control" id="img" name="img" accept="image/*" multiple required>
-                    <div id="image-preview">
-                        <c:forEach items="${room.images}" var="image">
-                            <div class="img-container">
-                                <img src="../hotel/img/room/${image.url}" style="width: 100px; height: auto">
-                                <span class="delete-icon">x</span>
-                            </div>
-                        </c:forEach>
-                    </div>
+                    <input type="file" class="form-control" id="img" name="img" accept="image/*" multiple>
+                    <div id="image-preview"></div>
                 </div>
                 <div class="mb-3">
                     <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label> <br>
@@ -301,52 +299,126 @@
 <!-- Template Javascript -->
 <script src="/admin/js/main.js"></script>
 <script>
-    function previewImages() {
-        var preview = document.getElementById("image-preview");
-        var files = document.querySelector('input[type=file]').files;
+    var existingFiles = [];
+    var hasLoadedFiles = false; // Biến cờ để kiểm tra đã chạy hàm loadFiles lần đầu chưa
+    const inputElement = document.getElementById("img");
+    let currentFiles = [];
 
-        preview.innerHTML = ""; // Xóa các hình ảnh trước đó (nếu có)
+    <c:forEach items="${room.images}" var="image">
+    existingFiles.push("/image${image.url}");
+    </c:forEach>
 
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            var reader = new FileReader();
+    // Gọi hàm để tải và gán tệp vào ô input
+    loadFiles(existingFiles);
 
-            reader.onload = function (event) {
-                var imgContainer = document.createElement("div");
-                imgContainer.classList.add("img-container");
+    function loadFiles(fileUrls) {
+        const existingFiles = Array.from(inputElement.files);
 
-                var img = document.createElement("img");
-                img.src = event.target.result;
-                img.style.width = "100px"; // Kích thước hình ảnh xem trước
-                img.style.height = "auto";
+        if (!hasLoadedFiles) { // Chỉ chạy khi chưa tải file lần nào
+            hasLoadedFiles = true; // Đánh dấu là đã tải file lần đầu
 
-                var deleteIcon = document.createElement("span");
-                deleteIcon.classList.add("delete-icon");
-                deleteIcon.innerHTML = "&times;";
+            // Lặp qua danh sách đường dẫn file và tải tệp từ mỗi URL
+            fileUrls.forEach(function (fileUrl) {
+                fetch(fileUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        // Tạo một đối tượng File từ Blob và đặt tên tệp
+                        const fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+                        const file = new File([blob], fileName);
 
-                // Gắn sự kiện click vào biểu tượng "x" để xóa hình ảnh và tệp tin
-                deleteIcon.addEventListener("click", function () {
-                    imgContainer.remove();
-                    var input = document.getElementById("img");
-                    var files = Array.from(input.files);
-                    var index = files.indexOf(file);
-                    if (index !== -1) {
-                        files.splice(index, 1);
-                    }
-                    input.files = new FileList(...files);
-                });
+                        // Kiểm tra xem tệp đã tồn tại trong danh sách hiện tại chưa
+                        if (!existingFiles.some(existingFile => existingFile.name === file.name)) {
+                            existingFiles.push(file);
+                        }
 
-                imgContainer.appendChild(img);
-                imgContainer.appendChild(deleteIcon);
-                preview.appendChild(imgContainer);
-            };
+                        // Cập nhật danh sách tệp trong ô input
+                        const newFileList = new DataTransfer();
+                        existingFiles.forEach(function (file) {
+                            newFileList.items.add(file);
+                        });
+                        inputElement.files = newFileList.files;
 
-            reader.readAsDataURL(file);
+                        // Sau khi thêm tệp vào ô input, cần cập nhật lại giao diện người dùng
+                        renderUploadedFiles(existingFiles, inputElement);
+                    });
+            });
         }
     }
 
-    document.getElementById("img").addEventListener("change", previewImages);
+    function renderUploadedFiles(files, inputElement) {
+        const previewContainer = document.getElementById("image-preview");
+        previewContainer.innerHTML = ""; // Xóa nội dung hiện tại
+
+        files.forEach(function (file, index) {
+            const imgContainer = document.createElement("div");
+            imgContainer.classList.add("img-container");
+
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file); // Sử dụng URL.createObjectURL để hiển thị tệp đã thêm
+
+            img.style.width = "200px";
+            img.style.height = "auto";
+            img.style.marginTop = "5px";
+
+            const deleteIcon = document.createElement("span");
+            deleteIcon.classList.add("delete-icon");
+            deleteIcon.innerHTML = "&times;";
+
+            // Gắn sự kiện click vào biểu tượng "x" để xóa hình ảnh và tệp tin
+            deleteIcon.addEventListener("click", function () {
+                imgContainer.remove();
+
+                // Xóa tệp tương ứng từ danh sách
+                files.splice(index, 1);
+
+                // Cập nhật lại danh sách tệp trong ô input
+                const newFileList = new DataTransfer();
+                files.forEach(function (file) {
+                    newFileList.items.add(file);
+                });
+                inputElement.files = newFileList.files;
+            });
+
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(deleteIcon);
+            previewContainer.appendChild(imgContainer);
+        });
+    }
+
+    document.getElementById("img").addEventListener("change", function (event) {
+        const inputElement = event.target;
+        const files = inputElement.files;
+        if (files.length > 0) {
+            // Thêm các tệp vào ô input và hiển thị
+            loadFiles(Array.from(files));
+        }
+    });
+
+    function handleNewFiles(newFiles) {
+        // Chuyển đổi FileList thành mảng
+        var newFilesArray = Array.from(newFiles);
+
+        // Duyệt qua các file mới
+        newFilesArray.forEach(newFile => {
+            // Nếu file chưa tồn tại thì thêm vào danh sách
+            if (!currentFiles.some(f => f.name === newFile.name)) {
+                currentFiles.push(newFile);
+            }
+        });
+
+        // Cập nhật lại danh sách files cho input
+        inputElement.files = currentFiles;
+        // Render lại UI
+        renderUploadedFiles(currentFiles, inputElement);
+    }
+
+    // Gọi hàm khi thêm files
+    inputElement.addEventListener('change', e => {
+        const newFiles = e.target.files;
+        handleNewFiles(newFiles);
+    });
 </script>
+
 </body>
 
 </html>

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ImageDAO extends DatabaseConnection {
+
     public void create(List<Image> images, int roomId){
         String CREATE = "INSERT INTO `case3`.`images` (`url`, `room_id`) VALUES (?, ?)";
         try (Connection connection = getConnection();
@@ -22,6 +23,7 @@ public class ImageDAO extends DatabaseConnection {
             System.out.println(e.getMessage());;
         }
     }
+
     public void delete(int id){
         String DELETE_IMAGE_ROOM = "DELETE FROM `case3`.`images` WHERE (`room_id` = ?)";
         try (Connection connection = getConnection();

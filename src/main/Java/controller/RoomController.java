@@ -1,21 +1,30 @@
 package controller;
 
-import model.EAmenities;
-import model.ERoomClass;
-import model.EStatus;
-import model.EType;
+import model.*;
+import service.ImageService;
 import service.RoomService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
+
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10,      // 10MB
+        maxRequestSize = 1024 * 1024 * 50)  // 50MB
 @WebServlet(name = "roomController", urlPatterns = "/admin")
 public class RoomController extends HttpServlet {
     private RoomService roomService;
+    private ImageService imageService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -82,20 +91,133 @@ public class RoomController extends HttpServlet {
         }
         switch (action){
             case "create":
-                roomService.create(req);
-                resp.sendRedirect("/admin");
+               create(req, resp);
                 break;
             case "edit":
-                roomService.update(req);
-                resp.sendRedirect("/admin");
+                edit(req, resp);
                 break;
         }
     }
 
+    private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        imageService.delete(id);
+        String name = req.getParameter("name");
+        ERoomClass roomClass = ERoomClass.valueOf(req.getParameter("roomClass"));
+        EType type = EType.valueOf(req.getParameter("type"));
+        BigDecimal price = new BigDecimal(req.getParameter("price"));
+        String description = req.getParameter("description");
+        String pathServerImage = getServletContext().getRealPath("/") + "image";
+        String pathProjectImage  = "D:\\Management-Hotel\\src\\main\\webapp\\image";
+        List<Image> imageList = new ArrayList<>();
+        for (Part part : req.getParts()) {
+            String fileName = extractFileName(part);
 
+            if(!fileName.isEmpty()){
+                fileName = new File(fileName).getName();
+
+                if (!fileName.isEmpty() && part.getContentType().startsWith("image/")) {
+                    fileName = new File(fileName).getName();
+                    part.write(pathProjectImage + File.separator + fileName);
+                    String dbImageUrl = File.separator + fileName;
+                    dbImageUrl = dbImageUrl.replace("\\", "/");
+                    part.write(pathServerImage + File.separator + fileName);
+                    Image image = new Image();
+                    image.setUrl(dbImageUrl);
+                    imageList.add(image);
+                }
+            }
+        }
+        /** for (String url : urls) {
+            Image image = new Image();
+            image.setUrl(url);
+            imageList.add(image);
+        } **/
+        List<EAmenities> amenitiesList = new ArrayList<>();
+        for (String amenity : req.getParameterValues("selectedAmenities")) {
+            EAmenities amenityEnum = EAmenities.valueOf(amenity);
+            amenitiesList.add(amenityEnum);
+        }
+        EStatus status = EStatus.valueOf(req.getParameter("status"));
+        Room room = new Room();
+        room.setId(id);
+        room.setName(name);
+        room.setRoomClass(roomClass);
+        room.setType(type);
+        room.setPrice(price);
+        room.setDescription(description);
+        room.setAmenities(amenitiesList);
+        room.setStatus(status);
+        roomService.update(room);
+        imageService.create(imageList, id);
+        resp.sendRedirect("/admin");
+    }
+
+    private void create(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String name = req.getParameter("name");
+        ERoomClass roomClass = ERoomClass.valueOf(req.getParameter("roomClass"));
+        EType type = EType.valueOf(req.getParameter("type"));
+        BigDecimal price = new BigDecimal(req.getParameter("price"));
+        String description = req.getParameter("description");
+        String pathServerImage = getServletContext().getRealPath("/") + "image";
+        String pathProjectImage  = "D:\\Management-Hotel\\src\\main\\webapp\\image";
+        List<Image> imageList = new ArrayList<>();
+        for (Part part : req.getParts()) {
+            String fileName = extractFileName(part);
+
+            if(!fileName.isEmpty()){
+                fileName = new File(fileName).getName();
+
+                if (!fileName.isEmpty() && part.getContentType().startsWith("image/")) {
+                    fileName = new File(fileName).getName();
+                    part.write(pathProjectImage + File.separator + fileName);
+                    String dbImageUrl = File.separator + fileName;
+                    dbImageUrl = dbImageUrl.replace("\\", "/");
+                    part.write(pathServerImage + File.separator + fileName);
+                    Image image = new Image();
+                    image.setUrl(dbImageUrl);
+                    imageList.add(image);
+                }
+            }
+        }
+        /** for (String url : urls) {
+            Image image = new Image();
+            image.setUrl(url);
+            imageList.add(image);
+        } **/
+        List<EAmenities> amenitiesList = new ArrayList<>();
+        for (String amenity : req.getParameterValues("selectedAmenities")) {
+            EAmenities amenityEnum = EAmenities.valueOf(amenity);
+            amenitiesList.add(amenityEnum);
+        }
+        EStatus status = EStatus.valueOf(req.getParameter("status"));
+        Room room = new Room();
+        room.setName(name);
+        room.setRoomClass(roomClass);
+        room.setType(type);
+        room.setPrice(price);
+        room.setDescription(description);
+        room.setAmenities(amenitiesList);
+        room.setStatus(status);
+        int roomId = roomService.create(room);
+        imageService.create(imageList, roomId);
+        resp.sendRedirect("/admin");
+    }
     @Override
     public void init() throws ServletException {
         roomService = new RoomService();
+        imageService = new ImageService();
+    }
+
+    private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+        }
+        return "";
     }
 }
 

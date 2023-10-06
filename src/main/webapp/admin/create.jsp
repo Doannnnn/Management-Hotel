@@ -45,7 +45,7 @@
             right: 0;
             background-color: #ffffff;
             color: #ff0000;
-            padding: 2px 5px;
+            padding: 0px 5px;
             cursor: pointer;
             font-size: 16px;
         }
@@ -118,8 +118,13 @@
             <a href="#" class="sidebar-toggler flex-shrink-0">
                 <i class="fa fa-bars"></i>
             </a>
-            <form class="d-none d-md-flex ms-4">
-                <input class="form-control border-0" type="search" placeholder="Search">
+            <form class="d-none d-md-flex ms-4" action="/admin?page=${page.currentPage}">
+                <div class="input-group">
+                    <input class="form-control border-0" type="text" value="${search}" name="search" style="width: 300px" placeholder="Search">
+                    <button id="searchButton" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </form>
             <div class="navbar-nav align-items-center ms-auto">
                 <div class="nav-item dropdown">
@@ -203,10 +208,10 @@
         <!-- Table Start -->
         <div class="container">
             <h3 class="text-center" style="margin: 1.5rem">CREATE ROOM</h3>
-            <form action="admin?action=create" method="post">
+            <form action="admin?action=create" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
+                    <input type="text" class="form-control" id="name" name="name" required="required">
                 </div>
                 <div class="mb-3">
                     <label for="roomClass" class="form-label">RoomClass</label>
@@ -293,52 +298,97 @@
 <!-- Template Javascript -->
 <script src="/admin/js/main.js"></script>
 <script>
+    var preview = document.getElementById("image-preview");
+    var fileNames = []; // Mảng lưu trữ tên tệp
+    var existingFiles = [];
+
+    function addFilesToInput(input, newFiles) {
+
+        // Kiểm tra và lọc ra các đối tượng File từ newFiles
+        var validNewFiles = Array.from(newFiles).filter(function (file) {
+            return file instanceof File;
+        });
+
+        // Tạo một mảng chứa các tệp và gán cho ô input
+        var newFileList = new DataTransfer();
+        existingFiles.forEach(function (file) {
+            newFileList.items.add(file);
+        });
+
+        validNewFiles.forEach(function (file) {
+            if (!existingFiles.some(function (existingFile) {
+                return existingFile.name === file.name;
+            })) {
+                existingFiles.push(file);
+                newFileList.items.add(file);
+            }
+        });
+
+        input.files = newFileList.files;
+    }
+
     function previewImages() {
-        var preview = document.getElementById("image-preview");
+        var input = document.getElementById("img");
         var files = document.querySelector('input[type=file]').files;
 
-        preview.innerHTML = ""; // Xóa các hình ảnh trước đó (nếu có)
+        addFilesToInput(input, files); // Thêm các tệp mới vào ô input
 
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
+            var fileName = file.name; // Lấy tên tệp
+            fileNames.push(fileName); // Thêm tên tệp vào mảng
+
             var reader = new FileReader();
 
-            reader.onload = function (event) {
-                var imgContainer = document.createElement("div");
-                imgContainer.classList.add("img-container");
-
-                var img = document.createElement("img");
-                img.src = event.target.result;
-                img.style.width = "100px"; // Kích thước hình ảnh xem trước
-                img.style.height = "auto";
-
-                var deleteIcon = document.createElement("span");
-                deleteIcon.classList.add("delete-icon");
-                deleteIcon.innerHTML = "&times;";
-
-                // Gắn sự kiện click vào biểu tượng "x" để xóa hình ảnh và tệp tin
-                deleteIcon.addEventListener("click", function () {
-                    imgContainer.remove();
-                    var input = document.getElementById("img");
-                    var files = Array.from(input.files);
-                    var index = files.indexOf(file);
-                    if (index !== -1) {
-                        files.splice(index, 1);
-                    }
-                    input.files = new FileList(...files);
-                });
-
-                imgContainer.appendChild(img);
-                imgContainer.appendChild(deleteIcon);
-                preview.appendChild(imgContainer);
-            };
+            reader.onload = createImagePreview(file, fileName); // Gọi hàm createImagePreview với tệp cụ thể và tên tệp
 
             reader.readAsDataURL(file);
         }
     }
 
+    function createImagePreview(file, fileName) {
+        return function (event) {
+            var imgContainer = document.createElement("div");
+            imgContainer.classList.add("img-container");
+
+            var img = document.createElement("img");
+            img.src = event.target.result;
+            img.style.width = "200px"; // Kích thước hình ảnh xem trước
+            img.style.height = "auto";
+            img.style.marginTop = "5px";
+
+            var deleteIcon = document.createElement("span");
+            deleteIcon.classList.add("delete-icon");
+            deleteIcon.innerHTML = "&times;";
+
+            // Gắn sự kiện click vào biểu tượng "x" để xóa hình ảnh và tệp tin
+            deleteIcon.addEventListener("click", function () {
+                imgContainer.remove();
+                var input = document.getElementById("img");
+                var index = existingFiles.indexOf(file);
+                if (index !== -1) {
+                    existingFiles.splice(index, 1);
+                    // Xóa tên tệp tương ứng từ mảng tên tệp
+                    fileNames.splice(index, 1);
+                    // Cập nhật lại danh sách tệp trong ô input
+                    var newFileList = new DataTransfer();
+                    for (var j = 0; j < existingFiles.length; j++) {
+                        newFileList.items.add(existingFiles[j]);
+                    }
+
+                    // Gán đối tượng FileList mới vào input.files
+                    input.files = newFileList.files;
+                }
+            });
+
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(deleteIcon);
+            preview.appendChild(imgContainer);
+        };
+    }
     document.getElementById("img").addEventListener("change", previewImages);
 </script>
+
 </body>
 
 </html>
