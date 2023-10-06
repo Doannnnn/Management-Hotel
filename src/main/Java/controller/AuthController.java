@@ -31,28 +31,18 @@ public class AuthController extends HttpServlet {
             case "register" -> showRegister(req, resp);
             case "register_admin" -> showRegisterAdmin(req, resp);
             case "check-login" -> checkLogin(req, resp);
-            case "edit" -> showEdit(req,resp);
-            case "show-information" -> information(req,resp);
-            default -> logout(req,resp);
+
+            default -> logout(req, resp);
 //            default -> start(req, resp);
 
         }
     }
 
-    private void information(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        req.setAttribute("auth", authService.getAuth(Integer.parseInt(pageString)));
-        req.setAttribute("message", req.getParameter("message"));
-        req.getRequestDispatcher("auth/edit.jsp").forward(req, resp);
-    }
 
-    private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("auth", authService.findByID(Integer.parseInt(req.getParameter("id"))));
-        req.getRequestDispatcher("auth/edit.jsp").forward(req, resp);
-    }
 
     private void checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
-        Auth auth = (Auth) session.getAttribute("auth");
+        Auth auth = (Auth) session.getAttribute("auths");
         if (auth != null) {
             // Người dùng đã đăng nhập
             String username = auth.getEmail();
@@ -69,27 +59,20 @@ public class AuthController extends HttpServlet {
     }
 
 
-
     private void showRegisterAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("roles", roleService.getRoles());
         req.setAttribute("message", req.getParameter("message"));
-        req.getRequestDispatcher("auth/admin.jsp").forward(req,resp);
+        req.getRequestDispatcher("auth/admin.jsp").forward(req, resp);
     }
+
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
         session.invalidate();
         req.getRequestDispatcher("/auth/login.jsp").forward(req, resp);
     }
 
-//    private void showForgotPassword(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        req.setAttribute("message", req.getParameter("message"));
-//        req.getRequestDispatcher("/auth/login.jsp").forward(req,resp);
-//    }
 
-    private void showLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("message", req.getParameter("message"));
-        req.getRequestDispatcher("/auth/login.jsp").forward(req, resp);
-    }
+
 
     private void showRegister(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("message", req.getParameter("message"));
@@ -107,9 +90,25 @@ public class AuthController extends HttpServlet {
             case "reset-password" -> ForgotPassword(req, resp);
             case "change-password" -> changepassword(req, resp);
             case "register_admin" -> registerAdmin(req, resp);
+            case "edit" -> edit(req, resp);
             default -> login(req, resp);
         }
     }
+
+    private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    authService.update(getAuthRequest(req),Integer.parseInt(req.getParameter("id")));
+        resp.sendRedirect("/auth?message=Updated");
+    }
+
+private Auth getAuthRequest(HttpServletRequest req){
+    String name = req.getParameter("name");
+    String email = req.getParameter("email");
+    String phone = req.getParameter("phone");
+    String address = req.getParameter("address");
+    return new Auth(name,email,phone,address);
+}
+
+
     private void registerAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         authService.registerAdmin(getUserByRequestAdmin(req));
         resp.sendRedirect("/hotel?message=Register Success");
@@ -123,14 +122,14 @@ public class AuthController extends HttpServlet {
     private void ForgotPassword(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (!authService.checkEmail(req, resp)) {
             resp.sendRedirect("/auth?message=Invalid username ");
-        }else{
+        } else {
             req.getRequestDispatcher("/auth/change-password.jsp").forward(req, resp);
         }
     }
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (!authService.login(req, resp)) {
-            req.getRequestDispatcher("/hotel-page").forward(req,resp);
+//            req.getRequestDispatcher("/hotel-page").forward(req, resp);
         }
     }
 
@@ -148,6 +147,7 @@ public class AuthController extends HttpServlet {
         String password = req.getParameter("password");
         return new Auth(img, name, email, phone, address, password);
     }
+
     private Auth getUserByRequestAdmin(HttpServletRequest req) {
         String img = req.getParameter("img");
         String name = req.getParameter("name");
@@ -156,13 +156,13 @@ public class AuthController extends HttpServlet {
         String address = req.getParameter("address");
         String password = req.getParameter("password");
         String idRole = req.getParameter("role");
-        Role role = new Role (Integer.parseInt(idRole));
-        return new Auth(img, name, email, phone, address, password,role);
+        Role role = new Role(Integer.parseInt(idRole));
+        return new Auth(img, name, email, phone, address, password, role);
     }
 
     @Override
     public void init() throws ServletException {
         authService = new AuthService();
-        roleService=new RoleService();
+        roleService = new RoleService();
     }
 }

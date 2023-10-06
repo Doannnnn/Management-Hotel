@@ -45,6 +45,11 @@
         <i class="icon_search"></i>
     </div>
     <div class="header-configure-area">
+
+
+
+
+
         <div class="language-option">
             <img src="../hotel/img/flag.jpg" alt="">
             <span>EN <i class="fa fa-angle-down"></i></span>
@@ -55,6 +60,8 @@
                 </ul>
             </div>
         </div>
+
+
         <a href="#" class="bk-btn">Booking Now</a>
     </div>
     <nav class="mainmenu mobile-menu">

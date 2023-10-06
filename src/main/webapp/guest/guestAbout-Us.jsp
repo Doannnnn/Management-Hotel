@@ -53,16 +53,21 @@
     <i class="icon_search"></i>
   </div>
   <div class="header-configure-area">
+
     <div class="language-option">
-      <img src="../hotel/img/flag.jpg" alt="">
-      <span>EN <i class="fa fa-angle-down"></i></span>
+      <img src="../hotel/img/a.jpg" alt="">x
+      <span>LOGIN <i class="fa fa-angle-down"></i></span>
       <div class="flag-dropdown">
         <ul>
-          <li><a href="#">Zi</a></li>
-          <li><a href="#">Fr</a></li>
+          <li><a href="/auth">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span class="padding_10">Login/Register</span></a>
+          </li>
         </ul>
       </div>
     </div>
+
+
     <a href="#" class="bk-btn">Booking Now</a>
   </div>
   <nav class="mainmenu mobile-menu">
@@ -107,16 +112,20 @@
               <a href="#"><i class="fa fa-instagram"></i></a>
             </div>
             <a href="/auth" class="bk-btn">Booking Now</a>
+
             <div class="language-option">
-              <img src="../hotel/img/flag.jpg" alt="">
-              <span>EN <i class="fa fa-angle-down"></i></span>
+              <img src="../hotel/img/a.jpg" alt="">x
+              <span>LOGIN <i class="fa fa-angle-down"></i></span>
               <div class="flag-dropdown">
                 <ul>
-                  <li><a href="#">Zi</a></li>
-                  <li><a href="#">Fr</a></li>
+                  <li><a href="/auth">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span class="padding_10">Login/Register</span></a>
+                  </li>
                 </ul>
               </div>
             </div>
+
           </div>
         </div>
       </div>

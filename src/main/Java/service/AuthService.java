@@ -45,12 +45,12 @@ public class AuthService {
             session.setAttribute("auth", auth); // luu vo kho
 //            session.setAttribute("isLoggedIn", true);
             if (auth.getRole().getName().equals("ADMIN")) {
-                session.setAttribute("auth",getAuth("username"));
+                session.setAttribute("auth",auth);
                 req.getRequestDispatcher("/admin/index.jsp").forward(req,resp);
 //                Chuyển hướng trang admin
             } else {
                 //Chuyển hướng trang người dùng
-                session.setAttribute("auth",getAuth("username") );
+                session.setAttribute("auth",auth);
                 req.getRequestDispatcher("/hotel/").forward(req,resp);
             }
             return true;
@@ -58,10 +58,6 @@ public class AuthService {
         return false;
     }
 
-    public boolean isLoggedIn(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        return session.getAttribute("isLoggedIn") != null && (boolean) session.getAttribute("isLoggedIn");
-    }
 
     public boolean checkEmail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
@@ -91,10 +87,15 @@ public class AuthService {
     public Auth findByID(int id){
         return authDao.findByID(id);
     }
-    public Auth findAll(int id){
+    public Auth findAll(){
         return authDao.findAll();
     }
     public Auth findByNameAndEmail(String name,String email){
         return authDao.findByUsernameAndEmail(name,email);
+    }
+
+    public void update(Auth auth, int id){
+        auth.setId(id);
+        authDao.update(auth);
     }
 }

@@ -22,7 +22,12 @@ public class Auth {
         this.img = img;
         this.name = name;
     }
-
+    public Auth( String name, String email, String phone, String address) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
     public Auth(String img, String name, String email, String phone, String address, String password) {
         this.img = img;
         this.name = name;

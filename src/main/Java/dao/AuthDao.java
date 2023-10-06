@@ -7,10 +7,7 @@ package dao;
 import model.Auth;
 import model.Role;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +39,7 @@ public class AuthDao extends DatabaseConnection {
     }
 
     public void register(Auth auth){
-        final String REGISTER_USER = "INSERT INTO `quanlykhachsan`.`user` (`img`,`name`, `email`,`phone`,`address`, `password` ) VALUES (?,?,?,?,?,?)";
+        final String REGISTER_USER = "INSERT INTO user (`img`,`name`, `email`,`phone`,`address`, `password` ) VALUES (?,?,?,?,?,?)";
         try {
             Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER);
@@ -58,7 +55,7 @@ public class AuthDao extends DatabaseConnection {
         }
     }
     public void registerAdmin(Auth auth){
-        final String REGISTER_USER = "INSERT INTO `quanlykhachsan`.`user` (`img`,`name`, `email`,`phone`,`address`, `password`,`role_id` ) VALUES (?,?,?,?,?,?,?)";
+        final String REGISTER_USER = "INSERT INTO user (`img`,`name`, `email`,`phone`,`address`, `password`,`role_id` ) VALUES (?,?,?,?,?,?,?)";
         try {
             Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_USER);
@@ -134,12 +131,12 @@ public class AuthDao extends DatabaseConnection {
         }
     }
     public Auth findByID(int id){
-        var SELECT_BY_ID = "SELECT * FROM user  WHERE id= ? ;";
+        var SELECT_BY_ID = "SELECT * FROM user  WHERE id= ? ";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
             preparedStatement.setInt(1, id);
             System.out.println(preparedStatement);
-            var rs = preparedStatement.executeQuery();
+            ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 Auth auth = new Auth();
                 auth.setId(rs.getInt("id"));
@@ -202,4 +199,19 @@ public class AuthDao extends DatabaseConnection {
         }
         return null;
     }
+    public void update(Auth auth){
+        String UPDATE = "UPDATE user SET `name` = ?, `email` = ?, `phone` = ?, `address` = ? WHERE (`id` = ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
+            preparedStatement.setString(1,auth.getName());
+            preparedStatement.setString(2, auth.getEmail());
+            preparedStatement.setString(3, auth.getPhone());
+            preparedStatement.setString(4, auth.getAddress());
+            preparedStatement.setInt(5, auth.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());;
+        }
+    }
+
 }
