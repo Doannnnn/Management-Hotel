@@ -190,40 +190,32 @@
         <!-- Table Start -->
         <div class="container-fluid" >
             <div id="main-container" class="card container px-6" style="height: 80vh">
-                <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT ROOM</h3>
+                <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT USER</h3>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th style="padding-left: 50px;">NAME</th>
-                        <th style="padding-left: 22px;">ROOMCLASS</th>
-                        <th style="padding-left: 32px;">TYPE</th>
-                        <th style="padding-left: 6px;">PRICE</th>
-                        <th style="padding-left: 30px;">DESCRIPTION</th>
-                        <th style="padding-left: 22px;">IMAGE</th>
-                        <th >AMENITIES</th>
-                        <th style="padding-left: 10px;">STATUS</th>
+                        <th style="padding-left: 50px;">IMAGE</th>
+                        <th style="padding-left: 22px;">NAME</th>
+                        <th style="padding-left: 32px;">EMAIL</th>
+                        <th style="padding-left: 6px;">PHONE</th>
                         <th style="padding-left: 34px;">ACTION</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="room" items="${page.content}">
+                    <c:forEach var="user" items="${users}">
                         <tr style="vertical-align: middle;">
-                            <td>${room.id}</td>
-                            <td>${room.name}</td>
-                            <td>${room.roomClass}</td>
-                            <td>${room.type}</td>
-                            <td>${room.price}</td>
-                            <td>${room.description}</td>
-                            <td><img src="/image${room.images[0].url}" style="width: 100px; height: auto"></td>
-                            <td>${room.getStringList()}</td>
-                            <td>${room.status}</td>
+                            <td>${user.id}</td>
+                            <td><img src="/hotel/img/room/avatar/${user.img}" style="width: 100px; height: auto"></td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phone}</td>
                             <td>
                                 <div class="text-right">
-                                    <a href="/admin?action=edit&id=${room.id}" class="icon-link">
+                                    <a href="/admin?action=edit&id=${user.id}" class="icon-link">
                                         <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
-                                    <a href="/admin?action=delete&id=${room.id}" class="icon-link" onclick="return confirmDelete()">
+                                    <a href="/admin?action=delete&id=${user.id}" class="icon-link" onclick="return confirmDelete()">
                                         <i class="fas fa-trash-alt"  style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
                                 </div>

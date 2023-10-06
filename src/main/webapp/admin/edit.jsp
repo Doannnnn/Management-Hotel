@@ -89,8 +89,8 @@
                         <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
                 </div>
-                <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
-                <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
+                <a href="admin/bill.jsp" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
+                <a href="admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
                 <a href="table.html" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Tables</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                 <div class="nav-item dropdown">
@@ -299,11 +299,12 @@
 <!-- Template Javascript -->
 <script src="/admin/js/main.js"></script>
 <script>
-    var existingFiles = [];
-    var hasLoadedFiles = false; // Biến cờ để kiểm tra đã chạy hàm loadFiles lần đầu chưa
-    const inputElement = document.getElementById("img");
+    let existingFiles = [];
     let currentFiles = [];
+    const inputElement = document.getElementById("img");
+    const previewContainer = document.getElementById("image-preview");
 
+    // Lấy danh sách đường dẫn file từ dữ liệu ban đầu
     <c:forEach items="${room.images}" var="image">
     existingFiles.push("/image${image.url}");
     </c:forEach>
@@ -312,51 +313,44 @@
     loadFiles(existingFiles);
 
     function loadFiles(fileUrls) {
-        const existingFiles = Array.from(inputElement.files);
+        // Lặp qua danh sách đường dẫn file và tải tệp từ mỗi URL
+        fileUrls.forEach(function (fileUrl) {
+            fetch(fileUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    // Tạo một đối tượng File từ Blob và đặt tên tệp
+                    const fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+                    const file = new File([blob], fileName);
 
-        if (!hasLoadedFiles) { // Chỉ chạy khi chưa tải file lần nào
-            hasLoadedFiles = true; // Đánh dấu là đã tải file lần đầu
+                    // Kiểm tra xem tệp đã tồn tại trong danh sách hiện tại chưa
+                    if (!currentFiles.some(existingFile => existingFile.name === file.name)) {
+                        currentFiles.push(file);
+                    }
 
-            // Lặp qua danh sách đường dẫn file và tải tệp từ mỗi URL
-            fileUrls.forEach(function (fileUrl) {
-                fetch(fileUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        // Tạo một đối tượng File từ Blob và đặt tên tệp
-                        const fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-                        const file = new File([blob], fileName);
-
-                        // Kiểm tra xem tệp đã tồn tại trong danh sách hiện tại chưa
-                        if (!existingFiles.some(existingFile => existingFile.name === file.name)) {
-                            existingFiles.push(file);
-                        }
-
-                        // Cập nhật danh sách tệp trong ô input
-                        const newFileList = new DataTransfer();
-                        existingFiles.forEach(function (file) {
-                            newFileList.items.add(file);
-                        });
-                        inputElement.files = newFileList.files;
-
-                        // Sau khi thêm tệp vào ô input, cần cập nhật lại giao diện người dùng
-                        renderUploadedFiles(existingFiles, inputElement);
+                    // Cập nhật danh sách tệp trong ô input
+                    const newFileList = new DataTransfer();
+                    currentFiles.forEach(function (file) {
+                        newFileList.items.add(file);
                     });
-            });
-        }
+                    inputElement.files = newFileList.files;
+
+                    // Sau khi thêm tệp vào ô input, cần cập nhật lại giao diện người dùng
+                    renderUploadedFiles(currentFiles);
+                });
+        });
     }
 
-    function renderUploadedFiles(files, inputElement) {
-        const previewContainer = document.getElementById("image-preview");
+    function renderUploadedFiles(files) {
         previewContainer.innerHTML = ""; // Xóa nội dung hiện tại
 
-        files.forEach(function (file, index) {
+        files.forEach(function (file) {
             const imgContainer = document.createElement("div");
             imgContainer.classList.add("img-container");
 
             const img = document.createElement("img");
             img.src = URL.createObjectURL(file); // Sử dụng URL.createObjectURL để hiển thị tệp đã thêm
 
-            img.style.width = "200px";
+            img.style.width = "200px"; // Kích thước hình ảnh xem trước
             img.style.height = "auto";
             img.style.marginTop = "5px";
 
@@ -369,14 +363,17 @@
                 imgContainer.remove();
 
                 // Xóa tệp tương ứng từ danh sách
-                files.splice(index, 1);
+                const index = currentFiles.findIndex(existingFile => existingFile.name === file.name);
+                if (index !== -1) {
+                    currentFiles.splice(index, 1);
 
-                // Cập nhật lại danh sách tệp trong ô input
-                const newFileList = new DataTransfer();
-                files.forEach(function (file) {
-                    newFileList.items.add(file);
-                });
-                inputElement.files = newFileList.files;
+                    // Cập nhật lại danh sách tệp trong ô input
+                    const newFileList = new DataTransfer();
+                    currentFiles.forEach(function (file) {
+                        newFileList.items.add(file);
+                    });
+                    inputElement.files = newFileList.files;
+                }
             });
 
             imgContainer.appendChild(img);
@@ -385,38 +382,34 @@
         });
     }
 
-    document.getElementById("img").addEventListener("change", function (event) {
-        const inputElement = event.target;
-        const files = inputElement.files;
-        if (files.length > 0) {
-            // Thêm các tệp vào ô input và hiển thị
-            loadFiles(Array.from(files));
-        }
+    inputElement.addEventListener("change", function (event) {
+        const newFiles = event.target.files;
+        addNewFiles(newFiles);
     });
 
-    function handleNewFiles(newFiles) {
-        // Chuyển đổi FileList thành mảng
-        var newFilesArray = Array.from(newFiles);
+    function addNewFiles(newFiles) {
+        // Kiểm tra và lọc ra các đối tượng File từ newFiles
+        const validNewFiles = Array.from(newFiles).filter(function (file) {
+            return file instanceof File;
+        });
 
-        // Duyệt qua các file mới
-        newFilesArray.forEach(newFile => {
-            // Nếu file chưa tồn tại thì thêm vào danh sách
-            if (!currentFiles.some(f => f.name === newFile.name)) {
-                currentFiles.push(newFile);
+        validNewFiles.forEach(function (file) {
+            if (!currentFiles.some(existingFile => existingFile.name === file.name)) {
+                currentFiles.push(file);
             }
         });
 
-        // Cập nhật lại danh sách files cho input
-        inputElement.files = currentFiles;
-        // Render lại UI
-        renderUploadedFiles(currentFiles, inputElement);
+        // Cập nhật lại danh sách tệp trong ô input
+        const newFileList = new DataTransfer();
+        currentFiles.forEach(function (file) {
+            newFileList.items.add(file);
+        });
+        inputElement.files = newFileList.files;
+
+        // Sau khi thêm tệp vào ô input, cần cập nhật lại giao diện người dùng
+        renderUploadedFiles(currentFiles);
     }
 
-    // Gọi hàm khi thêm files
-    inputElement.addEventListener('change', e => {
-        const newFiles = e.target.files;
-        handleNewFiles(newFiles);
-    });
 </script>
 
 </body>

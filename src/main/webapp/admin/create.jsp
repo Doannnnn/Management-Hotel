@@ -89,8 +89,8 @@
                         <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
                 </div>
-                <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
-                <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
+                <a href="admin/bill.jsp" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
+                <a href="admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
                 <a href="table.html" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Tables</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                 <div class="nav-item dropdown">
@@ -212,6 +212,7 @@
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" required="required">
+                    <div id="name-error" class="text-danger" style="margin: 5px"></div>
                 </div>
                 <div class="mb-3">
                     <label for="roomClass" class="form-label">RoomClass</label>
@@ -245,7 +246,7 @@
                 <div class="mb-3">
                     <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label> <br>
                     <c:forEach var="amenity" items="${amenities}">
-                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}">
+                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}" required>
                         <label style="margin-left: 5px" for="${amenity}">${amenity}</label>
                     </c:forEach>
                 </div>
@@ -388,7 +389,25 @@
     }
     document.getElementById("img").addEventListener("change", previewImages);
 </script>
+<script>
+    const nameInput = document.getElementById("name");
+    const nameError = document.getElementById("name-error");
 
+    // Sử dụng sự kiện input để kiểm tra sau mỗi lần nhập
+    nameInput.addEventListener("input", function () {
+        validateName();
+    });
+    function validateName() {
+        const nameValue = nameInput.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng đầu và cuối
+        // Sử dụng biểu thức chính quy để kiểm tra xem có ký tự không phải chữ cái không
+        const regex = /^[a-zA-Z\s]+$/
+        if (!regex.test(nameValue)) {
+            nameError.textContent = "Please enter letters only.";
+        } else {
+            nameError.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+</script>
 </body>
 
 </html>

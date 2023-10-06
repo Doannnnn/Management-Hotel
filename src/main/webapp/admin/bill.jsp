@@ -71,8 +71,8 @@
                         <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
                 </div>
-                <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
-                <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
+                <a href="admin/bill.jsp" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
+                <a href="admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
                 <a href="table.html" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Tables</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                 <div class="nav-item dropdown">
@@ -196,35 +196,32 @@
                     <tr>
                         <th>ID</th>
                         <th style="padding-left: 50px;">CODE</th>
-                        <th style="padding-left: 22px;">ROOMCLASS</th>
+                        <th style="padding-left: 22px;">ROOMNAME</th>
                         <th style="padding-left: 32px;">TYPE</th>
-                        <th style="padding-left: 6px;">PRICE</th>
-                        <th style="padding-left: 30px;">DESCRIPTION</th>
-                        <th style="padding-left: 22px;">IMAGE</th>
-                        <th>AMENITIES</th>
+                        <th style="padding-left: 6px;">SERVICE</th>
+                        <th style="padding-left: 30px;">USERNAME</th>
+                        <th style="padding-left: 22px;">PHONE</th>
+                        <th>TOTAL</th>
                         <th style="padding-left: 10px;">STATUS</th>
-                        <th style="padding-left: 34px;">ACTION</th>
+                        <th style="padding-left: 34px;">BIll-DETAILS</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="room" items="${page.content}">
+                    <c:forEach var="bill" items="${bills}">
                         <tr style="vertical-align: middle;">
-                            <td>${room.id}</td>
-                            <td>${room.name}</td>
-                            <td>${room.roomClass}</td>
-                            <td>${room.type}</td>
-                            <td>${room.price}</td>
-                            <td>${room.description}</td>
-                            <td><img src="../hotel/img/room/${room.images[0].url}" style="width: 100px; height: auto"></td>
-                            <td>${room.getStringList()}</td>
-                            <td>${room.status}</td>
+                            <td>${bill.id}</td>
+                            <td>${bill.code}</td>
+                            <td>${bill.room.name}</td>
+                            <td>${bill.room.type}</td>
+                            <td>${bill.product.name}</td>
+                            <td>${bill.auth.name}</td>
+                            <td>${bill.auth.phone}</td>
+                            <td>${bill.totalAmount}</td>
+                            <td>${bill.status}</td>
                             <td>
                                 <div class="text-right">
                                     <a href="/admin?action=edit&id=${room.id}" class="icon-link">
                                         <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
-                                    </a>
-                                    <a href="/admin?action=delete&id=${room.id}" class="icon-link" onclick="return confirmDelete()">
-                                        <i class="fas fa-trash-alt"  style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
                                 </div>
                             </td>

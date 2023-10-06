@@ -1,6 +1,8 @@
 package controller;
 
 import model.*;
+import service.AuthService;
+import service.BillService;
 import service.ImageService;
 import service.RoomService;
 
@@ -25,6 +27,8 @@ import java.util.List;
 public class RoomController extends HttpServlet {
     private RoomService roomService;
     private ImageService imageService;
+    private BillService billService;
+    private AuthService authService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -41,15 +45,29 @@ public class RoomController extends HttpServlet {
             case "delete":
                 delete(req, resp);
                 break;
+            case "bill":
+                showBill(req, resp);
+                break;
+            case "user":
+                showUser(req, resp);
+                break;
             default:
                 showRoom(req, resp);
         }
     }
 
+    private void showUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    private void showBill(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
+
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         roomService.delete(req);
-        req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
+        resp.sendRedirect("/admin");
     }
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -207,6 +225,8 @@ public class RoomController extends HttpServlet {
     public void init() throws ServletException {
         roomService = new RoomService();
         imageService = new ImageService();
+        billService = new BillService();
+        authService = new AuthService();
     }
 
     private String extractFileName(Part part) {
