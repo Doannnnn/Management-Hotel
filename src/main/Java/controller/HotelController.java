@@ -1,31 +1,26 @@
 package controller;
 
-<<<<<<< Updated upstream
+
 import model.Auth;
 import model.Rating;
 import model.Room;
 import service.AuthService;
 import service.RatingService;
 import service.RoomService;
-=======
 import model.*;
 import service.*;
->>>>>>> Stashed changes
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-<<<<<<< Updated upstream
 import java.sql.Date;
 import java.time.LocalDate;
-=======
 import java.math.BigDecimal;
->>>>>>> Stashed changes
 
-@WebServlet(name = "hotelController" , urlPatterns = "/hotel-page")
+
+@WebServlet(name = "hotelController", urlPatterns = "/hotel-page")
 public class HotelController extends HttpServlet {
     private RoomService roomService;
     private RatingService ratingService;
@@ -33,61 +28,63 @@ public class HotelController extends HttpServlet {
     private BookingService bookingService;
     private ProductService productService;
     private BillService billService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         if (action == null) {
             action = "";
         }
-        switch (action){
-            case "room"-> showRoom(req,resp);
-            case "room-detail"-> showRoomDetail(req,resp);
-            case "about-us"-> showAboutUS(req,resp);
-            case "bill-detail"-> showBill(req,resp);
-            case "blog-details"-> showBlogDetail(req,resp);
-            case "blog"-> showBlog(req,resp);
-            case "contact"-> showContact(req,resp);
-            default -> showIndex(req,resp);
+        switch (action) {
+            case "room" -> showRoom(req, resp);
+            case "room-detail" -> showRoomDetail(req, resp);
+            case "about-us" -> showAboutUS(req, resp);
+            case "bill-detail" -> showBill(req, resp);
+            case "blog-details" -> showBlogDetail(req, resp);
+            case "blog" -> showBlog(req, resp);
+            case "contact" -> showContact(req, resp);
+            default -> showIndex(req, resp);
         }
     }
 
     private void showRoomDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        req.setAttribute("room",roomService.findById(req));
-        req.setAttribute("ratings",ratingService.findAll(id));
-        req.getRequestDispatcher("hotel/room-details.jsp").forward(req,resp);
+        req.setAttribute("room", roomService.findById(req));
+        req.setAttribute("ratings", ratingService.findAll(id));
+        req.getRequestDispatcher("hotel/room-details.jsp").forward(req, resp);
 
     }
 
     private void showContact(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("hotel/contact.jsp").forward(req,resp);
+        req.getRequestDispatcher("hotel/contact.jsp").forward(req, resp);
     }
 
     private void showBlog(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("hotel/blog.jsp").forward(req,resp);
+        req.getRequestDispatcher("hotel/blog.jsp").forward(req, resp);
     }
+
     private void showBlogDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("hotel/blog-details.jsp").forward(req,resp);
+        req.getRequestDispatcher("hotel/blog-details.jsp").forward(req, resp);
     }
 
     private void showBill(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("room",roomService.findById(req));
-        req.setAttribute("book",bookingService.findByIDAuth(7));
-        req.setAttribute("products",productService.findAll());
-        req.getRequestDispatcher("bill/bill-detail.jsp").forward(req,resp);
+        req.setAttribute("room", roomService.findById(req));
+        req.setAttribute("book", bookingService.findByIDAuth(7));
+        req.setAttribute("products", productService.findAll());
+        req.getRequestDispatcher("bill/bill-detail.jsp").forward(req, resp);
     }
 
     private void showAboutUS(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("hotel/about-us.jsp").forward(req,resp);
+        req.getRequestDispatcher("hotel/about-us.jsp").forward(req, resp);
     }
 
     private void showRoom(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.setAttribute("rooms",roomService.findAllRoom());
-        req.getRequestDispatcher("hotel/rooms.jsp").forward(req,resp);
+        req.setAttribute("rooms", roomService.findAllRoom());
+        req.getRequestDispatcher("hotel/rooms.jsp").forward(req, resp);
     }
 
     private void showIndex(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getRequestDispatcher("hotel/index.jsp").forward(req,resp);
+        req.getRequestDispatcher("hotel/index.jsp").forward(req, resp);
     }
 
     @Override
@@ -96,25 +93,38 @@ public class HotelController extends HttpServlet {
         if (action == null) {
             action = "";
         }
-        switch (action){
-<<<<<<< Updated upstream
-            case "comment"-> saveRating(req,resp);
-        }
-=======
-            case "pay"-> pay(req,resp);
+        switch (action) {
 
+            case "comment" -> saveRating(req, resp);
+            case "pay" -> pay(req, resp);
         }
     }
+
 
     private void pay(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idUser = Integer.parseInt(req.getParameter("id"));
         int idRoom = Integer.parseInt(req.getParameter("room"));
         Auth auth = new Auth(idUser);
-        BigDecimal productFee = BigDecimal.valueOf(Long.parseLong(req.getParameter("productPriceInput")));
+
+        String productPriceInput = req.getParameter("productPrice");
+        BigDecimal productFee;
+        if (productPriceInput != null && !productPriceInput.isEmpty()) {
+            productFee = new BigDecimal(productPriceInput);
+        } else {
+
+            productFee = BigDecimal.ZERO;
+        }
         int idProduct = Integer.parseInt(req.getParameter("productID"));
-        Product product = new Product(idProduct,productFee);
+        Product product = new Product(idProduct, productFee);
         Room room = new Room(idRoom);
-        BigDecimal total = BigDecimal.valueOf(Long.parseLong(req.getParameter("totalInput")));
+
+        String totalFee = req.getParameter("totalAmount");
+        BigDecimal total;
+        if (totalFee != null && !totalFee.isEmpty()) {
+            total = new BigDecimal(totalFee);
+        } else {
+            total = BigDecimal.ZERO;
+        }
 
         Bill bill = new Bill();
         bill.setCode(String.valueOf(Math.floor(Math.random() * 9000) + 1000));
@@ -125,7 +135,7 @@ public class HotelController extends HttpServlet {
         bill.setAuth(auth);
         billService.create(bill);
         resp.sendRedirect("/hotel-page?message=Payment Success");
->>>>>>> Stashed changes
+
     }
 
     public void saveRating(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -149,8 +159,9 @@ public class HotelController extends HttpServlet {
         String scores = req.getParameter("rating");
         String comment = req.getParameter("comment");
         LocalDate date = LocalDate.now();
-        return new Rating(room, auth,Double.parseDouble(scores), comment, Date.valueOf(date));
+        return new Rating(room, auth, Double.parseDouble(scores), comment, Date.valueOf(date));
     }
+
     @Override
     public void init() throws ServletException {
         roomService = new RoomService();

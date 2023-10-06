@@ -12,9 +12,7 @@ public class Auth {
 
     public Auth() {
     }
-    public Auth(int id) {
-        this.id=id;
-    }
+
 
     public Auth(int id) {
         this.id = id;
@@ -62,6 +60,8 @@ public class Auth {
         this.password = password;
         this.role = role;
     }
+
+
 
     public String getImg() {
         return img;

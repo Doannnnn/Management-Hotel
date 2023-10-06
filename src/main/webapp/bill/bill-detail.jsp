@@ -285,7 +285,7 @@
                             </div>
                             <input type="hidden" name="productPrice" id="productPriceInput">
                             <input type="hidden" name="productID" id="productPriceID">
-                            <input type="hidden" name="total" id="totalInput">
+                            <input type="hidden" name="totalAmount" id="totalInput">
                             <button class="btn btn-primary mt-2" type="submit" id="pay">
                                 <span class="fas fa-dollar-sign px-1"></span>0 $
                             </button>
@@ -436,7 +436,7 @@
             changeProductFee(firstRadioButton);
         }
     };
-    document.getElementById("myForm").submit();
+
 
 </script>
 </body>

@@ -18,17 +18,11 @@ public class Room {
     private EStatus status;
 
     public Room(){};
-<<<<<<< Updated upstream
-    public Room(int id){
-        this.id=id;
-    };
-=======
 
     public Room(int id) {
         this.id = id;
     }
 
->>>>>>> Stashed changes
     public Room(int id, String name, ERoomClass roomClass, EType type, BigDecimal price, String description, List<Image> images, List<EAmenities> amenities, EStatus status) {
         this.id = id;
         this.name = name;
