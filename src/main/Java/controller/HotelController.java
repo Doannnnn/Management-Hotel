@@ -84,6 +84,8 @@ public class HotelController extends HttpServlet {
     }
 
     private void showIndex(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+//        Auth auth = (Auth) req.getAttribute("Auth");
+//        req.setAttribute("auth",auth);
         req.getRequestDispatcher("hotel/index.jsp").forward(req, resp);
     }
 
