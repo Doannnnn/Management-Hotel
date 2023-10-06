@@ -32,10 +32,17 @@ public class AuthController extends HttpServlet {
             case "register_admin" -> showRegisterAdmin(req, resp);
             case "check-login" -> checkLogin(req, resp);
             case "edit" -> showEdit(req,resp);
+            case "show-information" -> information(req,resp);
             default -> logout(req,resp);
 //            default -> start(req, resp);
 
         }
+    }
+
+    private void information(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        req.setAttribute("auth", authService.getAuth(Integer.parseInt(pageString)));
+        req.setAttribute("message", req.getParameter("message"));
+        req.getRequestDispatcher("auth/edit.jsp").forward(req, resp);
     }
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -123,7 +130,7 @@ public class AuthController extends HttpServlet {
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (!authService.login(req, resp)) {
-            resp.sendRedirect("/auth?message=Invalid username or password");
+            req.getRequestDispatcher("/hotel-page").forward(req,resp);
         }
     }
 

@@ -91,6 +91,9 @@ public class AuthService {
     public Auth findByID(int id){
         return authDao.findByID(id);
     }
+    public Auth findAll(int id){
+        return authDao.findAll();
+    }
     public Auth findByNameAndEmail(String name,String email){
         return authDao.findByUsernameAndEmail(name,email);
     }

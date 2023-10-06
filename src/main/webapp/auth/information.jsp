@@ -28,65 +28,38 @@
         <table class="table table-striped">
             <tr>
                 <td>
-                    Id
-                </td>
-                <td>
-                    FirstName
-                </td>
-                <td>
-                    LastName
-                </td>
-                <td>
-                    UserName
+                    Name
                 </td>
                 <td>
                     Email
                 </td>
                 <td>
-                    DOB
+                    Phone
                 </td>
                 <td>
-                    Role
-                </td>
-                <td>
-                    Gender
+                    Address
                 </td>
                 <td >
                     Action
                 </td>
             </tr>
-            <c:forEach var="user" items="${page.content}">
+            <c:forEach var="auth" items="${auths}">
                 <tr>
                     <td>
-                            ${user.id}
+                            ${auth.name}
                     </td>
                     <td>
-                            ${user.firstName}
+                            ${auth.email}
                     </td>
                     <td>
-                            ${user.lastName}
+                            ${auth.phone}
                     </td>
                     <td>
-                            ${user.userName}
-                    </td>
-                    <td>
-                            ${user.email}
-                    </td>
-                    <td>
-                            ${user.dob}
-                    </td>
-                    <td>
-                            ${user.role.name}
-                    </td>
-                    <td>
-                            ${user.gender}
+                            ${auth.address}
                     </td>
                         <td>
                             <a href="user?action=edit&id=${user.id}" class="btn btn-warning">Edit</a>
-
                         </td>
-
-
                 </tr>
             </c:forEach>
         </table>
