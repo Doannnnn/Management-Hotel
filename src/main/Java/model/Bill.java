@@ -6,14 +6,18 @@ import java.sql.Date;
 public class Bill {
     private int id;
     private String code;
-    private Booking booking;
+    private Auth auth;
     private Room room;
     private Product product;
     private BigDecimal totalAmount;
     private EStatusBill statusBill;
 
-    public Bill(int id, String code, Room room, Product product, BigDecimal totalAmount, EStatusBill statusBill) {
+    public Bill() {
+    }
+
+    public Bill(int id, Auth auth, String code, Room room, Product product, BigDecimal totalAmount, EStatusBill statusBill) {
         this.id = id;
+        this.auth = auth;
         this.code = code;
         this.room = room;
         this.product = product;
@@ -67,5 +71,13 @@ public class Bill {
 
     public void setStatusBill(EStatusBill statusBill) {
         this.statusBill = statusBill;
+    }
+
+    public Auth getAuth() {
+        return auth;
+    }
+
+    public void setAuth(Auth auth) {
+        this.auth = auth;
     }
 }

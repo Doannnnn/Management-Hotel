@@ -8,11 +8,20 @@ public class Product {
     private BigDecimal price;
     private String description;
 
+    public Product(int id, BigDecimal price) {
+        this.id = id;
+        this.price = price;
+    }
+
     public Product(int id, String name, BigDecimal price, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
+    }
+
+    public Product() {
+
     }
 
     public int getId() {

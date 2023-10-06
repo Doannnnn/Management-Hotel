@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Booking {
     private int id;
@@ -69,5 +70,10 @@ public class Booking {
 
     public void setAuth(Auth auth) {
         this.auth = auth;
+    }
+
+    public long getDate() {
+        long diff = Math.abs(this.checkOutDate.getTime() - this.checkInDate.getTime());
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 }

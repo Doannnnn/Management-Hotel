@@ -16,6 +16,10 @@ public class Auth {
         this.id=id;
     }
 
+    public Auth(int id) {
+        this.id = id;
+    }
+
     public Auth(String img, String name) {
         this.img = img;
         this.name = name;
@@ -39,11 +43,13 @@ public class Auth {
         this.password = password;
         this.role = role;
     }
-    public Auth(int id, String name, String phone, String address) {
+    public Auth(int id,String img, String name, String phone, String address,String email) {
         this.id = id;
+        this.img = img;
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.email = email;
     }
 
     public Auth(int id, String img, String name, String email, String phone, String address, String password, Role role) {
@@ -120,4 +126,6 @@ public class Auth {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

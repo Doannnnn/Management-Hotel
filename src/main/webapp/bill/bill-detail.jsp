@@ -184,144 +184,119 @@
 
 <!-- Room Details Section Begin -->
 <section class="room-details-section spad">
-                <div class="containers d-lg-flex">
-                    <div class="box-1 bg-light user">
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="../hotel/img/room/avatar/${user.img}"
-                                 class="pic rounded-circle" alt="">
-                            <p class="ps-2 name">${user.name}</p>
-                        </div>
-                        <div class="box-inner-1 pb-3 mb-3 ">
-                            <div class="d-flex justify-content-between mb-3 user details">
-                                <p class="fw-bold">${room.name}</p>
-                                <p class="fw-lighter"><span class="fas fa-dollar-sign"></span>${room.price}$</p>
-                            </div>
-                            <div class="owl-carousel owl-theme">
-                                <c:forEach var="img" items="${room.images}">
-                                    <img class="owl-lazy" data-src="../hotel/img/room/${img.url}" alt="" style="width: 100%; height: 100%;">
-                                </c:forEach>
-                            </div>
+    <div class="containers d-lg-flex">
+        <form id="myForm" action="/hotel-page?action=pay&id=${book.auth.id}&room=${room.id}" style="width: 100%; display: flex" method="post">
+            <div class="box-1 bg-light user">
+
+                <div>
+                    <p class="fw-bold">Payment Details</p>
+                    <p class="dis mb-3">Complete your purchase by providing your payment details</p>
+                </div>
+                <div class="box-inner-1 pb-3 mb-3 ">
+                    <div class="d-flex justify-content-between mb-3 user details">
+                        <p class="fw-bold">${room.name}</p>
+                        <p class="fw-lighter"><span class="fas fa-dollar-sign"></span>${room.price * book.numberRoom}$ /
+                            night </p>
+                    </div>
+                    <div class="owl-carousel owl-theme">
+                        <c:forEach var="img" items="${room.images}">
+                            <img class="owl-lazy" data-src="../hotel/img/room/${img.url}" alt=""
+                                 style="width: 100%; height: 100%;">
+                        </c:forEach>
+                    </div>
 
 
-                            <p class="dis info my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate quos ipsa
-                                sed officiis odio
-                            </p>
-                            <div class="radiobtn">
-                                <input type="radio" name="box" id="one">
-                                <input type="radio" name="box" id="two">
-                                <input type="radio" name="box" id="three">
-                                <label for="one" class="box py-2 first">
+                    <p class="dis info my-3">DATE IN ${book.checkInDate} , DATE OUT ${book.checkOutDate}
+                        , ${book.getDate()} NIGHT</br>
+                        ${book.numberGuests} GUEST , ${book.numberRoom} ROOM
+                    </p>
+                    <div class="radiobtn">
+                        <c:forEach var="product" items="${products}">
+                        <c:if test="${product.id == 1}">
+                        <input type="radio" name="box" id="one" data-price="0" data-id="1" onclick="changeProductFee(this)" >
+                        <label for="one" class="box py-2 first">
+                            </c:if>
+                            <c:if test="${product.id == 2}">
+                            <input type="radio" name="box" id="two" data-price="20" data-id="2" onclick="changeProductFee(this)">
+                            <label for="two" class="box py-2 second">
+                                </c:if>
+                                <c:if test="${product.id == 3}">
+                                <input type="radio" name="box" id="three" data-price="100" data-id="3" onclick="changeProductFee(this)">
+                                <label for="three" class="box py-2 third">
+                                    </c:if>
                                     <div class="d-flex align-items-start">
                                         <span class="circle"></span>
                                         <div class="course">
                                             <div class="d-flex align-items-center justify-content-between mb-2">
                                     <span class="fw-bold">
-                                        Collection 01
+                                            ${product.name}
                                     </span>
-                                                <span class="fas fa-dollar-sign">29</span>
+                                                <span class="fas fa-dollar-sign">${product.price} $</span>
                                             </div>
-                                            <span>10 x Presets. Released in 2018</span>
+                                            <span>${product.description}</span>
                                         </div>
                                     </div>
                                 </label>
-                                <label for="two" class="box py-2 second">
-                                    <div class="d-flex">
-                                        <span class="circle"></span>
-                                        <div class="course">
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="fw-bold">
-                                        Collection 01
-                                    </span>
-                                                <span class="fas fa-dollar-sign">29</span>
-                                            </div>
-                                            <span>10 x Presets. Released in 2018</span>
-                                        </div>
-                                    </div>
-                                </label>
-                                <label for="three" class="box py-2 third">
-                                    <div class="d-flex">
-                                        <span class="circle"></span>
-                                        <div class="course">
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="fw-bold">
-                                        Collection 01
-                                    </span>
-                                                <span class="fas fa-dollar-sign">29</span>
-                                            </div>
-                                            <span>10 x Presets. Released in 2018</span>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
+                                </c:forEach>
                     </div>
-                    <div class="box-2">
-                        <div class="box-inner-2">
-                            <div>
-                                <p class="fw-bold">Payment Details</p>
-                                <p class="dis mb-3">Complete your purchase by providing your payment details</p>
+                </div>
+            </div>
+            <div class="box-2">
+                <div class="box-inner-2" style="width: 380px;">
+                    <div class="d-flex justify-content-center mb-3 user details">
+                        <img src="../hotel/img/room/avatar/${book.auth.img}"
+                             class="pic rounded-circle" alt="">
+                    </div>
+                    <%--                <form action="" style="width: 100%;">--%>
+                    <div class="mb-3">
+                        <p class="dis fw-bold mb-2">Full Name</p>
+                        <p class="form-control">${book.auth.name}</p>
+                    </div>
+                    <div class="mb-3">
+                        <p class="dis fw-bold mb-2">Email address</p>
+                        <p class="form-control">${book.auth.email}</p>
+                    </div>
+                    <div class="mb-3">
+                        <p class="dis fw-bold mb-2">Phone number</p>
+                        <p class="form-control">${book.auth.phone}</p>
+                    </div>
+                    <div class="mb-3">
+                        <p class="dis fw-bold mb-2">Address</p>
+                        <p class="form-control">${book.auth.address}</p>
+                    </div>
+                    <div>
+                        <div class="d-flex flex-column dis">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p>Subtotal</p>
+                                <p id="roomfee" data-price="${room.price * book.numberRoom}"><span
+                                        class="fas fa-dollar-sign"></span>${room.price * book.numberRoom} $</p>
                             </div>
-                            <form action="">
-                                <div class="mb-3">
-                                    <p class="dis fw-bold mb-2">Email address</p>
-                                    <input class="form-control" type="email" value="luke@skywalker.com">
-                                </div>
-                                <div>
-                                    <p class="dis fw-bold mb-2">Card details</p>
-                                    <div class="d-flex align-items-center justify-content-between card-atm border rounded">
-                                        <div class="fab fa-cc-visa ps-3"></div>
-                                        <input type="text" class="form-control" placeholder="Card Details">
-                                        <div class="d-flex w-50">
-                                            <input type="text" class="form-control px-0" placeholder="MM/YY">
-                                            <input type="password" maxlength=3 class="form-control px-0" placeholder="CVV">
-                                        </div>
-                                    </div>
-                                    <div class="my-3 cardname">
-                                        <p class="dis fw-bold mb-2">Cardholder name</p>
-                                        <input class="form-control" type="text">
-                                    </div>
-                                    <div class="address">
-                                        <p class="dis fw-bold mb-3">Billing address</p>
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option selected hidden>United States</option>
-                                            <option value="1">India</option>
-                                            <option value="2">Australia</option>
-                                            <option value="3">Canada</option>
-                                        </select>
-                                        <div class="d-flex">
-                                            <input class="form-control zip" type="text" placeholder="ZIP">
-                                            <input class="form-control state" type="text" placeholder="State">
-                                        </div>
-                                        <div class=" my-3">
-                                            <p class="dis fw-bold mb-2">VAT Number</p>
-                                            <div class="inputWithcheck">
-                                                <input class="form-control" type="text" value="GB012345B9">
-                                                <span class="fas fa-check"></span>
-
-                                            </div>
-                                        </div>
-                                        <div class="d-flex flex-column dis">
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                                <p>Subtotal</p>
-                                                <p><span class="fas fa-dollar-sign"></span>33.00</p>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                                <p>VAT<span>(20%)</span></p>
-                                                <p><span class="fas fa-dollar-sign"></span>2.80</p>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                                <p class="fw-bold">Total</p>
-                                                <p class="fw-bold"><span class="fas fa-dollar-sign"></span>35.80</p>
-                                            </div>
-                                            <div class="btn btn-primary mt-2">Pay<span class="fas fa-dollar-sign px-1"></span>35.80
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p>Product</p>
+                                <p id="productPrice"><span class="fas fa-dollar-sign"></span>0 $</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p>VAT<span>(20%)</span></p>
+                                <p id="vat"><span class="fas fa-dollar-sign"></span>0 $</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p class="fw-bold">Total</p>
+                                <p class="fw-bold" id="totalPrice" ><span class="fas fa-dollar-sign"></span>0 $</p>
+                            </div>
+                            <input type="hidden" name="productPrice" id="productPriceInput">
+                            <input type="hidden" name="productID" id="productPriceID">
+                            <input type="hidden" name="total" id="totalInput">
+                            <button class="btn btn-primary mt-2" type="submit" id="pay">
+                                <span class="fas fa-dollar-sign px-1"></span>0 $
+                            </button>
                         </div>
                     </div>
                 </div>
+
+            </div>
+        </form>
+    </div>
+
 </section>
 <!-- Room Details Section End -->
 
@@ -421,11 +396,48 @@
 <script src="../owlcarousel/owl.carousel.min.js"></script>
 <script>
     $('.owl-carousel').owlCarousel({
-        items:1,
-        lazyLoad:true,
-        loop:true,
-        margin:10
+        items: 1,
+        lazyLoad: true,
+        loop: true,
+        margin: 10
     });
+
+    function changeProductFee(selectedRadio) {
+        var newPrice = parseFloat(selectedRadio.getAttribute("data-price"));
+        var newID = parseFloat(selectedRadio.getAttribute("data-id"));
+        var productPriceElement = document.getElementById("productPrice");
+        if (productPriceElement) {
+            productPriceElement.innerText = newPrice + " $";
+        }
+        var roomPrice = parseFloat(document.getElementById("roomfee").getAttribute("data-price")) || 0;
+        var vatRate = 0.2; // 20% VAT rate
+        var vatPrice = roomPrice * vatRate;
+        var total = roomPrice + vatPrice + newPrice;
+
+        // Update the prices in the HTML
+        document.getElementById("roomfee").innerText = roomPrice.toFixed(2) + " $";
+        document.getElementById("vat").innerText = vatPrice.toFixed(2) + " $";
+        document.getElementById("totalPrice").innerText = total.toFixed(2) + " $";
+        document.getElementById("pay").innerText =" Pay "+ total.toFixed(2) + " $";
+
+
+        document.getElementById("productPriceInput").value = newPrice;
+        document.getElementById("productPriceID").value = newID;
+        document.getElementById("totalInput").value = total;
+    }
+
+    window.onload = function () {
+        var firstRadioButton = document.getElementById("one");
+        firstRadioButton.onclick = function () {
+            changeProductFee(this);
+        };
+        if (!firstRadioButton.checked) {
+            firstRadioButton.checked = true;
+            changeProductFee(firstRadioButton);
+        }
+    };
+    document.getElementById("myForm").submit();
+
 </script>
 </body>
 

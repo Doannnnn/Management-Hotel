@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 public class BookingDAO extends DatabaseConnection{
 
     public Booking findById(int id){
-        String SELECT_BOOKING_BY_ID = "SELECT b.*, u.`name` name, u.phone phone, u.address address FROM bookings b join `user` u on b.user_id = u.id WHERE b.id = ?";
+        String SELECT_BOOKING_BY_ID = "SELECT b.*, u.img img,u.`name` name, u.phone phone, u.address address,u.email email " +
+                "FROM bookings b join `user` u on b.user_id = u.id WHERE u.id = ?";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKING_BY_ID)) {
             preparedStatement.setInt(1, id);
@@ -27,7 +28,7 @@ public class BookingDAO extends DatabaseConnection{
                 booking.setCheckOutDate(rs.getDate("check_out"));
                 booking.setNumberGuests(rs.getInt("number_guests"));
                 booking.setNumberRoom(rs.getInt("number_room"));
-                booking.setAuth(new Auth(rs.getInt("id"), rs.getString("name"), rs.getString("phone"), rs.getString("address")));
+                booking.setAuth(new Auth(rs.getInt("id"),rs.getString("img"), rs.getString("name"), rs.getString("phone"), rs.getString("address"), rs.getString("email")));
                 return booking;
             }
         } catch (Exception e) {
