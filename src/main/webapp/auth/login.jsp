@@ -31,7 +31,7 @@
 </c:if>
 <div class="container" id="container">
   <div class="container sign-up-container">
-    <form action="/auth?action=register" method="POST" onsubmit="return validateForm()">
+    <form action="/auth?action=register" method="POST" >
       <h1>Create Account</h1>
       <div class="social-container">
         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -51,7 +51,7 @@
       <div id="passwordError" class="error-message" style="display: none;"></div>
       <input type="password" placeholder="Re_Password" id="password" name="password" onblur="checkPassword()" required />
       <div id="passwordMatchError" class="error-message">Mật khẩu không trùng khớp</div>
-      <button id="signUpButton">Sign Up</button>
+      <button type="submit" > Sign Up </button>
     </form>
   </div>
   <div class="form-container sign-in-container">

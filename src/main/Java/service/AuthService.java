@@ -43,7 +43,7 @@ public class AuthService {
         if (auth != null && PasswordEncryptionUtil.checkPassword(password, auth.getPassword())) {
             HttpSession session = req.getSession();
             session.setAttribute("auth", auth); // luu vo kho
-            session.setAttribute("isLoggedIn", true);
+//            session.setAttribute("isLoggedIn", true);
             if (auth.getRole().getName().equals("ADMIN")) {
                 session.setAttribute("auth",getAuth("username"));
                 req.getRequestDispatcher("/admin/index.jsp").forward(req,resp);

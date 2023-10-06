@@ -31,17 +31,21 @@ public class AuthController extends HttpServlet {
             case "register" -> showRegister(req, resp);
             case "register_admin" -> showRegisterAdmin(req, resp);
             case "check-login" -> checkLogin(req, resp);
-//            case "log out" -> logout(req,resp);
+            case "edit" -> showEdit(req,resp);
             default -> logout(req,resp);
 //            default -> start(req, resp);
 
         }
     }
 
+    private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("auth", authService.findByID(Integer.parseInt(req.getParameter("id"))));
+        req.getRequestDispatcher("auth/edit.jsp").forward(req, resp);
+    }
+
     private void checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         Auth auth = (Auth) session.getAttribute("auth");
-
         if (auth != null) {
             // Người dùng đã đăng nhập
             String username = auth.getEmail();

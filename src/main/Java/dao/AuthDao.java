@@ -134,7 +134,7 @@ public class AuthDao extends DatabaseConnection {
         }
     }
     public Auth findByID(int id){
-        var SELECT_BY_ID = "SELECT u.* FROM user u WHERE u.id= ? ;";
+        var SELECT_BY_ID = "SELECT * FROM user  WHERE id= ? ;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
             preparedStatement.setInt(1, id);
