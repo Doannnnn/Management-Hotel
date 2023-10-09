@@ -14,7 +14,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- Css Styles -->
     <link rel="stylesheet" href="../hotel/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/font-awesome.min.css" type="text/css">
@@ -37,6 +37,74 @@
             text-transform: uppercase;
             font-weight: 500;
             padding-left: 20px;
+        }
+
+         .select-room-detail{
+             width: 100%;
+             height: 50px;
+             border: 1px solid #EBEBEB;
+             border-radius: 2px;
+             font-size: 16px;
+             color: #19191A;
+             text-transform: uppercase;
+             font-weight: 500;
+             padding-left: 20px;
+         }
+        .modal-content {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            background-color: #6c757d;
+            color: white;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            background-color: #f8f9fa;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Adjust input field styles */
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Center align input fields */
+        .d-flex.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
 </head>
@@ -66,12 +134,12 @@
 
 
         <div class="language-option">
-            <img src="../hotel/img/flag.jpg" alt="">
-            <span>EN <i class="fa fa-angle-down"></i></span>
+            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;" alt="">
+            <span>${auth.name} <i class="fa fa-angle-down"></i></span>
             <div class="flag-dropdown">
                 <ul>
-                    <li><a href="#">Zi</a></li>
-                    <li><a href="#">Fr</a></li>
+                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                    <li><a href="/auth" class="dropdown-item">Log Out</a></li>
                 </ul>
             </div>
         </div>
@@ -130,21 +198,61 @@
                             <a href="#"><i class="fa fa-instagram"></i></a>
                         </div>
                         <a href="#" class="bk-btn">Booking Now</a>
-                        <div class="language-option">
-                            <img src="../hotel/img/flag.jpg" alt="">
-                            <span>EN <i class="fa fa-angle-down"></i></span>
+
+                        <div class="language-option ">
+                            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;" alt="">
+                            <span>${auth.name} <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
-                                    <li><a href="#">Zi</a></li>
-                                    <li><a href="#">Fr</a></li>
+                                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                                    <li><a href="/auth" class="dropdown-item">Log Out</a></li>
                                 </ul>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <%--   hiển thị thông tin     --%>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm">
+                        <div class="mb-3">
+                            <label for="img" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
+                            <input type="file" name="img" id="img" value="${auth.img}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="name" name="name" value="${auth.name}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="col-form-label">Email</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="email" name="email" value="${auth.email}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="col-form-label">Phone</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone" value="${auth.phone}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="col-form-label">Address</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="address" name="address" value="${auth.address}" >
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%--        --%>
     <div class="menu-item">
         <div class="container">
             <div class="row">
@@ -668,6 +776,8 @@
 <!-- Search model end -->
 
 <!-- Js Plugins -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../hotel/js/jquery-3.3.1.min.js"></script>
 <script src="../hotel/js/bootstrap.min.js"></script>
 <script src="../hotel/js/jquery.magnific-popup.min.js"></script>
@@ -717,6 +827,26 @@
 
     // Đăng ký sự kiện cho phần tử có ID 'roomChoose'
     setupRoomOptions('roomChoose');
+</script>
+<script>
+
+        var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
+        keyboard: false
+    });
+
+    $(document).ready(function () {
+        // Khi người dùng nhấp vào liên kết "Information"
+        $(".edit-link").click(function () {
+            // Lấy giá trị id từ thuộc tính data-id của liên kết
+            var productId = $(this).data("id");
+            // Hiển thị modal tương ứng với id đã lấy được
+            $("#exampleModal").modal("show");
+
+            // Truyền giá trị id vào modal
+            // Đặt giá trị id vào một phần tử trong modal (ví dụ: một thẻ <span> có id "modalProductId")
+            $("#modalProductId").text(productId);
+        });
+    });
 </script>
 </body>
 

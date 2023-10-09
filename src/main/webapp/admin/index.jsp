@@ -411,7 +411,7 @@
 </script>
 <script>
     $(document).ready(function () {
-        // Khi người dùng nhấp vào liên kết "Information12"
+        // Khi người dùng nhấp vào liên kết "Information"
         $(".edit-link").click(function () {
             // Lấy giá trị id từ thuộc tính data-id của liên kết
             var productId = $(this).data("id");

@@ -91,8 +91,7 @@ public class HotelController extends HttpServlet {
     }
 
     private void showIndex(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Auth auth = (Auth) req.getAttribute("auth");
-        req.setAttribute("auth",auth);
+        req.setAttribute("auth",authService.findByID(Integer.parseInt(req.getParameter("id"))));
         req.getRequestDispatcher("hotel/index.jsp").forward(req, resp);
     }
 
@@ -191,7 +190,7 @@ public class HotelController extends HttpServlet {
             ratingService.saveRating(getRating(req, authId), id);
             resp.sendRedirect("hotel-page?action=room-detail&id=1");
         } else {
-            resp.sendRedirect("/auth/login.jsp"); // Chuyển hướng về trang trước đó nếu không tìm thấy bản ghi phù hợp
+            resp.sendRedirect("/auth/login.jsp");
         }
     }
 

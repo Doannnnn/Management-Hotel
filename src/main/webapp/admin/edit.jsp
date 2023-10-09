@@ -75,7 +75,7 @@
                     <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                 </div>
                 <div class="ms-3">
-                    <h6 class="mb-0">Jhon Doe</h6>
+                    <h6 class="mb-0">${auth.name}</h6>
                     <span>Admin</span>
                 </div>
             </div>
@@ -135,9 +135,9 @@
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
-                                    <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                    <h6 class="fw-normal mb-0">${auth.name} send you a message</h6>
                                     <small>15 minutes ago</small>
                                 </div>
                             </div>
@@ -145,9 +145,9 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
-                                    <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                    <h6 class="fw-normal mb-0">${auth.name} send you a message</h6>
                                     <small>15 minutes ago</small>
                                 </div>
                             </div>
@@ -155,9 +155,9 @@
                         <hr class="dropdown-divider">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
-                                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <img class="rounded-circle" src="../hotel/img/room/avatar/${auth.img}"alt="" style="width: 40px; height: 40px;">
                                 <div class="ms-2">
-                                    <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                    <h6 class="fw-normal mb-0">${auth.name} send you a message</h6>
                                     <small>15 minutes ago</small>
                                 </div>
                             </div>
@@ -192,19 +192,53 @@
                 </div>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <img class="rounded-circle me-lg-2" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                        <span class="d-none d-lg-inline-flex">John Doe</span>
+                        <img class="rounded-circle me-lg-2" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
+                        <span class="d-none d-lg-inline-flex">${auth.name}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                        <a href="#" class="dropdown-item">My Profile</a>
-                        <a href="#" class="dropdown-item">Settings</a>
-                        <a href="#" class="dropdown-item">Log Out</a>
+                        <a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}"  >Information</a>
+                        <a href="/auth?action=register_admin" class="dropdown-item"  >create Account</a>
+                        <a href="/auth" class="dropdown-item">Log Out</a>
                     </div>
                 </div>
             </div>
         </nav>
         <!-- Navbar End -->
+        <%--   hiển thị thông tin     --%>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
 
+                    </div>
+                    <div class="modal-body">
+                        <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm">
+                            <div class="mb-3">
+                                <label for="name" class="col-form-label">Name</label>
+                                <input class="d-flex justify-content-between select-room-detail"  name="name" value="${auth.name}" >
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="col-form-label">Email</label>
+                                <input class="d-flex justify-content-between select-room-detail" id="email" name="email" value="${auth.email}" >
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="col-form-label">Phone</label>
+                                <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone" value="${auth.phone}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="col-form-label">Address</label>
+                                <input class="d-flex justify-content-between select-room-detail" id="address" name="address" value="${auth.address}" >
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%--        --%>
         <!-- Table Start -->
         <div class="container">
             <h3 class="text-center" style="margin: 1.5rem">EDIT ROOM</h3>
@@ -409,7 +443,21 @@
         // Sau khi thêm tệp vào ô input, cần cập nhật lại giao diện người dùng
         renderUploadedFiles(currentFiles);
     }
+</script>
+<script>
+    $(document).ready(function () {
+        // Khi người dùng nhấp vào liên kết "Information"
+        $(".edit-link").click(function () {
+            // Lấy giá trị id từ thuộc tính data-id của liên kết
+            var productId = $(this).data("id");
+            // Hiển thị modal tương ứng với id đã lấy được
+            $("#exampleModal").modal("show");
 
+            // Truyền giá trị id vào modal
+            // Đặt giá trị id vào một phần tử trong modal (ví dụ: một thẻ <span> có id "modalProductId")
+            $("#modalProductId").text(productId);
+        });
+    });
 </script>
 
 </body>

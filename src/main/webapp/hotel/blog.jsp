@@ -12,7 +12,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- Css Styles -->
     <link rel="stylesheet" href="../hotel/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/font-awesome.min.css" type="text/css">
@@ -24,6 +24,75 @@
     <link rel="stylesheet" href="../hotel/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
+    <style>
+        .select-room-detail{
+            width: 100%;
+            height: 50px;
+            border: 1px solid #EBEBEB;
+            border-radius: 2px;
+            font-size: 16px;
+            color: #19191A;
+            text-transform: uppercase;
+            font-weight: 500;
+            padding-left: 20px;
+        }
+        .modal-content {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            background-color: #6c757d;
+            color: white;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            background-color: #f8f9fa;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Adjust input field styles */
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Center align input fields */
+        .d-flex.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -46,14 +115,14 @@
     </div>
     <div class="header-configure-area">
 
-        <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <img class="rounded-circle me-lg-2" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
-                <span class="d-none d-lg-inline-flex">${auth.name}</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                <a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}"  >Information</a>
-                <a href="/auth" class="dropdown-item">Log Out</a>
+        <div class="language-option">
+            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;" alt="">
+            <span>${auth.name} <i class="fa fa-angle-down"></i></span>
+            <div class="flag-dropdown">
+                <ul>
+                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                    <li><a href="/auth" class="dropdown-item">Log Out</a></li>
+                </ul>
             </div>
         </div>
 
@@ -112,14 +181,14 @@
                         </div>
                         <a href="#" class="bk-btn">Booking Now</a>
 
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <img class="rounded-circle me-lg-2" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
-                                <span class="d-none d-lg-inline-flex">${auth.name}</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                                <a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}"  >Information</a>
-                                <a href="/auth" class="dropdown-item">Log Out</a>
+                        <div class="language-option ">
+                            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;" alt="">
+                            <span>${auth.name} <i class="fa fa-angle-down"></i></span>
+                            <div class="flag-dropdown">
+                                <ul>
+                                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                                    <li><a href="/auth" class="dropdown-item">Log Out</a></li>
+                                </ul>
                             </div>
                         </div>
 
@@ -395,6 +464,8 @@
 <!-- Search model end -->
 
 <!-- Js Plugins -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../hotel/js/jquery-3.3.1.min.js"></script>
 <script src="../hotel/js/bootstrap.min.js"></script>
 <script src="../hotel/js/jquery.magnific-popup.min.js"></script>
@@ -403,6 +474,24 @@
 <script src="../hotel/js/jquery.slicknav.js"></script>
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
+        keyboard: false
+    });
+    $(document).ready(function () {
+        // Khi người dùng nhấp vào liên kết "Information"
+        $(".edit-link").click(function () {
+            // Lấy giá trị id từ thuộc tính data-id của liên kết
+            var productId = $(this).data("id");
+            // Hiển thị modal tương ứng với id đã lấy được
+            $("#exampleModal").modal("show");
+
+            // Truyền giá trị id vào modal
+            // Đặt giá trị id vào một phần tử trong modal (ví dụ: một thẻ <span> có id "modalProductId")
+            $("#modalProductId").text(productId);
+        });
+    });
+</script>
 </body>
 
 </html>

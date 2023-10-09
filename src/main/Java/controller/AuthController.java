@@ -7,15 +7,17 @@ import service.AuthService;
 import service.RoleService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet(name = "authController", urlPatterns = "/auth")
-
+@MultipartConfig(
+        location = "D:\\Management-Hotel\\src\\main\\webapp\\hotel\\img\\room\\avatar",
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 50, // 50MB
+        maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class AuthController extends HttpServlet {
     private AuthService authService;
     private RoleService roleService;
@@ -97,14 +99,13 @@ public class AuthController extends HttpServlet {
 
     private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String role = getRoleFromSomewhere(req);
-    authService.update(getAuthRequest(req),Integer.parseInt(req.getParameter("id")));
-
+        authService.update(getAuthRequest(req),Integer.parseInt(req.getParameter("id")));
         if (role.equals("ADMIN")) {
-            req.getRequestDispatcher("/admin/index.jsp").forward(req,resp); // Trang admin
+            resp.sendRedirect(req.getContextPath() + "/admin?id=" + Integer.parseInt(req.getParameter("id")));
         } else if (role.equals("USER")) {
-            req.getRequestDispatcher("/hotel").forward(req,resp); // Trang user
+            resp.sendRedirect(req.getContextPath() + "/hotel-page?id="+Integer.parseInt(req.getParameter("id")));
         } else {
-            resp.sendRedirect("/auth"); // Trang mặc định nếu không xác định được vai trò
+            resp.sendRedirect("/auth");
         }
     }
 
@@ -113,16 +114,19 @@ public class AuthController extends HttpServlet {
 
     private String getRoleFromSomewhere(HttpServletRequest req) {
         HttpSession session = req.getSession();
-        String role = (String) session.getAttribute("role");
-        return role;
+        return (String) session.getAttribute("role");
     }
 
-private Auth getAuthRequest(HttpServletRequest req){
+private Auth getAuthRequest(HttpServletRequest req) throws ServletException, IOException {
+    Part part = req.getPart("img");
+    String img = extractFileName(part);
+    part.write(img);
+
     String name = req.getParameter("name");
     String email = req.getParameter("email");
     String phone = req.getParameter("phone");
     String address = req.getParameter("address");
-    return new Auth(name,email,phone,address);
+    return new Auth(img,name,email,phone,address);
 }
 
 
@@ -173,6 +177,17 @@ private Auth getAuthRequest(HttpServletRequest req){
         String idRole = req.getParameter("role");
         Role role = new Role(Integer.parseInt(idRole));
         return new Auth(img, name, email, phone, address, password, role);
+    }
+
+    private String extractFileName(Part part) {
+        String contentDisposition = part.getHeader("content-disposition");
+        String[] items = contentDisposition.split(";");
+        for (String item : items) {
+            if (item.trim().startsWith("filename")) {
+                return item.substring(item.indexOf("=") + 2, item.length() - 1);
+            }
+        }
+        return null;
     }
 
     @Override

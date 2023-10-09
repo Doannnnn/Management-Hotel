@@ -7,6 +7,8 @@ package dao;
 import model.*;
 import service.dto.Page;
 
+import javax.servlet.http.Part;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -202,20 +204,33 @@ public class AuthDao extends DatabaseConnection {
         return null;
     }
     public void update(Auth auth){
-        String UPDATE = "UPDATE user SET `name` = ?, `email` = ?, `phone` = ?, `address` = ? WHERE (`id` = ?)";
+        String UPDATE = "UPDATE user SET `img`=?, `name` = ?, `email` = ?, `phone` = ?, `address` = ? WHERE (`id` = ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
-            preparedStatement.setString(1,auth.getName());
-            preparedStatement.setString(2, auth.getEmail());
-            preparedStatement.setString(3, auth.getPhone());
-            preparedStatement.setString(4, auth.getAddress());
-            preparedStatement.setInt(5, auth.getId());
+            preparedStatement.setString(1,auth.getImg());
+            preparedStatement.setString(2,auth.getName());
+            preparedStatement.setString(3, auth.getEmail());
+            preparedStatement.setString(4, auth.getPhone());
+            preparedStatement.setString(5, auth.getAddress());
+            preparedStatement.setInt(6, auth.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());;
         }
     }
 
+    private void saveImageToDatabase(Part part, String fileName, int id) {
+        try (Connection connection = getConnection()) {
+            String sql = "UPDATE auth SET img = ? WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setBinaryStream(1, part.getInputStream());
+            statement.setInt(2, id);
+            statement.executeUpdate();
+        } catch (SQLException | IOException e) {
+            // Xử lý ngoại lệ ở đây hoặc chuyển ngoại lệ cho lớp gọi
+            e.printStackTrace();
+        }
+    }
 
     public Page<Auth> findAllPage(int page, String search){
         var result = new Page<Auth>();
