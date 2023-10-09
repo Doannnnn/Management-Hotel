@@ -98,7 +98,7 @@ public class RoomController extends HttpServlet {
         req.setAttribute("types", EType.values());
         req.setAttribute("amenities", EAmenities.values());
         req.setAttribute("status", EStatus.values());
-        req.getRequestDispatcher("admin/edit.jsp").forward(req,resp);
+        req.getRequestDispatcher("admin/").forward(req,resp);
     }
 
     private void showCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

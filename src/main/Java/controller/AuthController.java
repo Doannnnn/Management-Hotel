@@ -1,6 +1,7 @@
 package controller;
 
 
+import dao.AuthDao;
 import model.Auth;
 import model.Role;
 import service.AuthService;
@@ -10,7 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
+import java.io.*;
 
 @WebServlet(name = "authController", urlPatterns = "/auth")
 @MultipartConfig(
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class AuthController extends HttpServlet {
     private AuthService authService;
     private RoleService roleService;
+
 
 
     @Override
@@ -35,7 +37,7 @@ public class AuthController extends HttpServlet {
             case "check-login" -> checkLogin(req, resp);
 
             default -> logout(req, resp);
-//            default -> start(req, resp);
+
 
         }
     }
@@ -99,7 +101,10 @@ public class AuthController extends HttpServlet {
 
     private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String role = getRoleFromSomewhere(req);
-        authService.update(getAuthRequest(req),Integer.parseInt(req.getParameter("id")));
+        Part part = req.getPart("img");
+        Auth auth = getAuthRequest(req, part);
+        authService.update(auth,Integer.parseInt(req.getParameter("id")));
+
         if (role.equals("ADMIN")) {
             resp.sendRedirect(req.getContextPath() + "/admin?id=" + Integer.parseInt(req.getParameter("id")));
         } else if (role.equals("USER")) {
@@ -109,7 +114,16 @@ public class AuthController extends HttpServlet {
         }
     }
 
-
+    private void saveImageToPath(InputStream inputStream, String filePath) throws IOException {
+        // Ghi dữ liệu từ InputStream vào tệp tin
+        try (OutputStream outputStream = new FileOutputStream(filePath)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        }
+    }
 
 
     private String getRoleFromSomewhere(HttpServletRequest req) {
@@ -117,17 +131,27 @@ public class AuthController extends HttpServlet {
         return (String) session.getAttribute("role");
     }
 
-private Auth getAuthRequest(HttpServletRequest req) throws ServletException, IOException {
-    Part part = req.getPart("img");
-    String img = extractFileName(part);
-    part.write(img);
+    private Auth getAuthRequest(HttpServletRequest req, Part part) throws ServletException, IOException {
+        String img = extractFileName(part);
+        int id = Integer.parseInt(req.getParameter("id"));
+        String imagePath = "D:\\Management-Hotel\\src\\main\\webapp\\hotel\\img\\room\\avatar";
+        String filePath = imagePath + File.separator + img;
 
-    String name = req.getParameter("name");
-    String email = req.getParameter("email");
-    String phone = req.getParameter("phone");
-    String address = req.getParameter("address");
-    return new Auth(img,name,email,phone,address);
-}
+
+        String serverPath = this.getServletContext().getRealPath("/") + "hotel\\img\\room\\avatar" + File.separator + img;
+        System.out.println("serverPath..." + serverPath);
+
+        saveImageToPath(part.getInputStream(), filePath);
+        saveImageToPath(part.getInputStream(), serverPath);
+
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String phone = req.getParameter("phone");
+        String address = req.getParameter("address");
+
+        return new Auth(img, name, email, phone, address);
+    }
+
 
 
     private void registerAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

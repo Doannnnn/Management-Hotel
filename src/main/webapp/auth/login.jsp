@@ -21,6 +21,8 @@
       display: none;
       color: red;
       margin-top: 5px;
+      font-style: italic;
+      font-size: 14px;
     }
   </style>
 </head>

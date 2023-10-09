@@ -219,15 +219,14 @@ public class AuthDao extends DatabaseConnection {
         }
     }
 
-    private void saveImageToDatabase(Part part, String fileName, int id) {
-        try (Connection connection = getConnection()) {
-            String sql = "UPDATE auth SET img = ? WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBinaryStream(1, part.getInputStream());
-            statement.setInt(2, id);
-            statement.executeUpdate();
+    public void saveImageToDatabase(Part part, String fileName, int id) {
+        String UPDATE = "UPDATE user SET `img` = ? WHERE (`id` = ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
+            preparedStatement.setBinaryStream(1, part.getInputStream());
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException | IOException e) {
-            // Xử lý ngoại lệ ở đây hoặc chuyển ngoại lệ cho lớp gọi
             e.printStackTrace();
         }
     }

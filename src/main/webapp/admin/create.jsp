@@ -212,7 +212,11 @@
 
                     </div>
                     <div class="modal-body">
-                        <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm">
+                        <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="img" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
+                                <input type="file" name="img" id="img" accept="image/*" value="${auth.img}">
+                            </div>
                             <div class="mb-3">
                                 <label for="name" class="col-form-label">Name</label>
                                 <input class="d-flex justify-content-between select-room-detail"  name="name" value="${auth.name}" >

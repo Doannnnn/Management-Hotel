@@ -60,6 +60,8 @@
             color: red;
             margin-top: 5px;
             display: none;
+            font-style: italic;
+            font-size: 14px;
         }
 
         button {
@@ -134,8 +136,6 @@
         </form>
     </div>
 </div>
-<script>
     <script src="/auth/assets/js/validex.js"></script>
-</script>
 </body>
 </html>

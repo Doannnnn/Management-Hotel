@@ -45,11 +45,12 @@ public class AuthService {
         var auth = authDao.findByUsernameOrEmail(usernameOrEmail);
         if (auth != null && PasswordEncryptionUtil.checkPassword(password, auth.getPassword())) {
             HttpSession session = req.getSession();
-//            session.setAttribute("isLoggedIn", true);
                 session.setAttribute("auth",auth);
             if (auth.getRole().getName().equals("ADMIN")) {
-                resp.sendRedirect(req.getContextPath() + "/admin?id="+ auth.getId());
+                session.setAttribute("role","ADMIN");
+                resp.sendRedirect(req.getContextPath() + "/admin?id="+ auth.getId() );
             } else {
+                session.setAttribute("role","USER");
                 resp.sendRedirect(req.getContextPath() + "/hotel-page?id="+ auth.getId());
             }
         }
@@ -96,6 +97,8 @@ public class AuthService {
         auth.setId(id);
         authDao.update(auth);
     }
+
+
     public Page<Auth> findAllPage(int page, String search){
         return authDao.findAllPage(page, search);
     }

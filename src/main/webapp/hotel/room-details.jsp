@@ -51,6 +51,19 @@
             padding-left: 20px;
         }
 
+        
+         .select-room-detail{
+             width: 100%;
+             height: 50px;
+             border: 1px solid #EBEBEB;
+             border-radius: 2px;
+             font-size: 16px;
+             color: #19191A;
+             text-transform: uppercase;
+             font-weight: 500;
+             padding-left: 20px;
+         }
+
         .modal-content {
             background-color: #f8f9fa;
             border-radius: 10px;
@@ -107,6 +120,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
     </style>
 </head>
 
@@ -222,7 +236,11 @@
 
                 </div>
                 <div class="modal-body">
-                    <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm">
+                    <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="img" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
+                            <input type="file" name="img" id="img" accept="image/*" value="${auth.img}">
+                        </div>
                         <div class="mb-3">
                             <label for="name" class="col-form-label">Name</label>
                             <input class="d-flex justify-content-between select-room-detail" id="name" name="name"

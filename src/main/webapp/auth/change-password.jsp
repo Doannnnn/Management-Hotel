@@ -35,8 +35,6 @@
         <button>Đổi mật khẩu</button>
     </form>
 </div>
-<script>
     <script src="/auth/assets/js/validex.js"></script>
-</script>
 </body>
 </html>
