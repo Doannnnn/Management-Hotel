@@ -87,16 +87,14 @@ public class BillDAO extends DatabaseConnection{
     }
 
     public Bill findById(int id) {
-        String SELECT_BILL_BY_ID = "SELECT b.id, b.code, r.id AS room_id, r.name AS room_name, r.type AS room_type, " +
-                "p.id AS product_id, p.name AS product_name, " +
-                "u.id AS user_id, u.name AS user_name, u.phone AS user_phone, " +
-                "b.total_amount AS total, b.status " +
+        String SELECT_BILL_BY_ID = "SELECT b.id, b.code, b.date_invoice, r.price price, p.price price_product, r.name AS room_name, r.type, bk.check_in check_in, bk.check_out check_out, " +
+                "p.name AS service, u.name AS user_name, u.phone, bk.number_room, b.total_amount AS total, b.status " +
                 "FROM bill b " +
+                "JOIN user u ON b.user_id = u.id " +
+                "JOIN bookings bk ON b.booking_id = bk.id " +
                 "JOIN rooms r ON b.room_id = r.id " +
                 "JOIN products p ON b.product_id = p.id " +
-                "JOIN user u ON b.user_id = u.id " +
                 "WHERE b.id = ?";
-        Bill bill = null;
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILL_BY_ID)) {
@@ -105,26 +103,32 @@ public class BillDAO extends DatabaseConnection{
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
-                bill = new Bill();
+                Bill bill = new Bill();
                 bill.setId(rs.getInt("id"));
                 bill.setCode(rs.getString("code"));
                 bill.setTotalAmount(rs.getBigDecimal("total"));
+                bill.setDateOfInvoice(rs.getDate("date_invoice"));
 
                 Room room = new Room();
-                room.setId(rs.getInt("room_id"));
                 room.setName(rs.getString("room_name"));
-                room.setType(EType.valueOf(rs.getString("room_type")));
+                room.setType(EType.valueOf(rs.getString("type")));
+                room.setPrice(rs.getBigDecimal("price"));
 
                 Product product = new Product();
-                product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("product_name"));
+                product.setName(rs.getString("service"));
+                product.setPrice(rs.getBigDecimal("price_product"));
+
+                Booking booking = new Booking();
+                booking.setNumberRoom(rs.getInt("number_room"));
+                booking.setCheckInDate(rs.getDate("check_in"));
+                booking.setCheckOutDate(rs.getDate("check_out"));
 
                 Auth auth = new Auth();
-                auth.setId(rs.getInt("user_id"));
                 auth.setName(rs.getString("user_name"));
-                auth.setPhone(rs.getString("user_phone"));
+                auth.setPhone(rs.getString("phone"));
 
                 bill.setRoom(room);
+                bill.setBooking(booking);
                 bill.setProduct(product);
                 bill.setAuth(auth);
 
@@ -134,12 +138,14 @@ public class BillDAO extends DatabaseConnection{
                     EStatusBill statusBill = EStatusBill.valueOf(statusStr);
                     bill.setStatusBill(statusBill);
                 }
+
+                return bill;
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
 
-        return bill;
+        return null;
     }
 
 

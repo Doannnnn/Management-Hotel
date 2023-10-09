@@ -253,7 +253,7 @@
                             <td>
                                 <div class="text-right" style="margin-left: 15px">
                                     <a href="/admin?action=bill-details&id=${bill.id}" class="icon-link">
-                                        <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
+                                        <i class="fas fa-info-circle" style="font-size: 30px; margin-left: 20px"></i>
                                     </a>
                                 </div>
                             </td>
