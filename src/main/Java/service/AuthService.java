@@ -49,14 +49,14 @@ public class AuthService {
             if (auth.getRole().getName().equals("ADMIN")) {
                 session.setAttribute("auth",auth);
                 session.setAttribute("role", "ADMIN");
-                req.getRequestDispatcher("/admin/index.jsp").forward(req,resp);
+                resp.sendRedirect(req.getContextPath() + "/admin");
 //                Chuyển hướng trang admin
             } else {
                 //Chuyển hướng trang người dùng
                 session.setAttribute("auth",auth);
                 session.setAttribute("role", "USER");
                 session.setAttribute("book",bookingService.findByIDAuth(auth.getId()));
-                req.getRequestDispatcher("/hotel/index.jsp").forward(req,resp);
+                resp.sendRedirect(req.getContextPath() + "/hotel-page");
 
             }
         }

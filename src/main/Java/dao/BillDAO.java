@@ -1,13 +1,16 @@
 package dao;
 
 import model.*;
+import service.dto.Page;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BillDAO extends DatabaseConnection{
 
@@ -30,9 +33,10 @@ public class BillDAO extends DatabaseConnection{
 
     public List<Bill> getAllBill() {
         String SELECT_ALL_BILL = "SELECT b.id, b.code, r.name AS room_name, r.type, " +
-                "p.name AS service, u.name AS user_name, u.phone, b.total_amount AS total, b.status " +
+                "p.name AS service, u.name AS user_name, u.phone, bk.number_room, b.total_amount AS total, b.status " +
                 "FROM bill b " +
                 "JOIN user u ON b.user_id = u.id " +
+                "JOIN bookings bk ON b.booking_id = bk.id " +
                 "JOIN rooms r ON b.room_id = r.id " +
                 "JOIN products p ON b.product_id = p.id";
         List<Bill> bills = new ArrayList<>();
@@ -55,11 +59,15 @@ public class BillDAO extends DatabaseConnection{
                 Product product = new Product();
                 product.setName(rs.getString("service"));
 
+                Booking booking = new Booking();
+                booking.setNumberRoom(rs.getInt("number_room"));
+
                 Auth auth = new Auth();
                 auth.setName(rs.getString("user_name"));
                 auth.setPhone(rs.getString("phone"));
 
                 bill.setRoom(room);
+                bill.setBooking(booking);
                 bill.setProduct(product);
                 bill.setAuth(auth);
 
@@ -79,7 +87,10 @@ public class BillDAO extends DatabaseConnection{
     }
 
     public Bill findById(int id) {
-        String SELECT_BILL_BY_ID = "SELECT b.id, b.code, r.*, p.*, u.*, b.total_amount total, b.status " +
+        String SELECT_BILL_BY_ID = "SELECT b.id, b.code, r.id AS room_id, r.name AS room_name, r.type AS room_type, " +
+                "p.id AS product_id, p.name AS product_name, " +
+                "u.id AS user_id, u.name AS user_name, u.phone AS user_phone, " +
+                "b.total_amount AS total, b.status " +
                 "FROM bill b " +
                 "JOIN rooms r ON b.room_id = r.id " +
                 "JOIN products p ON b.product_id = p.id " +
@@ -101,17 +112,17 @@ public class BillDAO extends DatabaseConnection{
 
                 Room room = new Room();
                 room.setId(rs.getInt("room_id"));
-                room.setName(rs.getString("name"));
-                room.setType(EType.valueOf(rs.getString("type")));
+                room.setName(rs.getString("room_name"));
+                room.setType(EType.valueOf(rs.getString("room_type")));
 
                 Product product = new Product();
                 product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("name"));
+                product.setName(rs.getString("product_name"));
 
                 Auth auth = new Auth();
                 auth.setId(rs.getInt("user_id"));
-                auth.setName(rs.getString("name"));
-                auth.setPhone(rs.getString("phone"));
+                auth.setName(rs.getString("user_name"));
+                auth.setPhone(rs.getString("user_phone"));
 
                 bill.setRoom(room);
                 bill.setProduct(product);
@@ -129,6 +140,77 @@ public class BillDAO extends DatabaseConnection{
         }
 
         return bill;
+    }
+
+
+    public Page<Bill> findAllBill(int page, String search){
+        var result = new Page<Bill>();
+        final int TOTAL_ELEMENT = 6;
+        result.setCurrentPage(page);
+        var content = new ArrayList<Bill>();
+        if(search == null){
+            search = "";
+        }
+        search = "%" + search.toLowerCase() + "%";
+        var SELECT_ALL = "SELECT b.id, b.code, u.name AS user_name, u.phone, r.type, bk.number_room, b.total_amount AS total, b.status " +
+                "FROM bill b " +
+                "JOIN user u ON b.user_id = u.id " +
+                "JOIN bookings bk ON b.booking_id = bk.id " +
+                "JOIN rooms r ON b.room_id = r.id " +
+                "JOIN products p ON b.product_id = p.id " +
+                "WHERE (LOWER(b.code) LIKE ?) " +
+                "LIMIT ? OFFSET ?";
+
+        var SELECT_COUNT = "SELECT COUNT(1) cnt FROM bill b " +
+                "WHERE (LOWER(b.code) LIKE ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL)) {
+            preparedStatement.setString(1, search);
+            preparedStatement.setInt(2,TOTAL_ELEMENT);
+            preparedStatement.setInt(3, (page - 1) * TOTAL_ELEMENT);
+            System.out.println(preparedStatement);
+            var rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Bill bill = new Bill();
+                bill.setId(rs.getInt("id"));
+                bill.setCode(rs.getString("code"));
+                bill.setTotalAmount(rs.getBigDecimal("total"));
+
+                Room room = new Room();
+                room.setType(EType.valueOf(rs.getString("type")));
+
+                Booking booking = new Booking();
+                booking.setNumberRoom(rs.getInt("number_room"));
+
+                Auth auth = new Auth();
+                auth.setName(rs.getString("user_name"));
+                auth.setPhone(rs.getString("phone"));
+
+                bill.setRoom(room);
+                bill.setBooking(booking);
+                bill.setAuth(auth);
+
+                // Lấy giá trị trạng thái và gán vào Enum EStatusBill
+                String statusStr = rs.getString("status");
+                if (statusStr != null) {
+                    EStatusBill statusBill = EStatusBill.valueOf(statusStr);
+                    bill.setStatusBill(statusBill);
+                }
+
+                content.add(bill);
+            }
+            result.setContent(content);
+            var preparedStatementCount = connection.prepareStatement(SELECT_COUNT);
+            preparedStatementCount.setString(1, search);
+            var rsCount = preparedStatementCount.executeQuery();
+            if(rsCount.next()){
+                result.setTotalPage((int) Math.ceil((double) rsCount.getInt("cnt") /TOTAL_ELEMENT));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());;
+        }
+        return result;
     }
 
 }

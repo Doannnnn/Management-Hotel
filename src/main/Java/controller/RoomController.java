@@ -51,9 +51,17 @@ public class RoomController extends HttpServlet {
             case "user":
                 showUser(req, resp);
                 break;
+            case "bill-details":
+                showBillDetails(req, resp);
+                break;
             default:
                 showRoom(req, resp);
         }
+    }
+
+    private void showBillDetails(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("bill", billService.findById(Integer.parseInt(req.getParameter("id"))));
+        req.getRequestDispatcher("admin/bill-details.jsp").forward(req,resp);
     }
 
     private void showUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -68,6 +76,12 @@ public class RoomController extends HttpServlet {
     }
 
     private void showBill(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pageString = req.getParameter("page");
+        if (pageString == null) {
+            pageString = "1";
+        }
+        req.setAttribute("page", billService.findAllBill(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("bills", billService.getAllBill());
         req.getRequestDispatcher("admin/bill.jsp").forward(req,resp);
     }

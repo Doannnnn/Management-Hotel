@@ -8,6 +8,7 @@ public class Bill {
     private int id;
     private String code;
     private Auth auth;
+    private Booking booking;
     private Room room;
     private Product product;
     private BigDecimal totalAmount;
@@ -15,17 +16,18 @@ public class Bill {
     private Date dateOfInvoice = Date.valueOf(LocalDate.now());
 
     public Bill() {
+
     }
 
-    public Bill(int id, Auth auth, String code, Room room, Product product, BigDecimal totalAmount, EStatusBill statusBill,Date dateOfInvoice) {
+    public Bill(int id, Auth auth, String code, Booking booking,Room room, Product product, BigDecimal totalAmount, EStatusBill statusBill) {
         this.id = id;
         this.auth = auth;
         this.code = code;
+        this.booking = booking;
         this.room = room;
         this.product = product;
         this.totalAmount = totalAmount;
         this.statusBill = statusBill;
-        this.dateOfInvoice = dateOfInvoice;
     }
 
     public int getId() {
@@ -90,5 +92,13 @@ public class Bill {
 
     public void setDateOfInvoice(Date dateOfInvoice) {
         this.dateOfInvoice = dateOfInvoice;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }

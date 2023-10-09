@@ -100,7 +100,7 @@
             <a href="#" class="sidebar-toggler flex-shrink-0">
                 <i class="fa fa-bars"></i>
             </a>
-            <form class="d-none d-md-flex ms-4" action="/admin?page=${page.currentPage}">
+            <form class="d-none d-md-flex ms-4" action="/admin?action=bill&search=${page.currentPage}">
                 <div class="input-group">
                     <input class="form-control border-0" type="text" value="${search}" name="search" style="width: 300px" placeholder="Search">
                     <button id="searchButton" class="btn btn-primary">
@@ -224,37 +224,35 @@
         <!-- Table Start -->
         <div class="container-fluid" >
             <div id="main-container" class="card container px-6" style="height: 80vh">
-                <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT ROOM</h3>
+                <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT BILL</h3>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th style="padding-left: 50px;">CODE</th>
-                        <th style="padding-left: 22px;">ROOMNAME</th>
+                        <th style="padding-left: 42px;">CODE</th>
+                        <th style="padding-left: 20px;">USERNAME</th>
+                        <th style="padding-left: 32px;">PHONE</th>
                         <th style="padding-left: 32px;">TYPE</th>
-                        <th style="padding-left: 6px;">SERVICE</th>
-                        <th style="padding-left: 30px;">USERNAME</th>
-                        <th style="padding-left: 22px;">PHONE</th>
+                        <th style="padding-left: 30px;">NUMBER</th>
                         <th>TOTAL</th>
-                        <th style="padding-left: 10px;">STATUS</th>
-                        <th style="padding-left: 34px;">BIll-DETAILS</th>
+                        <th>STATUS</th>
+                        <th>BIll-DETAILS</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="bill" items="${bills}">
+                    <c:forEach var="bill" items="${page.content}">
                         <tr style="vertical-align: middle;">
                             <td>${bill.id}</td>
                             <td>${bill.code}</td>
-                            <td>${bill.room.name}</td>
-                            <td>${bill.room.type}</td>
-                            <td>${bill.product.name}</td>
                             <td>${bill.auth.name}</td>
                             <td>${bill.auth.phone}</td>
+                            <td>${bill.room.type}</td>
+                            <td style="padding-left: 32px;">${bill.booking.numberRoom}</td>
                             <td>${bill.totalAmount}</td>
-                            <td>${bill.status}</td>
+                            <td>${bill.statusBill}</td>
                             <td>
-                                <div class="text-right">
-                                    <a href="/admin?action=edit&id=${room.id}" class="icon-link">
+                                <div class="text-right" style="margin-left: 15px">
+                                    <a href="/admin?action=bill-details&id=${bill.id}" class="icon-link">
                                         <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
                                 </div>
@@ -266,10 +264,7 @@
             </div>
         </div>
         <nav aria-label="...">
-            <c:set var="url" value="/admin?page="/>
-            <c:if test="${isShowRestore}">
-                <c:set var="url" value="/admin?action=restore&page="/>
-            </c:if>
+            <c:set var="url" value="/admin?action=bill&page="/>
             <ul class="pagination" style="padding: 12px">
                 <li class="page-item <c:if test="${page.currentPage == 1}">disabled</c:if>">
                     <a class="page-link" href="${url}${(page.currentPage - 1)}" tabindex="-1"
@@ -333,6 +328,7 @@
     function confirmDelete() {
         return confirm("Bạn có chắc chắn muốn xóa?");
     }
+
 </script>
 <script>
     $(document).ready(function () {
