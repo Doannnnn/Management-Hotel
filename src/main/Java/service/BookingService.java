@@ -12,4 +12,8 @@ public class BookingService {
     public Booking findByIDAuth(int idAuth){
         return bookingDAO.findById(idAuth);
     }
+
+    public void create(Booking booking) {
+        bookingDAO.create(booking);
+    }
 }

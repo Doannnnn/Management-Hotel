@@ -17,9 +17,11 @@ import java.util.stream.Collectors;
 
 public class AuthService {
     private AuthDao authDao;
+    private BookingService bookingService;
 
     public AuthService() {
         authDao = new AuthDao();
+        bookingService = new BookingService();
     }
 
     public void register(Auth auth) {
@@ -36,13 +38,12 @@ public class AuthService {
         return auths.stream().filter(auth -> auth.getEmail().equals(email)).findFirst().orElse(null);
     }
 
-    public boolean login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String usernameOrEmail = req.getParameter("username");
         String password = req.getParameter("password");
         var auth = authDao.findByUsernameOrEmail(usernameOrEmail);
         if (auth != null && PasswordEncryptionUtil.checkPassword(password, auth.getPassword())) {
             HttpSession session = req.getSession();
-            session.setAttribute("auth", auth); // luu vo kho
 //            session.setAttribute("isLoggedIn", true);
             if (auth.getRole().getName().equals("ADMIN")) {
                 session.setAttribute("auth",auth);
@@ -53,11 +54,12 @@ public class AuthService {
                 //Chuyển hướng trang người dùng
                 session.setAttribute("auth",auth);
                 session.setAttribute("role", "USER");
-                req.getRequestDispatcher("/hotel/").forward(req,resp);
+                session.setAttribute("book",bookingService.findByIDAuth(auth.getId()));
+                req.getRequestDispatcher("/hotel/index.jsp").forward(req,resp);
+
             }
-            return true;
         }
-        return false;
+
     }
 
 

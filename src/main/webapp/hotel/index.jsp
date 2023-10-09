@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -24,6 +26,19 @@
     <link rel="stylesheet" href="../hotel/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
+    <style>
+        .select-room-detail{
+            width: 100%;
+            height: 50px;
+            border: 1px solid #ebebeb;
+            border-radius: 2px;
+            font-size: 16px;
+            color: #19191a;
+            text-transform: uppercase;
+            font-weight: 500;
+            padding-left: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -116,7 +131,7 @@
                         </div>
                         <a href="#" class="bk-btn">Booking Now</a>
                         <div class="language-option">
-                            <img src="../hotel/img/flag.jpg" alt="">x
+                            <img src="../hotel/img/flag.jpg" alt="">
                             <span>EN <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
@@ -182,35 +197,37 @@
                 </div>
             </div>
             <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
-                <div class="booking-form">
+                <div class="room-booking" style="background-color: white;  border-color: black;  padding: 56px; margin: -34px;">
                     <h3>Booking Your Hotel</h3>
-                    <form action="#">
+                    <form action="/hotel-page?action=booking" method="post">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
-                            <input type="text" class="date-input" id="date-in">
+                            <input type="text" class="date-input" id="date-in" name="checkin" required>
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="check-date">
                             <label for="date-out">Check Out:</label>
-                            <input type="text" class="date-input" id="date-out">
+                            <input type="text" class="date-input" id="date-out"  name="checkout" required>
                             <i class="icon_calendar"></i>
                         </div>
-                        <div class="select-option">
-                            <label for="guest">Guests:</label>
-                            <select id="guest">
-                                <option value="">2 Adults</option>
-                                <option value="">3 Adults</option>
+                        <div class="check-date">
+                            <label for="roomChoose">Room:</label>
+                            <select id="roomChoose" name="roomChoose" class="select-room-detail">
+                                <option value="1">1 Room</option>
+                                <option value="2">2 Room</option>
+                                <option value="3">3 Room</option>
+                                <option value="4">4 Room</option>
+                                <option value="5">5 Room</option>
+                                <option value="6">6 Room</option>
                             </select>
                         </div>
-                        <div class="select-option">
-                            <label for="room">Room:</label>
-                            <select id="room">
-                                <option value="">1 Room</option>
-                                <option value="">2 Room</option>
-                            </select>
+                        <div class="room-options" id="roomOptions">
+                            <!-- Các ô chứa số người trong từng phòng -->
                         </div>
+
                         <button type="submit">Check Availability</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -231,7 +248,7 @@
                 <div class="about-text">
                     <div class="section-title">
                         <span>About Us</span>
-                        <h2>Intercontinental LA <br />Westlake Hotel</h2>
+                        <h2>Intercontinental LA <br/>Westlake Hotel</h2>
                     </div>
                     <p class="f-para">Sona.com is a leading online accommodation site. We’re passionate about
                         travel. Every day, we inspire and reach millions of travelers across 90 local websites in 41
@@ -579,7 +596,7 @@
                                 <img src="../hotel/img/footer-logo.png" alt="">
                             </a>
                         </div>
-                        <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
+                        <p>We inspire and reach millions of travelers<br/> across 90 local websites</p>
                         <div class="fa-social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -624,9 +641,14 @@
                     </ul>
                 </div>
                 <div class="col-lg-5">
-                    <div class="co-text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                    <div class="co-text">
+                        <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                            All rights reserved | This template is made with <i class="fa fa-heart"
+                                                                                aria-hidden="true"></i> by <a
+                                    href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -649,11 +671,53 @@
 <script src="../hotel/js/jquery-3.3.1.min.js"></script>
 <script src="../hotel/js/bootstrap.min.js"></script>
 <script src="../hotel/js/jquery.magnific-popup.min.js"></script>
-<script src="../hotel/js/jquery.nice-select.min.js"></script>
+<%--<script src="../hotel/js/jquery.nice-select.min.js"></script>--%>
 <script src="../hotel/js/jquery-ui.min.js"></script>
 <script src="../hotel/js/jquery.slicknav.js"></script>
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
+<script>
+    function setupRoomOptions(elementId) {
+        var ele = document.getElementById(elementId);
+
+
+        if (ele) {
+            console.log(" 1 1 1")
+
+            ele.addEventListener("change", (event) => {
+                console.log("element")
+                updateRoomOptions(elementId);
+            });
+            // element.addEventListener('change', function() {
+            //
+            //     console.log("element")
+            //     updateRoomOptions(elementId);
+            // });
+        }
+    }
+
+    function updateRoomOptions(elementId) {
+        var selectedRooms = parseInt(document.getElementById(elementId).value, 10) || 0;
+        var roomOptionsContainer = document.getElementById('roomOptions');
+        roomOptionsContainer.innerHTML = '';
+
+        for (var i = 1; i <= selectedRooms; i++) {
+            var roomOption = document.createElement('div');
+            roomOption.className = 'select-option';
+            roomOption.innerHTML = '<label for="guest">Guests in Room ' + i + ':</label>' +
+                '<select name="guests' + i + '" class="select-room-detail">' +
+                '<option value="1">1 Adult</option>' +
+                '<option value="2">2 Adults</option>' +
+                '<option value="3">3 Adults</option>' +
+                '<option value="4">4 Adults</option>' +
+                '</select>';
+            roomOptionsContainer.appendChild(roomOption);
+        }
+    }
+
+    // Đăng ký sự kiện cho phần tử có ID 'roomChoose'
+    setupRoomOptions('roomChoose');
+</script>
 </body>
 
 </html>

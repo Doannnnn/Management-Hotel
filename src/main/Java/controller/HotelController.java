@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 
 
 @WebServlet(name = "hotelController", urlPatterns = "/hotel-page")
@@ -90,8 +91,8 @@ public class HotelController extends HttpServlet {
     }
 
     private void showIndex(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-//        Auth auth = (Auth) req.getAttribute("Auth");
-//        req.setAttribute("auth",auth);
+        Auth auth = (Auth) req.getAttribute("auth");
+        req.setAttribute("auth",auth);
         req.getRequestDispatcher("hotel/index.jsp").forward(req, resp);
     }
 
@@ -102,10 +103,43 @@ public class HotelController extends HttpServlet {
             action = "";
         }
         switch (action) {
-
             case "comment" -> saveRating(req, resp);
             case "pay" -> pay(req, resp);
+            case "booking" -> booking(req, resp);
         }
+    }
+
+    private void booking(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int numberRoom = Integer.parseInt(req.getParameter("roomChoose"));
+        int numberGuests = 0;
+        int a =1;
+        for (int i = 0; i < numberRoom; i++) {
+            numberGuests += Integer.parseInt(req.getParameter("guests" + a));
+            a++;
+        }
+
+        Date checkin = getDateCheck("checkin",req);
+        Date checkout = getDateCheck("checkout",req);
+        if (checkout.after(checkin)) {
+        Booking booking = new Booking();
+        booking.setAuth(new Auth());
+        booking.setCheckInDate(checkin);
+        booking.setCheckOutDate(checkout);
+        booking.setNumberRoom(numberRoom);
+        booking.setNumberGuests(numberGuests);
+        bookingService.create(booking);
+        resp.sendRedirect("/hotel-page?message=Booking Successful");
+        }
+        else {
+            resp.sendRedirect("/hotel-page?message=Check In/Check out is invalid");
+        }
+
+    }
+    public Date getDateCheck(String str,HttpServletRequest req) {
+        String dateCheckin = req.getParameter(str);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM, yyyy");
+        LocalDate localDate = LocalDate.parse(dateCheckin, formatter);
+        return Date.valueOf(localDate);
     }
 
 

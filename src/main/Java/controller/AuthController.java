@@ -145,9 +145,7 @@ private Auth getAuthRequest(HttpServletRequest req){
     }
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        if (!authService.login(req, resp)) {
-//            req.getRequestDispatcher("/hotel-page").forward(req, resp);
-        }
+        authService.login(req, resp);
     }
 
     private void register(HttpServletRequest req, HttpServletResponse resp) throws IOException {
