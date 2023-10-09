@@ -46,11 +46,13 @@ public class AuthService {
 //            session.setAttribute("isLoggedIn", true);
             if (auth.getRole().getName().equals("ADMIN")) {
                 session.setAttribute("auth",auth);
+                session.setAttribute("role", "ADMIN");
                 req.getRequestDispatcher("/admin/index.jsp").forward(req,resp);
 //                Chuyển hướng trang admin
             } else {
                 //Chuyển hướng trang người dùng
                 session.setAttribute("auth",auth);
+                session.setAttribute("role", "USER");
                 req.getRequestDispatcher("/hotel/").forward(req,resp);
             }
             return true;

@@ -101,6 +101,7 @@
     <h6 class="d-none" id="message">${message}</h6>
 </c:if>
 <div class="container" id="container">
+    <a href="/admin" > Back</a>
     <div class="form-container sign-up-container">
         <form action="/auth?action=register_admin" method="POST">
             <h1>Create Account Admin</h1>
@@ -125,7 +126,7 @@
             <div>
                 <select class="form-select" aria-label="Default select example" id="role" name="role">
                     <c:forEach var="role" items="${roles}">
-                        <option value="${role.name}">${role.name}</option>
+                        <option value="${role.id}">${role.name}</option>
                     </c:forEach>
                 </select>
             </div>

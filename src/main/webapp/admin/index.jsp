@@ -32,6 +32,75 @@
     <!-- Template Stylesheet -->
     <link href="/admin/css/style.css" rel="stylesheet">
     <link href="/admin/css/app.css" rel="stylesheet">
+    <style>
+        .select-room-detail{
+            width: 100%;
+            height: 50px;
+            border: 1px solid #EBEBEB;
+            border-radius: 2px;
+            font-size: 16px;
+            color: #19191A;
+            text-transform: uppercase;
+            font-weight: 500;
+            padding-left: 20px;
+        }
+        .modal-content {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            background-color: #6c757d;
+            color: white;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            background-color: #f8f9fa;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Adjust input field styles */
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Center align input fields */
+        .d-flex.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -179,7 +248,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                         <a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}"  >Information</a>
-                        <a href="#" class="dropdown-item"  >create Account</a>
+                        <a href="/auth?action=register_admin" class="dropdown-item"  >create Account</a>
                         <a href="/auth" class="dropdown-item">Log Out</a>
                     </div>
                 </div>
@@ -199,19 +268,19 @@
                         <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm">
                             <div class="mb-3">
                                 <label for="name" class="col-form-label">Name</label>
-                                <input class="d-flex justify-content-between" id="name" name="name" value="${auth.name}" >
+                                <input class="d-flex justify-content-between select-room-detail" id="name" name="name" value="${auth.name}" >
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="col-form-label">Email</label>
-                                <input class="d-flex justify-content-between" id="email" name="email" value="${auth.email}" >
+                                <input class="d-flex justify-content-between select-room-detail" id="email" name="email" value="${auth.email}" >
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="col-form-label">Phone</label>
-                                <input class="d-flex justify-content-between" id="phone" name="phone" value="${auth.phone}">
+                                <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone" value="${auth.phone}">
                             </div>
                             <div class="mb-3">
                                 <label for="address" class="col-form-label">Address</label>
-                                <input class="d-flex justify-content-between" id="address" name="address" value="${auth.address}" >
+                                <input class="d-flex justify-content-between select-room-detail" id="address" name="address" value="${auth.address}" >
                             </div>
                         </form>
                     </div>

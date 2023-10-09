@@ -6,7 +6,6 @@ import model.Role;
 import service.AuthService;
 import service.RoleService;
 
-import javax.net.ssl.HandshakeCompletedEvent;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "authController", urlPatterns = "/auth")
+
 public class AuthController extends HttpServlet {
     private AuthService authService;
     private RoleService roleService;
@@ -95,9 +95,26 @@ public class AuthController extends HttpServlet {
         }
     }
 
-    private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String role = getRoleFromSomewhere(req);
     authService.update(getAuthRequest(req),Integer.parseInt(req.getParameter("id")));
-        resp.sendRedirect("/auth?message=Updated");
+
+        if (role.equals("ADMIN")) {
+            req.getRequestDispatcher("/admin/index.jsp").forward(req,resp); // Trang admin
+        } else if (role.equals("USER")) {
+            req.getRequestDispatcher("/hotel").forward(req,resp); // Trang user
+        } else {
+            resp.sendRedirect("/auth"); // Trang mặc định nếu không xác định được vai trò
+        }
+    }
+
+
+
+
+    private String getRoleFromSomewhere(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        String role = (String) session.getAttribute("role");
+        return role;
     }
 
 private Auth getAuthRequest(HttpServletRequest req){
@@ -109,9 +126,9 @@ private Auth getAuthRequest(HttpServletRequest req){
 }
 
 
-    private void registerAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void registerAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         authService.registerAdmin(getUserByRequestAdmin(req));
-        resp.sendRedirect("/hotel?message=Register Success");
+        req.getRequestDispatcher("/admin/index.jsp").forward(req,resp);
     }
 
     private void changepassword(HttpServletRequest req, HttpServletResponse resp) throws IOException {
