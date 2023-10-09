@@ -3,6 +3,7 @@ package service;
 
 import dao.AuthDao;
 import model.Auth;
+import service.dto.Page;
 import util.PasswordEncryptionUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -102,4 +103,9 @@ public class AuthService {
         auth.setId(id);
         authDao.update(auth);
     }
+    public Page<Auth> findAllPage(int page, String search){
+        return authDao.findAllPage(page, search);
+    }
 }
+
+

@@ -4,12 +4,14 @@ package dao;
 
 
 
-import model.Auth;
-import model.Role;
+import model.*;
+import service.dto.Page;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthDao extends DatabaseConnection {
 
@@ -214,4 +216,52 @@ public class AuthDao extends DatabaseConnection {
         }
     }
 
+
+    public Page<Auth> findAllPage(int page, String search){
+        var result = new Page<Auth>();
+        final int TOTAL_ELEMENT = 5;
+        result.setCurrentPage(page);
+        var content = new ArrayList<Auth>();
+        if(search == null){
+            search = "";
+        }
+        search = "%" + search.toLowerCase() + "%";
+        var SELECT_ALL = "SELECT u.id, img, u.name, email, phone, address, r.name role \n" +
+                "FROM user u JOIN roles r ON u.role_id = r.id WHERE (LOWER(u.name) LIKE ? OR LOWER(u.email) LIKE ?) GROUP BY u.id, img, u.name, email, phone, address, r.name   LIMIT ? OFFSET ?";
+
+        var SELECT_COUNT = "SELECT COUNT(1) cnt FROM user u " +
+                "WHERE (LOWER(u.name) LIKE ? OR LOWER(u.email) LIKE ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL)) {
+            preparedStatement.setString(1, search);
+            preparedStatement.setString(2, search);
+            preparedStatement.setInt(3,TOTAL_ELEMENT);
+            preparedStatement.setInt(4, (page - 1) * TOTAL_ELEMENT);
+            System.out.println(preparedStatement);
+            var rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Auth auth = new Auth();
+                auth.setId(rs.getInt("id"));
+                auth.setImg(rs.getString("img"));
+                auth.setName(rs.getString("name"));
+                auth.setEmail(rs.getString("email"));
+                auth.setPhone(rs.getString("phone"));
+                auth.setAddress(rs.getString("address"));
+                auth.setRole(new Role(rs.getInt("id"), rs.getString("name")));
+                content.add(auth);
+            }
+            result.setContent(content);
+            var preparedStatementCount = connection.prepareStatement(SELECT_COUNT);
+            preparedStatementCount.setString(1, search);
+            preparedStatementCount.setString(2, search);
+            var rsCount = preparedStatementCount.executeQuery();
+            if(rsCount.next()){
+                result.setTotalPage((int) Math.ceil((double) rsCount.getInt("cnt") /TOTAL_ELEMENT));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());;
+        }
+        return result;
+    }
 }
