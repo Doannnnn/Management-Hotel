@@ -35,25 +35,22 @@
             color: rgb(128, 128, 128);
             cursor: pointer;
         }
-
         .icon_star {
             /* Màu vàng cho ngôi sao được đánh giá hoặc đã được nhấp vào */
             color: yellow;
         }
+        .select-room-detail {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #EBEBEB;
+            border-radius: 2px;
+            font-size: 16px;
+            color: #19191A;
+            text-transform: uppercase;
+            font-weight: 500;
+            padding-left: 20px;
+        }
 
-<<<<<<< Updated upstream
-
-         .select-room-detail{
-             width: 100%;
-             height: 50px;
-             border: 1px solid #EBEBEB;
-             border-radius: 2px;
-             font-size: 16px;
-             color: #19191A;
-             text-transform: uppercase;
-             font-weight: 500;
-             padding-left: 20px;
-         }
         .modal-content {
             background-color: #f8f9fa;
             border-radius: 10px;
@@ -110,22 +107,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
-
-
-=======
-        .select-room-detail {
-            width: 100%;
-            height: 50px;
-            border: 1px solid #ebebeb;
-            border-radius: 2px;
-            font-size: 16px;
-            color: #19191a;
-            text-transform: uppercase;
-            font-weight: 500;
-            padding-left: 20px;
-        }
->>>>>>> Stashed changes
     </style>
 </head>
 
@@ -154,7 +135,8 @@
             <span>${auth.name} <i class="fa fa-angle-down"></i></span>
             <div class="flag-dropdown">
                 <ul>
-                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                    <li><a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                           id="${auth.id}">Information</a></li>
                     <li><a href="/auth" class="dropdown-item">Log Out</a></li>
                 </ul>
             </div>
@@ -215,11 +197,13 @@
                         <a href="#" class="bk-btn">Booking Now</a>
 
                         <div class="language-option ">
-                            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;" alt="">
+                            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;"
+                                 alt="">
                             <span>${auth.name} <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
-                                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                                    <li><a href="#" class="dropdown-item" data-bs-toggle="modal"
+                                           data-bs-target="#exampleModal" id="${auth.id}">Information</a></li>
                                     <li><a href="/auth" class="dropdown-item">Log Out</a></li>
                                 </ul>
                             </div>
@@ -241,19 +225,23 @@
                     <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm">
                         <div class="mb-3">
                             <label for="name" class="col-form-label">Name</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="name" name="name" value="${auth.name}" >
+                            <input class="d-flex justify-content-between select-room-detail" id="name" name="name"
+                                   value="${auth.name}">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="col-form-label">Email</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="email" name="email" value="${auth.email}" >
+                            <input class="d-flex justify-content-between select-room-detail" id="email" name="email"
+                                   value="${auth.email}">
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="col-form-label">Phone</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone" value="${auth.phone}">
+                            <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone"
+                                   value="${auth.phone}">
                         </div>
                         <div class="mb-3">
                             <label for="address" class="col-form-label">Address</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="address" name="address" value="${auth.address}" >
+                            <input class="d-flex justify-content-between select-room-detail" id="address" name="address"
+                                   value="${auth.address}">
                         </div>
                     </form>
                 </div>
@@ -341,7 +329,7 @@
                                     <i class="icon_star"></i>
                                     <i class="icon_star-half_alt"></i>
                                 </div>
-                                <a href="/hotel-page?action=bill-detail&id=${room.id}">Booking Now</a>
+                                <a href="/hotel-page?action=bill-detail&idroom=${room.id}&id=${auth.id}">Booking Now</a>
                             </div>
                         </div>
                         <h2>${room.price}$<span>/Pernight</span></h2>
@@ -476,7 +464,7 @@
                 <div class="room-booking">
                     <h3>Your Reservation</h3>
                     <c:if test="${book == null}">
-                        <form action="/hotel-page?action=booking" method="post">
+                        <form action="/hotel-page?action=booking-room-detail&id=${auth.id}&idroom=${room.id}" method="post">
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
                                 <input type="text" class="date-input" id="date-in" name="checkin" required>
@@ -501,8 +489,7 @@
                             <div class="room-options" id="roomOptions">
                                 <!-- Các ô chứa số người trong từng phòng -->
                             </div>
-
-                            <button type="submit">Check Availability</button>
+                            <button type="submit">Booking</button>
                         </form>
 
                     </c:if>

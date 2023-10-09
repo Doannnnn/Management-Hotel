@@ -28,8 +28,11 @@ public class RoomService {
     public int create(Room room){
        return roomDAO.create(room);
     }
+    public Room findById(int id){
+        return roomDAO.findById(id);
+    }
     public Room findById(HttpServletRequest req){
-        int id = Integer.parseInt(req.getParameter("id"));
+        int id = Integer.parseInt("id");
         return roomDAO.findById(id);
     }
 

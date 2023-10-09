@@ -113,13 +113,15 @@
                             <a href="#"><i class="fa fa-instagram"></i></a>
                         </div>
                         <a href="#" class="bk-btn">Booking Now</a>
-                        <div class="language-option">
-                            <img src="../hotel/img/flag.jpg" alt="">
-                            <span>EN <i class="fa fa-angle-down"></i></span>
+                        <div class="language-option ">
+                            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;"
+                                 alt="">
+                            <span>${auth.name} <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
-                                    <li><a href="#">Zi</a></li>
-                                    <li><a href="#">Fr</a></li>
+                                    <li><a href="#" class="dropdown-item" data-bs-toggle="modal"
+                                           data-bs-target="#exampleModal" id="${auth.id}">Information</a></li>
+                                    <li><a href="/auth" class="dropdown-item">Log Out</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -185,7 +187,7 @@
 <!-- Room Details Section Begin -->
 <section class="room-details-section spad">
     <div class="containers d-lg-flex">
-        <form id="myForm" action="/hotel-page?action=pay&id=${book.auth.id}&room=${room.id}" style="width: 100%; display: flex" method="post">
+        <form id="myForm" action="/hotel-page?action=pay&id=${auth.id}&room=${room.id}&idbook=${book.id}" style="width: 100%; display: flex" method="post">
             <div class="box-1 bg-light user">
 
                 <div>

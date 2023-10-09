@@ -38,7 +38,7 @@ public class BookingDAO extends DatabaseConnection{
     }
 
     public void create(Booking booking){
-        String CREATE_BOOKING = "INSERT INTO `case3`.`bookings` (`check_in`, `check_out`, `number_guests`, `number_room`, `user_id`) VALUES (?, ?, ?, ?, ?);";
+        String CREATE_BOOKING = "INSERT INTO `bookings` (`check_in`, `check_out`, `number_guests`, `number_room`, `user_id`) VALUES (?, ?, ?, ?, ?);";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_BOOKING)) {
             preparedStatement.setDate(1, booking.getCheckInDate());
@@ -52,7 +52,7 @@ public class BookingDAO extends DatabaseConnection{
         }
     }
     public void delete(int id){
-        String DELETE_BOOKING = "DELETE FROM `case3`.`bookings` WHERE (`id` = ?)";
+        String DELETE_BOOKING = "DELETE FROM `bookings` WHERE (`user_id` = ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOKING)) {
             preparedStatement.setInt(1,id);

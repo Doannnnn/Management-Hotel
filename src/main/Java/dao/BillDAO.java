@@ -15,16 +15,17 @@ import java.util.stream.Collectors;
 public class BillDAO extends DatabaseConnection{
 
     public void create(Bill bill) {
-        String CREATE_BILL_SQL = "INSERT INTO `bill` (`code`, `user_id`, `room_id`, `product_id`, `total_amount`,`date_invoice`) VALUES (?, ?, ?, ?, ?,?);";
+        String CREATE_BILL_SQL = "INSERT INTO `quanlykhachsan`.`bill` (`code`, `user_id`, `booking_id`, `room_id`, `product_id`, `total_amount`, `date_invoice`) VALUES (?, ?, ?, ?, ?, ?, ?);";
         try{
             Connection connection = getConnection();
             PreparedStatement pre = connection.prepareStatement(CREATE_BILL_SQL);
             pre.setString(1,bill.getCode());
             pre.setInt(2,bill.getAuth().getId());
-            pre.setInt(3,bill.getRoom().getId());
-            pre.setInt(4,bill.getProduct().getId());
-            pre.setBigDecimal(5,bill.getTotalAmount());
-            pre.setDate(6,bill.getDateOfInvoice());
+            pre.setInt(3,bill.getBooking().getId());
+            pre.setInt(4,bill.getRoom().getId());
+            pre.setInt(5,bill.getProduct().getId());
+            pre.setBigDecimal(6,bill.getTotalAmount());
+            pre.setDate(7,bill.getDateOfInvoice());
             pre.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

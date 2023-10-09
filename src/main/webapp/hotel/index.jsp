@@ -301,7 +301,7 @@
                 <div class="room-booking"
                      style="background-color: white;  border-color: black;  padding: 56px; margin: -34px;">
                     <h3>Booking Your Hotel</h3>
-                    <form action="/hotel-page?action=booking" method="post">
+                    <form action="/hotel-page?action=booking&id=${auth.id}" method="post">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
                             <input type="text" class="date-input" id="date-in" name="checkin" required>

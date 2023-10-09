@@ -16,4 +16,8 @@ public class BookingService {
     public void create(Booking booking) {
         bookingDAO.create(booking);
     }
+
+    public void delete(int idUser) {
+        bookingDAO.delete(idUser);
+    }
 }
