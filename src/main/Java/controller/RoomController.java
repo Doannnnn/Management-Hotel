@@ -63,7 +63,7 @@ public class RoomController extends HttpServlet {
         }
         req.setAttribute("page",  authService.findAllPage(Integer.parseInt(pageString), req.getParameter("search")));
         req.setAttribute("search", req.getParameter("search"));
-        req.setAttribute("auths", authService.getAllAuth());
+        req.setAttribute("auths", authService.findAll());
         req.getRequestDispatcher("admin/user.jsp").forward(req,resp);
     }
 
