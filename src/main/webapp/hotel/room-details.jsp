@@ -207,7 +207,7 @@
                 <div class="room-details-item">
                     <div class="owl-carousel owl-theme">
                         <c:forEach var="img" items="${room.images}">
-                            <img class="owl-lazy" data-src="../hotel/img/room/${img.url}" alt="" style="width: 100%;height: 100%;">
+                            <img class="owl-lazy" data-src="/image${img.url}" alt="" style="width: 100%;height: 100%;">
                         </c:forEach>
 
                     </div>

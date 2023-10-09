@@ -85,12 +85,12 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                     <div class="dropdown-menu bg-transparent border-0">
                         <a href="/admin" class="dropdown-item">Room</a>
-                        <a href="admin?action=create" class="dropdown-item">Create</a>
+                        <a href="/admin?action=create" class="dropdown-item">Create</a>
                         <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
                 </div>
-                <a href="admin/bill.jsp" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
-                <a href="admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
+                <a href="/admin?action=bill" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
+                <a href="/admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
                 <a href="table.html" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Tables</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                 <div class="nav-item dropdown">
@@ -246,7 +246,7 @@
                 <div class="mb-3">
                     <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label> <br>
                     <c:forEach var="amenity" items="${amenities}">
-                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}" required>
+                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}">
                         <label style="margin-left: 5px" for="${amenity}">${amenity}</label>
                     </c:forEach>
                 </div>

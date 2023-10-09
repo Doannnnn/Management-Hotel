@@ -26,6 +26,30 @@
     <link rel="stylesheet" href="../hotel/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
+    <style>
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #707079;
+            background-color: #efd4b9;
+            border-color: #EFD4B9;
+        }
+        .page-link {
+            position: relative;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-left: -1px;
+            line-height: 1.25;
+            color: #dfa974;
+            background-color: #fff;
+            border: 1px solid #EFD4B9;
+        }
+        .page-link:hover {
+            z-index: 2;
+            text-decoration: none;
+            background: #dfa974;
+            color: #ffffff;
+        }
+    </style>
 </head>
 
 <body>
@@ -186,10 +210,10 @@
 <section class="rooms-section spad">
     <div class="container">
         <div class="row">
-            <c:forEach var="room" items="${rooms}">
+            <c:forEach var="room" items="${page.content}">
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="../hotel/img/room/${room.images[0].url}" alt="">
+                        <img src="/image${room.images[0].url}" alt="">
                         <div class="ri-text">
                             <h4>${room.name}</h4>
                             <h3>${room.price}$</h3>
@@ -218,12 +242,29 @@
                     </div>
                 </div>
             </c:forEach>
-            <div class="col-lg-12">
-                <div class="room-pagination">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
-                </div>
+            <div class="col-lg-12 d-flex justify-content-center">
+                <c:set var="url" value="/hotel-page?action=room&page="/>
+                <ul class="pagination" style="padding: 12px">
+                    <li class="page-item <c:if test="${page.currentPage == 1}">disabled</c:if>">
+                        <a class="page-link" href="${url}${(page.currentPage - 1)}" tabindex="-1"
+                           aria-disabled="true"><</a>
+                    </li>
+                    <c:forEach var="number" begin="1" end="${page.totalPage}">
+                        <c:if test="${number == page.currentPage}">
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="${url}${number}">${number}</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${number != page.currentPage}">
+                            <li class="page-item">
+                                <a class="page-link" href="${url}${number}">${number}</a>
+                            </li>
+                        </c:if>
+                    </c:forEach>
+                    <li class="page-item <c:if test="${page.currentPage == page.totalPage}">disabled</c:if>">
+                        <a class="page-link" href="${url}${(page.currentPage + 1)}">></a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

@@ -39,7 +39,6 @@ public class RoomService {
 
     public void delete(HttpServletRequest req){
         int id = Integer.parseInt(req.getParameter("id"));
-        imageDAO.delete(id);
         roomDAO.delete(id);
     }
 }

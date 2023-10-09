@@ -18,7 +18,7 @@ import static java.sql.DriverManager.getConnection;
 public class RoomDAO extends DatabaseConnection {
 
      public List<Room> findAllRoom() {
-        String SELECT_ALL_ROOMS = "SELECT r.*, group_concat(i.url) as images FROM rooms r JOIN images i ON r.id = i.room_id group by r.id;";
+        String SELECT_ALL_ROOMS = "SELECT r.*, group_concat(i.url) as images FROM rooms r JOIN images i ON r.id = i.room_id WHERE r.deleted = '0' group by r.id;";
         List<Room> rooms = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ROOMS)) {
@@ -61,12 +61,12 @@ public class RoomDAO extends DatabaseConnection {
         }
         search = "%" + search.toLowerCase() + "%";
         var SELECT_ALL = "SELECT r.*, group_concat(i.url) as images " +
-                "FROM rooms r JOIN images i ON r.id = i.room_id " +
-                "WHERE (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?) group by r.id  " +
+                "FROM rooms r JOIN images i ON r.id = i.room_id WHERE r.deleted = '0' " +
+                "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?) group by r.id  " +
                 " LIMIT ? OFFSET ?";
 
-        var SELECT_COUNT = "SELECT COUNT(1) cnt FROM rooms r   " +
-                "WHERE (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?)";
+        var SELECT_COUNT = "SELECT COUNT(1) cnt FROM rooms r WHERE r.deleted = '0' " +
+                "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL)) {
             preparedStatement.setString(1, search);
@@ -136,7 +136,7 @@ public class RoomDAO extends DatabaseConnection {
     }
 
     public Room findById(int id){
-        String SELECT_ROOMS_BY_ID = "SELECT r.*, group_concat(i.url) as images FROM rooms r JOIN images i ON r.id = i.room_id where (r.id = ?) group by r.id;";
+        String SELECT_ROOMS_BY_ID = "SELECT r.*, group_concat(i.url) as images FROM rooms r JOIN images i ON r.id = i.room_id where (r.id = ?) AND r.deleted = '0' group by r.id;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ROOMS_BY_ID)) {
             preparedStatement.setInt(1, id);
@@ -193,11 +193,11 @@ public class RoomDAO extends DatabaseConnection {
         }
     }
 
-    public void delete(int id){
-        String DELETE_ROOM = "DELETE FROM `rooms` WHERE (`id` = ?)";
+    public void delete(int id) {
+        String UPDATE_DELETED = "UPDATE `rooms` SET `deleted` = '1' WHERE (`id` = ?)";
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ROOM)) {
-            preparedStatement.setInt(1,id);
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_DELETED)) {
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

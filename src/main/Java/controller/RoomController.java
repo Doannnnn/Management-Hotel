@@ -57,11 +57,19 @@ public class RoomController extends HttpServlet {
     }
 
     private void showUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        String pageString = req.getParameter("page");
+        if (pageString == null) {
+            pageString = "1";
+        }
+        req.setAttribute("page",  authService.findAllPage(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("search", req.getParameter("search"));
+        req.setAttribute("auths", authService.getAllAuth());
+        req.getRequestDispatcher("admin/user.jsp").forward(req,resp);
     }
 
-    private void showBill(HttpServletRequest req, HttpServletResponse resp) {
-
+    private void showBill(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("bills", billService.getAllBill());
+        req.getRequestDispatcher("admin/bill.jsp").forward(req,resp);
     }
 
 
@@ -93,11 +101,8 @@ public class RoomController extends HttpServlet {
             pageString = "1";
         }
         req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
-
         req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("rooms", roomService.findAllRoom());
-
-
         req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
     }
 

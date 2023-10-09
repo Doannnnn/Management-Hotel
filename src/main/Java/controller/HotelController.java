@@ -79,6 +79,12 @@ public class HotelController extends HttpServlet {
     }
 
     private void showRoom(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String pageString = req.getParameter("page");
+        if (pageString == null) {
+            pageString = "1";
+        }
+        req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("rooms", roomService.findAllRoom());
         req.getRequestDispatcher("hotel/rooms.jsp").forward(req, resp);
     }

@@ -67,12 +67,12 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                     <div class="dropdown-menu bg-transparent border-0">
                         <a href="/admin" class="dropdown-item">Room</a>
-                        <a href="admin?action=create" class="dropdown-item">Create</a>
-                        <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
+                        <a href="/admin?action=create" class="dropdown-item">Create</a>
+                        <a href="/admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
                 </div>
-                <a href="admin/bill.jsp" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
-                <a href="admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
+                <a href="/admin?action=bill" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
+                <a href="/admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
                 <a href="table.html" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Tables</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                 <div class="nav-item dropdown">
@@ -189,33 +189,33 @@
 
         <!-- Table Start -->
         <div class="container-fluid" >
-            <div id="main-container" class="card container px-6" style="height: 80vh">
+            <div id="main-container" class="card container px-6" style="height: 87vh">
                 <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT USER</h3>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th style="padding-left: 50px;">IMAGE</th>
-                        <th style="padding-left: 22px;">NAME</th>
-                        <th style="padding-left: 32px;">EMAIL</th>
-                        <th style="padding-left: 6px;">PHONE</th>
+                        <th style="padding-left: 30px;">IMAGE</th>
+                        <th style="padding-left: 35px;">NAME</th>
+                        <th style="padding-left: 55px;">EMAIL</th>
+                        <th style="padding-left: 40px;">PHONE</th>
                         <th style="padding-left: 34px;">ACTION</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="user" items="${users}">
+                    <c:forEach var="auth" items="${page.content}">
                         <tr style="vertical-align: middle;">
-                            <td>${user.id}</td>
-                            <td><img src="/hotel/img/room/avatar/${user.img}" style="width: 100px; height: auto"></td>
-                            <td>${user.name}</td>
-                            <td>${user.email}</td>
-                            <td>${user.phone}</td>
+                            <td>${auth.id}</td>
+                            <td><img src="/hotel/img/room/avatar/${auth.img}" style="width: 100px; height: 100px"></td>
+                            <td>${auth.name}</td>
+                            <td>${auth.email}</td>
+                            <td>${auth.phone}</td>
                             <td>
                                 <div class="text-right">
-                                    <a href="/admin?action=edit&id=${user.id}" class="icon-link">
+                                    <a href="#" class="icon-link">
                                         <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
-                                    <a href="/admin?action=delete&id=${user.id}" class="icon-link" onclick="return confirmDelete()">
+                                    <a href="#" class="icon-link" onclick="return confirmDelete()">
                                         <i class="fas fa-trash-alt"  style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
                                 </div>
@@ -227,7 +227,7 @@
             </div>
         </div>
         <nav aria-label="...">
-            <c:set var="url" value="/admin?page="/>
+            <c:set var="url" value="/admin?action=user&page="/>
             <ul class="pagination" style="padding: 12px">
                 <li class="page-item <c:if test="${page.currentPage == 1}">disabled</c:if>">
                     <a class="page-link" href="${url}${(page.currentPage - 1)}" tabindex="-1"

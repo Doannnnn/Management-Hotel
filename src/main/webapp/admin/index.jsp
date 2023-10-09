@@ -140,7 +140,7 @@
                         <a href="admin/edit.jsp" class="dropdown-item">Edit</a>
                     </div>
                 </div>
-                <a href="admin/bill.jsp" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
+                <a href="admin?action=bill" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Bill</a>
                 <a href="admin?action=user" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>User</a>
                 <a href="table.html" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Tables</a>
                 <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
@@ -297,7 +297,7 @@
 
         <!-- Table Start -->
         <div class="container-fluid" >
-            <div id="main-container" class="card container px-6" style="height: 80vh">
+            <div id="main-container" class="card container px-6" style="height: 75vh">
                 <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT ROOM</h3>
                 <table class="table table-striped">
                     <thead>
