@@ -46,18 +46,11 @@ public class AuthService {
         if (auth != null && PasswordEncryptionUtil.checkPassword(password, auth.getPassword())) {
             HttpSession session = req.getSession();
 //            session.setAttribute("isLoggedIn", true);
+                session.setAttribute("auth",auth);
             if (auth.getRole().getName().equals("ADMIN")) {
-                session.setAttribute("auth",auth);
-                session.setAttribute("role", "ADMIN");
-                resp.sendRedirect(req.getContextPath() + "/admin");
-//                Chuyển hướng trang admin
+                resp.sendRedirect(req.getContextPath() + "/admin?id="+ auth.getId());
             } else {
-                //Chuyển hướng trang người dùng
-                session.setAttribute("auth",auth);
-                session.setAttribute("role", "USER");
-                session.setAttribute("book",bookingService.findByIDAuth(auth.getId()));
-                resp.sendRedirect(req.getContextPath() + "/hotel-page");
-
+                resp.sendRedirect(req.getContextPath() + "/hotel-page?id="+ auth.getId());
             }
         }
 
