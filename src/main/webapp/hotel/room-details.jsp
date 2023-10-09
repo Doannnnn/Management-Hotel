@@ -41,6 +41,7 @@
             color: yellow;
         }
 
+<<<<<<< Updated upstream
 
          .select-room-detail{
              width: 100%;
@@ -112,6 +113,19 @@
 
 
 
+=======
+        .select-room-detail {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #ebebeb;
+            border-radius: 2px;
+            font-size: 16px;
+            color: #19191a;
+            text-transform: uppercase;
+            font-weight: 500;
+            padding-left: 20px;
+        }
+>>>>>>> Stashed changes
     </style>
 </head>
 
@@ -153,7 +167,7 @@
             <li><a href="../hotel-page">Home</a></li>
             <li><a href="../hotel-page?action=room">Rooms</a></li>
             <li><a href="../hotel-page?action=about-us">About Us</a></li>
-            <li  class="active"><a href="#">Pages</a>
+            <li class="active"><a href="#">Pages</a>
                 <ul class="dropdown">
                     <li><a href="../hotel-page?action=room-details">Room Details</a></li>
                     <li><a href="#">Deluxe Room</a></li>
@@ -297,10 +311,6 @@
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
                     <h2>Our Rooms</h2>
-                    <div class="bt-option">
-                        <a href="../hotel/index.jsp">Home</a>
-                        <span>Rooms</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -379,7 +389,7 @@
                                 </div>
                                 <div class="ri-text">
                                     <span>${rating.date}</span>
-                                    <div class="review-rating" >
+                                    <div class="review-rating">
                                         <c:choose>
                                             <c:when test="${rating.scores == 1}">
                                                 <i class="icon_star"></i>
@@ -447,7 +457,7 @@
                             <div class="col-lg-12">
                                 <div>
                                     <div class="rating" id="ratingStars">
-                                        <i class="icon_star_alt"  onclick="rateStar(1)"></i>
+                                        <i class="icon_star_alt" onclick="rateStar(1)"></i>
                                         <i class="icon_star_alt" onclick="rateStar(2)"></i>
                                         <i class="icon_star_alt" onclick="rateStar(3)"></i>
                                         <i class="icon_star_alt" onclick="rateStar(4)"></i>
@@ -456,7 +466,7 @@
                                     <input type="hidden" id="ratingValue" name="rating" value="">
                                 </div>
                                 <textarea placeholder="Your Review" name="comment"></textarea>
-                                <button type="submit" >Submit Now</button>
+                                <button type="submit">Submit Now</button>
                             </div>
                         </div>
                     </form>
@@ -465,31 +475,57 @@
             <div class="col-lg-4">
                 <div class="room-booking">
                     <h3>Your Reservation</h3>
-                    <form action="#">
-                        <div class="check-date">
-                            <label for="date-in">Check In:</label>
-                            <input type="text" class="date-input" id="date-in" >
-                            <i class="icon_calendar"></i>
-                        </div>
-                        <div class="check-date">
-                            <label for="date-out">Check Out:</label>
-                            <input type="text" class="date-input" id="date-out" >
-                            <i class="icon_calendar"></i>
-                        </div>
-                        <div class="select-option">
-                            <label for="guest">Guests:</label>
-                            <select id="guest">
-                                <option value="">3 Adults</option>
-                            </select>
-                        </div>
-                        <div class="select-option">
-                            <label for="room">Room:</label>
-                            <select id="room">
-                                <option value="">1 Room</option>
-                            </select>
-                        </div>
-                        <button type="submit">Check Availability</button>
-                    </form>
+                    <c:if test="${book == null}">
+                        <form action="/hotel-page?action=booking" method="post">
+                            <div class="check-date">
+                                <label for="date-in">Check In:</label>
+                                <input type="text" class="date-input" id="date-in" name="checkin" required>
+                                <i class="icon_calendar"></i>
+                            </div>
+                            <div class="check-date">
+                                <label for="date-out">Check Out:</label>
+                                <input type="text" class="date-input" id="date-out" name="checkout" required>
+                                <i class="icon_calendar"></i>
+                            </div>
+                            <div class="check-date">
+                                <label for="roomChoose">Room:</label>
+                                <select id="roomChoose" name="roomChoose" class="select-room-detail">
+                                    <option value="1">1 Room</option>
+                                    <option value="2">2 Room</option>
+                                    <option value="3">3 Room</option>
+                                    <option value="4">4 Room</option>
+                                    <option value="5">5 Room</option>
+                                    <option value="6">6 Room</option>
+                                </select>
+                            </div>
+                            <div class="room-options" id="roomOptions">
+                                <!-- Các ô chứa số người trong từng phòng -->
+                            </div>
+
+                            <button type="submit">Check Availability</button>
+                        </form>
+
+                    </c:if>
+                    <c:if test="${book != null}">
+                        <form action="#">
+                            <div class="mb-3">
+                                <p class="dis fw-bold mb-2">Check In:</p>
+                                <p class="form-control">${book.checkInDate}</p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="dis fw-bold mb-2">Check Out:</p>
+                                <p class="form-control">${book.checkOutDate}</p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="dis fw-bold mb-2">Guests: </p>
+                                <p class="form-control">${book.numberGuests}</p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="dis fw-bold mb-2">Room: </p>
+                                <p class="form-control">${book.numberRoom}</p>
+                            </div>
+                        </form>
+                    </c:if>
                 </div>
             </div>
         </div>
@@ -509,7 +545,7 @@
                                 <img src="../hotel/img/footer-logo.png" alt="">
                             </a>
                         </div>
-                        <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
+                        <p>We inspire and reach millions of travelers<br/> across 90 local websites</p>
                         <div class="fa-social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
@@ -554,9 +590,14 @@
                     </ul>
                 </div>
                 <div class="col-lg-5">
-                    <div class="co-text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                    <div class="co-text">
+                        <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                            All rights reserved | This template is made with <i class="fa fa-heart"
+                                                                                aria-hidden="true"></i> by <a
+                                    href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -586,15 +627,17 @@
 <script src="../hotel/js/jquery.slicknav.js"></script>
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
+<script src="../hotel/js/update-book.js"></script>
 <script src="../owlcarousel/jquery.min.js"></script>
 <script src="../owlcarousel/owl.carousel.min.js"></script>
 <script>
     $('.owl-carousel').owlCarousel({
-        items:1,
-        lazyLoad:true,
-        loop:true,
-        margin:10
+        items: 1,
+        lazyLoad: true,
+        loop: true,
+        margin: 10
     });
+
     function rateStar(starIndex) {
         const stars = document.querySelectorAll('#ratingStars i');
         const ratingValueField = document.getElementById('ratingValue');

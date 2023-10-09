@@ -52,6 +52,7 @@ public class HotelController extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         req.setAttribute("room", roomService.findById(req));
         req.setAttribute("ratings", ratingService.findAll(id));
+        req.setAttribute("message", req.getParameter("message"));
         req.getRequestDispatcher("hotel/room-details.jsp").forward(req, resp);
 
     }
@@ -69,6 +70,7 @@ public class HotelController extends HttpServlet {
     }
 
     private void showBill(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("message", req.getParameter("message"));
         req.setAttribute("room", roomService.findById(req));
         req.setAttribute("book", bookingService.findByIDAuth(7));
         req.setAttribute("products", productService.findAll());
@@ -85,6 +87,7 @@ public class HotelController extends HttpServlet {
             pageString = "1";
         }
         req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("message", req.getParameter("message"));
         req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("rooms", roomService.findAllRoom());
         req.getRequestDispatcher("hotel/rooms.jsp").forward(req, resp);
@@ -92,6 +95,7 @@ public class HotelController extends HttpServlet {
 
     private void showIndex(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.setAttribute("auth",authService.findByID(Integer.parseInt(req.getParameter("id"))));
+        req.setAttribute("message", req.getParameter("message"));
         req.getRequestDispatcher("hotel/index.jsp").forward(req, resp);
     }
 

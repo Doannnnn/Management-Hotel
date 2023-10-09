@@ -279,10 +279,6 @@
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
                     <h2>Blog</h2>
-                    <div class="bt-option">
-                        <a href="../hotel/index.jsp">Home</a>
-                        <span>Blog Grid</span>
-                    </div>
                 </div>
             </div>
         </div>

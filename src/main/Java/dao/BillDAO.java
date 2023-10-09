@@ -12,7 +12,7 @@ import java.util.List;
 public class BillDAO extends DatabaseConnection{
 
     public void create(Bill bill) {
-        String CREATE_BILL_SQL = "INSERT INTO `bill` (`code`, `user_id`, `room_id`, `product_id`, `total_amount`) VALUES (?, ?, ?, ?, ?);";
+        String CREATE_BILL_SQL = "INSERT INTO `bill` (`code`, `user_id`, `room_id`, `product_id`, `total_amount`,`date_invoice`) VALUES (?, ?, ?, ?, ?,?);";
         try{
             Connection connection = getConnection();
             PreparedStatement pre = connection.prepareStatement(CREATE_BILL_SQL);
@@ -21,8 +21,8 @@ public class BillDAO extends DatabaseConnection{
             pre.setInt(3,bill.getRoom().getId());
             pre.setInt(4,bill.getProduct().getId());
             pre.setBigDecimal(5,bill.getTotalAmount());
+            pre.setDate(6,bill.getDateOfInvoice());
             pre.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

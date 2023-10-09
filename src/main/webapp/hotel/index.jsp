@@ -27,29 +27,18 @@
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
     <style>
-        .select-room-detail{
+        .select-room-detail {
             width: 100%;
             height: 50px;
-            border: 1px solid #ebebeb;
+            border: 1px solid #EBEBEB;
             border-radius: 2px;
             font-size: 16px;
-            color: #19191a;
+            color: #19191A;
             text-transform: uppercase;
             font-weight: 500;
             padding-left: 20px;
         }
 
-         .select-room-detail{
-             width: 100%;
-             height: 50px;
-             border: 1px solid #EBEBEB;
-             border-radius: 2px;
-             font-size: 16px;
-             color: #19191A;
-             text-transform: uppercase;
-             font-weight: 500;
-             padding-left: 20px;
-         }
         .modal-content {
             background-color: #f8f9fa;
             border-radius: 10px;
@@ -130,15 +119,13 @@
     <div class="header-configure-area">
 
 
-
-
-
         <div class="language-option">
             <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;" alt="">
             <span>${auth.name} <i class="fa fa-angle-down"></i></span>
             <div class="flag-dropdown">
                 <ul>
-                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                    <li><a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                           id="${auth.id}">Information</a></li>
                     <li><a href="/auth" class="dropdown-item">Log Out</a></li>
                 </ul>
             </div>
@@ -200,11 +187,13 @@
                         <a href="#" class="bk-btn">Booking Now</a>
 
                         <div class="language-option ">
-                            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;" alt="">
+                            <img src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;"
+                                 alt="">
                             <span>${auth.name} <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
-                                    <li><a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}" >Information</a></li>
+                                    <li><a href="#" class="dropdown-item" data-bs-toggle="modal"
+                                           data-bs-target="#exampleModal" id="${auth.id}">Information</a></li>
                                     <li><a href="/auth" class="dropdown-item">Log Out</a></li>
                                 </ul>
                             </div>
@@ -229,19 +218,23 @@
                         </div>
                         <div class="mb-3">
                             <label for="name" class="col-form-label">Name</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="name" name="name" value="${auth.name}" >
+                            <input class="d-flex justify-content-between select-room-detail" id="name" name="name"
+                                   value="${auth.name}">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="col-form-label">Email</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="email" name="email" value="${auth.email}" >
+                            <input class="d-flex justify-content-between select-room-detail" id="email" name="email"
+                                   value="${auth.email}">
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="col-form-label">Phone</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone" value="${auth.phone}">
+                            <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone"
+                                   value="${auth.phone}">
                         </div>
                         <div class="mb-3">
                             <label for="address" class="col-form-label">Address</label>
-                            <input class="d-flex justify-content-between select-room-detail" id="address" name="address" value="${auth.address}" >
+                            <input class="d-flex justify-content-between select-room-detail" id="address" name="address"
+                                   value="${auth.address}">
                         </div>
                     </form>
                 </div>
@@ -305,7 +298,8 @@
                 </div>
             </div>
             <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
-                <div class="room-booking" style="background-color: white;  border-color: black;  padding: 56px; margin: -34px;">
+                <div class="room-booking"
+                     style="background-color: white;  border-color: black;  padding: 56px; margin: -34px;">
                     <h3>Booking Your Hotel</h3>
                     <form action="/hotel-page?action=booking" method="post">
                         <div class="check-date">
@@ -315,7 +309,7 @@
                         </div>
                         <div class="check-date">
                             <label for="date-out">Check Out:</label>
-                            <input type="text" class="date-input" id="date-out"  name="checkout" required>
+                            <input type="text" class="date-input" id="date-out" name="checkout" required>
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="check-date">
@@ -786,51 +780,10 @@
 <script src="../hotel/js/jquery.slicknav.js"></script>
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
-<script>
-    function setupRoomOptions(elementId) {
-        var ele = document.getElementById(elementId);
-
-
-        if (ele) {
-            console.log(" 1 1 1")
-
-            ele.addEventListener("change", (event) => {
-                console.log("element")
-                updateRoomOptions(elementId);
-            });
-            // element.addEventListener('change', function() {
-            //
-            //     console.log("element")
-            //     updateRoomOptions(elementId);
-            // });
-        }
-    }
-
-    function updateRoomOptions(elementId) {
-        var selectedRooms = parseInt(document.getElementById(elementId).value, 10) || 0;
-        var roomOptionsContainer = document.getElementById('roomOptions');
-        roomOptionsContainer.innerHTML = '';
-
-        for (var i = 1; i <= selectedRooms; i++) {
-            var roomOption = document.createElement('div');
-            roomOption.className = 'select-option';
-            roomOption.innerHTML = '<label for="guest">Guests in Room ' + i + ':</label>' +
-                '<select name="guests' + i + '" class="select-room-detail">' +
-                '<option value="1">1 Adult</option>' +
-                '<option value="2">2 Adults</option>' +
-                '<option value="3">3 Adults</option>' +
-                '<option value="4">4 Adults</option>' +
-                '</select>';
-            roomOptionsContainer.appendChild(roomOption);
-        }
-    }
-
-    // Đăng ký sự kiện cho phần tử có ID 'roomChoose'
-    setupRoomOptions('roomChoose');
-</script>
+<script src="../hotel/js/update-book.js"></script>
 <script>
 
-        var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
+    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
         keyboard: false
     });
 
@@ -848,6 +801,7 @@
         });
     });
 </script>
+
 </body>
 
 </html>

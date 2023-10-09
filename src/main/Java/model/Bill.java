@@ -2,6 +2,7 @@ package model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Bill {
     private int id;
@@ -11,11 +12,12 @@ public class Bill {
     private Product product;
     private BigDecimal totalAmount;
     private EStatusBill statusBill;
+    private Date dateOfInvoice = Date.valueOf(LocalDate.now());
 
     public Bill() {
     }
 
-    public Bill(int id, Auth auth, String code, Room room, Product product, BigDecimal totalAmount, EStatusBill statusBill) {
+    public Bill(int id, Auth auth, String code, Room room, Product product, BigDecimal totalAmount, EStatusBill statusBill,Date dateOfInvoice) {
         this.id = id;
         this.auth = auth;
         this.code = code;
@@ -23,6 +25,7 @@ public class Bill {
         this.product = product;
         this.totalAmount = totalAmount;
         this.statusBill = statusBill;
+        this.dateOfInvoice = dateOfInvoice;
     }
 
     public int getId() {
@@ -79,5 +82,13 @@ public class Bill {
 
     public void setAuth(Auth auth) {
         this.auth = auth;
+    }
+
+    public Date getDateOfInvoice() {
+        return dateOfInvoice;
+    }
+
+    public void setDateOfInvoice(Date dateOfInvoice) {
+        this.dateOfInvoice = dateOfInvoice;
     }
 }
