@@ -45,16 +45,19 @@
         <i class="icon_search"></i>
     </div>
     <div class="header-configure-area">
-        <div class="language-option">
-            <img src="../hotel/img/flag.jpg" alt="">
-            <span>EN <i class="fa fa-angle-down"></i></span>
-            <div class="flag-dropdown">
-                <ul>
-                    <li><a href="#">Zi</a></li>
-                    <li><a href="#">Fr</a></li>
-                </ul>
+
+        <div class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img class="rounded-circle me-lg-2" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
+                <span class="d-none d-lg-inline-flex">${auth.name}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                <a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}"  >Information</a>
+                <a href="/auth" class="dropdown-item">Log Out</a>
             </div>
         </div>
+
+
         <a href="#" class="bk-btn">Booking Now</a>
     </div>
     <nav class="mainmenu mobile-menu">
@@ -108,21 +111,59 @@
                             <a href="#"><i class="fa fa-instagram"></i></a>
                         </div>
                         <a href="#" class="bk-btn">Booking Now</a>
-                        <div class="language-option">
-                            <img src="../hotel/img/flag.jpg" alt="">
-                            <span>EN <i class="fa fa-angle-down"></i></span>
-                            <div class="flag-dropdown">
-                                <ul>
-                                    <li><a href="#">Zi</a></li>
-                                    <li><a href="#">Fr</a></li>
-                                </ul>
+
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <img class="rounded-circle me-lg-2" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
+                                <span class="d-none d-lg-inline-flex">${auth.name}</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                                <a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}"  >Information</a>
+                                <a href="/auth" class="dropdown-item">Log Out</a>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <%--   hiển thị thông tin     --%>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                </div>
+                <div class="modal-body">
+                    <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm">
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="name" name="name" value="${auth.name}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="col-form-label">Email</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="email" name="email" value="${auth.email}" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="col-form-label">Phone</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="phone" name="phone" value="${auth.phone}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="col-form-label">Address</label>
+                            <input class="d-flex justify-content-between select-room-detail" id="address" name="address" value="${auth.address}" >
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%--        --%>
+
     <div class="menu-item">
         <div class="container">
             <div class="row">
