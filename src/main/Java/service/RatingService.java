@@ -23,4 +23,8 @@ public class RatingService {
     public void saveRating(Rating rating ,int id) {
         ratingDAO.saveRating(rating,id);
     }
+
+    public double findStar(int idRoom) {
+        return ratingDAO.findStar(idRoom);
+    }
 }

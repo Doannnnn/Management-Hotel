@@ -60,6 +60,7 @@ public class HotelController extends HttpServlet {
         int idRoom = Integer.parseInt(req.getParameter("idroom"));
         int idUser = Integer.parseInt(req.getParameter("iduser"));
         req.setAttribute("room", roomService.findById(idRoom));
+        req.setAttribute("star", ratingService.findStar(idRoom));
         req.setAttribute("ratings", ratingService.findAll(idRoom));
         req.setAttribute("book", bookingService.findByIDAuth(idUser));
         req.setAttribute("message", req.getParameter("message"));
@@ -228,7 +229,7 @@ public class HotelController extends HttpServlet {
             int id = Integer.parseInt(req.getParameter("room_id"));
             int authId = auth.getId();
             ratingService.saveRating(getRating(req, authId), id);
-            resp.sendRedirect("hotel-page?action=room-detail");
+            resp.sendRedirect("hotel-page?action=room-detail&idroom="+id+"&iduser="+authId);
         } else {
             resp.sendRedirect("/auth/login.jsp");
         }

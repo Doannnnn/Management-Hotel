@@ -250,13 +250,12 @@
                         <nav class="mainmenu">
                             <ul>
                                 <li><a href="../hotel/index.jsp">Home</a></li>
-                                <li><a href="../hotel-page?action=room">Rooms</a></li>
+                                <li><a href="../hotel-page?action=room&id=${auth.id}">Rooms</a></li>
                                 <li><a href="../hotel-page?action=about-us">About Us</a></li>
                                 <li  class="active"><a href="#">Page</a>
                                     <ul class="dropdown">
-                                        <li><a href="../hotel-page?action=room-detail&id=1">Room Details</a></li>
                                         <li><a href="../hotel-page?action=blog-details">Blog Details</a></li>
-                                        <li><a href="../hotel-page?action=bill">Bill</a></li>
+                                        <li><a href="../hotel-page?action=show-bill-detail&id=${auth.id}">Bill</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="../hotel-page?action=blog">News</a></li>

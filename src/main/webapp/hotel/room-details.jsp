@@ -286,13 +286,12 @@
                         <nav class="mainmenu">
                             <ul>
                                 <li><a href="../hotel/index.jsp">Home</a></li>
-                                <li><a href="../hotel-page?action=room">Rooms</a></li>
+                                <li  class="active"><a href="../hotel-page?action=room&id=${auth.id}">Rooms</a></li>
                                 <li><a href="../hotel-page?action=about-us">About Us</a></li>
-                                <li class="active"><a href="#">Page</a>
+                                <li><a href="#">Page</a>
                                     <ul class="dropdown">
-                                        <li><a href="../hotel-page?action=room-detail&id=1">Room Details</a></li>
                                         <li><a href="../hotel-page?action=blog-details">Blog Details</a></li>
-                                        <li><a href="../hotel-page?action=bill">Bill</a></li>
+                                        <li><a href="../hotel-page?action=show-bill-detail&id=${auth.id}">Bill</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="../hotel-page?action=blog">News</a></li>
@@ -340,12 +339,7 @@
                         <div class="rd-title">
                             <h3>${room.name}</h3>
                             <div class="rdt-right">
-                                <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
+                                <div class="rating" id="starRating" data-score="${star}">
                                 </div>
                                 <a href="/hotel-page?action=bill-detail&idroom=${room.id}&id=${auth.id}">Booking Now</a>
                             </div>
@@ -359,11 +353,11 @@
                             </tr>
                             <tr>
                                 <td class="r-o">Capacity:</td>
-                                <td>${room.roomClass}</td>
+                                <td>${room.roomClass.value}</td>
                             </tr>
                             <tr>
                                 <td class="r-o">Bed:</td>
-                                <td>${room.type}</td>
+                                <td>${room.type.value}</td>
                             </tr>
                             <tr>
                                 <td class="r-o">Services:</td>
@@ -659,8 +653,23 @@
 
         ratingValueField.value = starIndex;
     }
+    function convertToStars(score){
+        var stars ="";
+        var fullStars = Math.floor(score);
+        for (var i = 0; i < fullStars ; i++){
+            stars += '<i class="fa fa-star"></i> ';
+        }
+        if (score % 1 !== 0){
+            stars += '<i class="fa fa-star-half"></i> ';
+        }
+        return stars;
+    }
+    var starRatingElement = document.getElementById("starRating");
+    var score = parseFloat(starRatingElement.getAttribute("data-score"));
+    starRatingElement.innerHTML = convertToStars(score);
 </script>
 <script>
+
     var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
         keyboard: false
     });
