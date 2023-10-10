@@ -303,12 +303,12 @@
                     <form action="/hotel-page?action=booking&id=${auth.id}" method="post">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
-                            <input type="text" class="date-input" id="date-in" name="checkin" required>
+                            <input type="text" class="date-input" id="date-in" name="checkin" onchange="validateDates()" required>
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="check-date">
                             <label for="date-out">Check Out:</label>
-                            <input type="text" class="date-input" id="date-out" name="checkout" required>
+                            <input type="text" class="date-input" id="date-out" name="checkout" onchange="validateDates()" required>
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="check-date">
@@ -799,6 +799,24 @@
             $("#modalProductId").text(productId);
         });
     });
+
+    function validateDates() {
+        var checkInDate = new Date(document.getElementById('date-in').value);
+        var checkOutDate = new Date(document.getElementById('date-out').value);
+
+        // Chỉ so sánh ngày và tháng của ngày "Check In" và ngày "Check Out"
+        var checkInDayMonth = checkInDate.getDate() + '-' + (checkInDate.getMonth() + 1);
+        var checkOutDayMonth = checkOutDate.getDate() + '-' + (checkOutDate.getMonth() + 1);
+
+        // Kiểm tra nếu ngày "Check Out" trùng với ngày "Check In" hoặc ngày sau "Check In"
+        if (checkOutDayMonth <= checkInDayMonth || checkOutDate.getDate() - checkInDate.getDate() <= 1) {
+            alert('Ngày "Check Out" không hợp lệ. Vui lòng chọn ngày khác.');
+            document.getElementById('date-out').value = ''; // Xóa giá trị của trường "Check Out"
+            return false;
+        }
+
+        return true;
+    }
 </script>
 
 </body>

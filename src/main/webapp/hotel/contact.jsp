@@ -309,10 +309,10 @@
                 <form action="#" class="contact-form">
                     <div class="row">
                         <div class="col-lg-6">
-                            <input type="text" placeholder="Your Name">
+                            <input type="text" placeholder="Your Name" value="${auth.name}">
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" placeholder="Your Email">
+                            <input type="text" placeholder="Your Email" value="${auth.email}">
                         </div>
                         <div class="col-lg-12">
                             <textarea placeholder="Your Message"></textarea>
