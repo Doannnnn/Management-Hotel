@@ -262,13 +262,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-
                     </div>
                     <div class="modal-body">
                         <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="img" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
-                                <input type="file" name="img" id="img" accept="image/*" value="${auth.img}">
+                                <input type="file" name="img" id="img" accept="image/*" >
                             </div>
                             <div class="mb-3">
                                 <label for="name" class="col-form-label">Name</label>
@@ -415,18 +414,13 @@
 </script>
 <script>
     $(document).ready(function () {
-        // Khi người dùng nhấp vào liên kết "Information"
         $(".edit-link").click(function () {
-            // Lấy giá trị id từ thuộc tính data-id của liên kết
             var productId = $(this).data("id");
-            // Hiển thị modal tương ứng với id đã lấy được
             $("#exampleModal").modal("show");
-
-            // Truyền giá trị id vào modal
-            // Đặt giá trị id vào một phần tử trong modal (ví dụ: một thẻ <span> có id "modalProductId")
             $("#modalProductId").text(productId);
         });
     });
+
 </script>
 </body>
 </html>

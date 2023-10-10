@@ -102,20 +102,21 @@ public class AuthController extends HttpServlet {
     private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String role = getRoleFromSomewhere(req);
         Part part = req.getPart("img");
-        Auth auth = getAuthRequest(req, part);
-        authService.update(auth,Integer.parseInt(req.getParameter("id")));
-
+        int id = Integer.parseInt(req.getParameter("id"));
+        Auth auth = getAuthRequest(req, part,id);
+        authService.update(auth,id);
+        HttpSession session = req.getSession();
+        session.setAttribute("auth",auth);
         if (role.equals("ADMIN")) {
-            resp.sendRedirect(req.getContextPath() + "/admin?id=" + Integer.parseInt(req.getParameter("id")));
+            resp.sendRedirect(req.getContextPath() + "/admin" );
         } else if (role.equals("USER")) {
-            resp.sendRedirect(req.getContextPath() + "/hotel-page?id="+Integer.parseInt(req.getParameter("id")));
+            resp.sendRedirect(req.getContextPath() + "/hotel-page?id="+id);
         } else {
             resp.sendRedirect("/auth");
         }
     }
 
     private void saveImageToPath(InputStream inputStream, String filePath) throws IOException {
-        // Ghi dữ liệu từ InputStream vào tệp tin
         try (OutputStream outputStream = new FileOutputStream(filePath)) {
             byte[] buffer = new byte[1024];
             int bytesRead;
@@ -131,24 +132,30 @@ public class AuthController extends HttpServlet {
         return (String) session.getAttribute("role");
     }
 
-    private Auth getAuthRequest(HttpServletRequest req, Part part) throws ServletException, IOException {
+    private void handleImageUpload(Part part, String filePath) throws IOException {
+        if (part != null && part.getSize() > 0) {
+            try (InputStream inputStream = part.getInputStream()) {
+                saveImageToPath(inputStream, filePath);
+            }
+        }
+    }
+    private Auth getAuthRequest(HttpServletRequest req, Part part, int id) throws IOException {
         String img = extractFileName(part);
-        int id = Integer.parseInt(req.getParameter("id"));
         String imagePath = "D:\\Management-Hotel\\src\\main\\webapp\\hotel\\img\\room\\avatar";
         String filePath = imagePath + File.separator + img;
-
-
+        if (img != null && !img.isEmpty()) {
+            handleImageUpload(part, filePath);
+        } else {
+            Auth existingAuth = authService.findByID(id);
+            img = existingAuth.getImg(); // Sử dụng ảnh hiện tại từ cơ sở dữ liệu
+        }
         String serverPath = this.getServletContext().getRealPath("/") + "hotel\\img\\room\\avatar" + File.separator + img;
         System.out.println("serverPath..." + serverPath);
-
-        saveImageToPath(part.getInputStream(), filePath);
-        saveImageToPath(part.getInputStream(), serverPath);
 
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String phone = req.getParameter("phone");
         String address = req.getParameter("address");
-
         return new Auth(img, name, email, phone, address);
     }
 

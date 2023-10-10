@@ -787,15 +787,9 @@
     });
 
     $(document).ready(function () {
-        // Khi người dùng nhấp vào liên kết "Information"
         $(".edit-link").click(function () {
-            // Lấy giá trị id từ thuộc tính data-id của liên kết
             var productId = $(this).data("id");
-            // Hiển thị modal tương ứng với id đã lấy được
             $("#exampleModal").modal("show");
-
-            // Truyền giá trị id vào modal
-            // Đặt giá trị id vào một phần tử trong modal (ví dụ: một thẻ <span> có id "modalProductId")
             $("#modalProductId").text(productId);
         });
     });
@@ -803,15 +797,12 @@
     function validateDates() {
         var checkInDate = new Date(document.getElementById('date-in').value);
         var checkOutDate = new Date(document.getElementById('date-out').value);
-
-        // Chỉ so sánh ngày và tháng của ngày "Check In" và ngày "Check Out"
         var checkInDayMonth = checkInDate.getDate() + '-' + (checkInDate.getMonth() + 1);
         var checkOutDayMonth = checkOutDate.getDate() + '-' + (checkOutDate.getMonth() + 1);
 
-        // Kiểm tra nếu ngày "Check Out" trùng với ngày "Check In" hoặc ngày sau "Check In"
-        if (checkOutDayMonth <= checkInDayMonth || checkOutDate.getDate() - checkInDate.getDate() <= 1) {
+        if (checkOutDate <= checkInDate || checkOutDate.getDate() - checkInDate.getDate() <= 1) {
             alert('Ngày "Check Out" không hợp lệ. Vui lòng chọn ngày khác.');
-            document.getElementById('date-out').value = ''; // Xóa giá trị của trường "Check Out"
+            document.getElementById('date-out').value = '';
             return false;
         }
 

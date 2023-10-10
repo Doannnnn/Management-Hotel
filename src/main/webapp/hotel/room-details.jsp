@@ -389,49 +389,49 @@
                                 </div>
                                 <div class="ri-text">
                                     <span>${rating.date}</span>
-                                    <div class="review-rating">
+                                    <div class="rating">
                                         <c:choose>
                                             <c:when test="${rating.scores == 1}">
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
                                             </c:when>
                                             <c:when test="${rating.scores == 2}">
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
                                             </c:when>
                                             <c:when test="${rating.scores == 3}">
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
                                             </c:when>
                                             <c:when test="${rating.scores == 4}">
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star_alt"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-empty"></i>
                                             </c:when>
                                             <c:when test="${rating.scores == 5}">
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
-                                                <i class="icon_star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
                                             </c:when>
                                             <c:otherwise>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
-                                                <i class="icon_star_alt"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
+                                                <i class="fa fa-star-empty"></i>
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
@@ -466,7 +466,7 @@
                                     <input type="hidden" id="ratingValue" name="rating" value="">
                                 </div>
                                 <textarea placeholder="Your Review" name="comment"></textarea>
-                                <button type="submit">Submit Now</button>
+                                <button type="submit" disabled>Submit Now</button>
                             </div>
                         </div>
                     </form>
@@ -640,6 +640,7 @@
     function rateStar(starIndex) {
         const stars = document.querySelectorAll('#ratingStars i');
         const ratingValueField = document.getElementById('ratingValue');
+        const submitButton = document.querySelector('#comment-form button[type="submit"]');
 
         for (let i = 0; i < stars.length; i++) {
             if (i < starIndex) {
@@ -652,6 +653,12 @@
         }
 
         ratingValueField.value = starIndex;
+
+        if (starIndex > 0) {
+            submitButton.removeAttribute('disabled');
+        } else {
+            submitButton.setAttribute('disabled', 'disabled');
+        }
     }
     function convertToStars(score){
         var stars ="";
@@ -675,15 +682,9 @@
     });
 
     $(document).ready(function () {
-        // Khi người dùng nhấp vào liên kết "Information"
         $(".edit-link").click(function () {
-            // Lấy giá trị id từ thuộc tính data-id của liên kết
             var productId = $(this).data("id");
-            // Hiển thị modal tương ứng với id đã lấy được
             $("#exampleModal").modal("show");
-
-            // Truyền giá trị id vào modal
-            // Đặt giá trị id vào một phần tử trong modal (ví dụ: một thẻ <span> có id "modalProductId")
             $("#modalProductId").text(productId);
         });
     });
