@@ -341,7 +341,7 @@
                                 </tr>
                                 <tr>
                                     <td class="r-o">Amenities:</td>
-                                    <td>${room.amenities}</td>
+                                    <td>${room.getStringList()}</td>
                                 </tr>
                                 </tbody>
                             </table>

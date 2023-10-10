@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class BillDAO extends DatabaseConnection{
 
     public void create(Bill bill) {
-        String CREATE_BILL_SQL = "INSERT INTO `quanlykhachsan`.`bill` (`code`, `user_id`, `booking_id`, `room_id`, `product_id`, `total_amount`, `date_invoice`) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        String CREATE_BILL_SQL = "INSERT INTO `quanlykhachsan`.`bill` (`code`, `user_id`, `booking_id`, `room_id`, `product_id`, `total_amount`, `date_invoice`,`status`) VALUES (?, ?, ?, ?, ?, ?, ?,?);";
         try{
             Connection connection = getConnection();
             PreparedStatement pre = connection.prepareStatement(CREATE_BILL_SQL);
@@ -26,6 +26,7 @@ public class BillDAO extends DatabaseConnection{
             pre.setInt(5,bill.getProduct().getId());
             pre.setBigDecimal(6,bill.getTotalAmount());
             pre.setDate(7,bill.getDateOfInvoice());
+            pre.setString(8,bill.getStatusBill().name());
             pre.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -34,7 +35,7 @@ public class BillDAO extends DatabaseConnection{
 
     public List<Bill> getAllBill() {
         String SELECT_ALL_BILL = "SELECT b.id, b.code, r.name AS room_name, r.type, " +
-                "p.name AS service, u.name AS user_name, u.phone, bk.number_room, b.total_amount AS total, b.status " +
+                "p.name AS service, u.name AS user_name, u.phone, bk.number_room,bk.number_guests, b.total_amount AS total, b.status " +
                 "FROM bill b " +
                 "JOIN user u ON b.user_id = u.id " +
                 "JOIN bookings bk ON b.booking_id = bk.id " +
@@ -48,38 +49,7 @@ public class BillDAO extends DatabaseConnection{
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                Bill bill = new Bill();
-                bill.setId(rs.getInt("id"));
-                bill.setCode(rs.getString("code"));
-                bill.setTotalAmount(rs.getBigDecimal("total"));
-
-                Room room = new Room();
-                room.setName(rs.getString("room_name"));
-                room.setType(EType.valueOf(rs.getString("type")));
-
-                Product product = new Product();
-                product.setName(rs.getString("service"));
-
-                Booking booking = new Booking();
-                booking.setNumberRoom(rs.getInt("number_room"));
-
-                Auth auth = new Auth();
-                auth.setName(rs.getString("user_name"));
-                auth.setPhone(rs.getString("phone"));
-
-                bill.setRoom(room);
-                bill.setBooking(booking);
-                bill.setProduct(product);
-                bill.setAuth(auth);
-
-                // Lấy giá trị trạng thái và gán vào Enum EStatusBill
-                String statusStr = rs.getString("status");
-                if (statusStr != null) {
-                    EStatusBill statusBill = EStatusBill.valueOf(statusStr);
-                    bill.setStatusBill(statusBill);
-                }
-
-                bills.add(bill);
+                bills.add(getById(rs));
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -87,8 +57,8 @@ public class BillDAO extends DatabaseConnection{
         return bills;
     }
 
-    public Bill findById(int id) {
-        String SELECT_BILL_BY_ID = "SELECT b.id, b.code, b.date_invoice, r.price price, p.price price_product, r.name AS room_name, r.type, bk.check_in check_in, bk.check_out check_out, " +
+    public Bill findById(int id){
+        String SELECT_BILL_BY_ID = "SELECT b.id, b.code, b.date_invoice, r.price price, p.price price_product, r.name AS room_name, r.type, bk.check_in check_in, bk.check_out check_out,bk.number_guests, " +
                 "p.name AS service, u.name AS user_name, u.phone, bk.number_room, b.total_amount AS total, b.status " +
                 "FROM bill b " +
                 "JOIN user u ON b.user_id = u.id " +
@@ -96,7 +66,6 @@ public class BillDAO extends DatabaseConnection{
                 "JOIN rooms r ON b.room_id = r.id " +
                 "JOIN products p ON b.product_id = p.id " +
                 "WHERE b.id = ?";
-
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILL_BY_ID)) {
             preparedStatement.setInt(1, id);
@@ -104,49 +73,78 @@ public class BillDAO extends DatabaseConnection{
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
-                Bill bill = new Bill();
-                bill.setId(rs.getInt("id"));
-                bill.setCode(rs.getString("code"));
-                bill.setTotalAmount(rs.getBigDecimal("total"));
-                bill.setDateOfInvoice(rs.getDate("date_invoice"));
-
-                Room room = new Room();
-                room.setName(rs.getString("room_name"));
-                room.setType(EType.valueOf(rs.getString("type")));
-                room.setPrice(rs.getBigDecimal("price"));
-
-                Product product = new Product();
-                product.setName(rs.getString("service"));
-                product.setPrice(rs.getBigDecimal("price_product"));
-
-                Booking booking = new Booking();
-                booking.setNumberRoom(rs.getInt("number_room"));
-                booking.setCheckInDate(rs.getDate("check_in"));
-                booking.setCheckOutDate(rs.getDate("check_out"));
-
-                Auth auth = new Auth();
-                auth.setName(rs.getString("user_name"));
-                auth.setPhone(rs.getString("phone"));
-
-                bill.setRoom(room);
-                bill.setBooking(booking);
-                bill.setProduct(product);
-                bill.setAuth(auth);
-
-                // Lấy giá trị trạng thái và gán vào Enum EStatusBill
-                String statusStr = rs.getString("status");
-                if (statusStr != null) {
-                    EStatusBill statusBill = EStatusBill.valueOf(statusStr);
-                    bill.setStatusBill(statusBill);
-                }
-
-                return bill;
+                return getById(rs);
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
 
         return null;
+    }
+    public List<Bill> findByIdUser(int idUser){
+        String SELECT_BILL_BY_ID = "SELECT b.id, b.code, b.date_invoice, r.price price, p.price price_product, r.name AS room_name, r.type, bk.check_in check_in, bk.check_out check_out,bk.number_guests, " +
+                "p.name AS service, u.name AS user_name, u.phone, bk.number_room, b.total_amount AS total, b.status " +
+                "FROM bill b " +
+                "JOIN user u ON b.user_id = u.id " +
+                "JOIN bookings bk ON b.booking_id = bk.id " +
+                "JOIN rooms r ON b.room_id = r.id " +
+                "JOIN products p ON b.product_id = p.id " +
+                "WHERE u.id = ?";
+        List<Bill> bills = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILL_BY_ID)) {
+            preparedStatement.setInt(1,idUser);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                bills.add(getById(rs));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return bills;
+    }
+
+    public Bill getById(ResultSet rs) throws SQLException {
+        Bill bill = new Bill();
+        bill.setId(rs.getInt("id"));
+        bill.setCode(rs.getString("code"));
+        bill.setTotalAmount(rs.getBigDecimal("total"));
+        bill.setDateOfInvoice(rs.getDate("date_invoice"));
+
+        Room room = new Room();
+        room.setName(rs.getString("room_name"));
+        room.setType(EType.valueOf(rs.getString("type")));
+        room.setPrice(rs.getBigDecimal("price"));
+
+        Product product = new Product();
+        product.setName(rs.getString("service"));
+        product.setPrice(rs.getBigDecimal("price_product"));
+
+        Booking booking = new Booking();
+        booking.setNumberRoom(rs.getInt("number_room"));
+        booking.setNumberGuests(rs.getInt("number_guests"));
+        booking.setCheckInDate(rs.getDate("check_in"));
+        booking.setCheckOutDate(rs.getDate("check_out"));
+
+        Auth auth = new Auth();
+        auth.setName(rs.getString("user_name"));
+        auth.setPhone(rs.getString("phone"));
+
+        bill.setRoom(room);
+        bill.setBooking(booking);
+        bill.setProduct(product);
+        bill.setAuth(auth);
+
+        // Lấy giá trị trạng thái và gán vào Enum EStatusBill
+        String statusStr = rs.getString("status");
+        if (statusStr != null) {
+            EStatusBill statusBill = EStatusBill.valueOf(statusStr);
+            bill.setStatusBill(statusBill);
+        }
+        return bill;
     }
 
 

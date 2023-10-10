@@ -252,8 +252,10 @@
                     </div>
 
 
-                    <p class="dis info my-3">DATE IN ${book.checkInDate} , DATE OUT ${book.checkOutDate}
-                        , ${book.getDate()} NIGHT</br>
+                    <p class="dis info my-2">DATE IN ${book.checkInDate} , DATE OUT ${book.checkOutDate}
+                        , ${book.getDate()} NIGHT
+                    </p>
+                    <p class="dis info my-2">
                         ${book.numberGuests} GUEST , ${book.numberRoom} ROOM
                     </p>
                     <div class="radiobtn">
@@ -263,11 +265,11 @@
                         <label for="one" class="box py-2 first">
                             </c:if>
                             <c:if test="${product.id == 2}">
-                            <input type="radio" name="box" id="two" data-price="20" data-id="2" onclick="changeProductFee(this)">
+                            <input type="radio" name="box" id="two" data-price="${20*book.numberRoom}" data-id="2" onclick="changeProductFee(this)">
                             <label for="two" class="box py-2 second">
                                 </c:if>
                                 <c:if test="${product.id == 3}">
-                                <input type="radio" name="box" id="three" data-price="100" data-id="3" onclick="changeProductFee(this)">
+                                <input type="radio" name="box" id="three" data-price="${100*book.numberRoom}" data-id="3" onclick="changeProductFee(this)">
                                 <label for="three" class="box py-2 third">
                                     </c:if>
                                     <div class="d-flex align-items-start">

@@ -18,6 +18,7 @@
     <!-- Css Styles -->
     <link rel="stylesheet" href="../hotel/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="../hotel/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/flaticon.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/owl.carousel.min.css" type="text/css">
@@ -27,6 +28,11 @@
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
     <style>
+        a:hover, a:focus {
+            text-decoration: none;
+            outline: none;
+            color: #f15454;
+        }
         .select-room-detail{
             width: 100%;
             height: 50px;
@@ -288,7 +294,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <h2>About Us</h2>
+                    <h2>Order list</h2>
                 </div>
             </div>
         </div>
@@ -299,34 +305,33 @@
 <!-- About Us Page Section Begin -->
 <section class="aboutus-page-section spad">
     <div class="container">
-        <c:if test="${bill == null}">
+        <c:if test="${bills == null}">
             <img src="../hotel/img/room/avatar/page-not-found.png">
         </c:if>
-        <c:if test="${bill != null}">
+        <c:if test="${bills != null}">
             <table class="table table-striped">
                 <thead>
-                <tr>
-                    <th style="padding-left: 50px;">CODE</th>
-                    <th style="padding-left: 22px;">CHECK IN</th>
-                    <th style="padding-left: 32px;">CHECK OUT</th>
-                    <th style="padding-left: 6px;">DATE INVOICE</th>
-                    <th style="padding-left: 10px;">STATUS</th>
-                    <th style="padding-left: 10px;">DETAIL</th>
+                <tr style="vertical-align: middle; text-align: center">
+                    <th >CODE</th>
+                    <th >CHECK IN</th>
+                    <th >CHECK OUT</th>
+                    <th >DATE INVOICE</th>
+                    <th >STATUS</th>
+                    <th >DETAIL</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="bill" items="${bill}">
-                    <tr style="vertical-align: middle;">
+                <c:forEach var="bill" items="${bills}">
+                    <tr style="vertical-align: middle; text-align: center">
                         <td>${bill.code}</td>
-                        <td>${bill.book.checkin}</td>
-                        <td>${bill.book.checkout}</td>
-                        <td>${bill.description}</td>
+                        <td>${bill.booking.checkInDate}</td>
+                        <td>${bill.booking.checkOutDate}</td>
                         <td>${bill.dateOfInvoice}</td>
                         <td>${bill.statusBill}</td>
                         <td>
-                            <div class="text-right">
-                                <a href="#" class="icon-link">
-                                    <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
+                            <div>
+                                <a href="#" class="icon-link" data-bs-toggle="modal" data-bs-target="#exampleModal-${bill.id}">
+                                   <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
                                 </a>
                             </div>
                         </td>
@@ -336,7 +341,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">DETAIL ORDER ${bill.code}</h5>
+                                    <h5 class="modal-title">Table Detail</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
@@ -350,11 +355,11 @@
                                             </div>
                                             <div class="mb-3">
                                                 <p class="dis fw-bold mb-2">Number Room: </p>
-                                                <p class="form-control">${bill.book.numberRoom}</p>
+                                                <p class="form-control">${bill.booking.numberRoom}</p>
                                             </div>
                                             <div class="mb-3">
                                                 <p class="dis fw-bold mb-2">Number Guest: </p>
-                                                <p class="form-control">${bill.book.numberGuests}</p>
+                                                <p class="form-control">${bill.booking.numberGuests}</p>
                                             </div>
                                             <div class="mb-3">
                                                 <p class="dis fw-bold mb-2">Service: </p>
@@ -362,13 +367,14 @@
                                             </div>
                                             <div class="mb-3">
                                                 <p class="dis fw-bold mb-2">Service fee: </p>
-                                                <p class="form-control">${bill.product.price * bill.book.numberRoom}</p>
+                                                <p class="form-control">${bill.product.price * bill.booking.numberRoom}</p>
                                             </div>
                                             <div class="mb-3">
                                                 <p class="dis fw-bold mb-2">Total Amount (TAX):</p>
                                                 <p class="form-control">${bill.totalAmount}</p>
                                             </div>
-                                            <button type="button" class="btn btn-primary">Cancel</button>
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                                    aria-label="Close">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -480,22 +486,11 @@
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
 <script>
-
-    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
-        keyboard: false
-    });
-
     $(document).ready(function () {
-        // Khi người dùng nhấp vào liên kết "Information"
         $(".edit-link").click(function () {
-            // Lấy giá trị id từ thuộc tính data-id của liên kết
             var productId = $(this).data("id");
-            // Hiển thị modal tương ứng với id đã lấy được
+            $("#exampleModal .modal-title").text("DETAIL ORDER " + productId);
             $("#exampleModal").modal("show");
-
-            // Truyền giá trị id vào modal
-            // Đặt giá trị id vào một phần tử trong modal (ví dụ: một thẻ <span> có id "modalProductId")
-            $("#modalProductId").text(productId);
         });
     });
 </script>

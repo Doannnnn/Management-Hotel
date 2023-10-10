@@ -24,6 +24,10 @@ public class BillService {
     public Bill findById(int id){
         return billDAO.findById(id);
     }
+    public List<Bill> findByIdUser(int id){
+        return billDAO.findByIdUser(id);
+    }
+
 
     public Page<Bill> findAllBill(int page, String search){
         return billDAO.findAllBill(page, search);

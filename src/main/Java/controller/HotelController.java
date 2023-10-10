@@ -50,8 +50,9 @@ public class HotelController extends HttpServlet {
     }
 
     private void showBillDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int idUser = Integer.parseInt(req.getParameter("iduser"));
-        req.setAttribute("bill",billService.findById(idUser));
+        int idUser = Integer.parseInt(req.getParameter("id"));
+        req.setAttribute("auth", authService.findByID(idUser));
+        req.setAttribute("bills",billService.findByIdUser(idUser));
         req.getRequestDispatcher("hotel/bill.jsp").forward(req, resp);
     }
 
@@ -211,8 +212,8 @@ public class HotelController extends HttpServlet {
         bill.setBooking(new Booking(idBook));
         bill.setRoom(room);
         bill.setTotalAmount(total);
-        bill.setStatusBill(EStatusBill.PAID);
         bill.setAuth(auth);
+        bill.setStatusBill(EStatusBill.PAID);
         billService.create(bill);
         resp.sendRedirect("/hotel-page?action=show-bill-detail&message=Payment Success&id="+idUser);
 
