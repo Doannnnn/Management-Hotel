@@ -33,7 +33,7 @@
 </c:if>
 <div class="container" id="container">
   <div class="container sign-up-container">
-    <form action="/auth?action=register" method="POST" >
+    <form action="/auth?action=register" method="POST" onsubmit="return validateForm()">
       <h1>Create Account</h1>
       <div class="social-container">
         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>

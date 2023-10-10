@@ -51,7 +51,7 @@
             padding-left: 20px;
         }
 
-        
+
          .select-room-detail{
              width: 100%;
              height: 50px;

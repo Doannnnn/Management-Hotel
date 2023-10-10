@@ -124,3 +124,22 @@ function validatePassword() {
 // Xử lý sự kiện khi người dùng rời khỏi trường mật khẩu
 document.getElementById("re_password").addEventListener("blur", validatePassword);
 
+function validateForm() {
+    var nameError = document.getElementById('nameError');
+    var emailError = document.getElementById('emailError');
+    var phoneError = document.getElementById('phoneError');
+    var addressError = document.getElementById('addressError');
+    var passwordMatchError = document.getElementById('passwordMatchError');
+
+    if (
+        nameError.style.display !== 'none' ||
+        emailError.style.display !== 'none' ||
+        phoneError.style.display !== 'none' ||
+        addressError.style.display !== 'none' ||
+        passwordMatchError.style.display !== 'none'
+    ) {
+        return false;
+    }
+
+    return true;
+}
