@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class BillDAO extends DatabaseConnection{
 
     public void create(Bill bill) {
-        String CREATE_BILL_SQL = "INSERT INTO `quanlykhachsan`.`bill` (`code`, `user_id`, `booking_id`, `room_id`, `product_id`, `total_amount`, `date_invoice`,`status`) VALUES (?, ?, ?, ?, ?, ?, ?,?);";
+        String CREATE_BILL_SQL = "INSERT INTO bill (`code`, `user_id`, `booking_id`, `room_id`, `product_id`, `total_amount`, `date_invoice`,`status`) VALUES (?, ?, ?, ?, ?, ?, ?,?);";
         try{
             Connection connection = getConnection();
             PreparedStatement pre = connection.prepareStatement(CREATE_BILL_SQL);
@@ -146,7 +146,7 @@ public class BillDAO extends DatabaseConnection{
         return bill;
     }
     public Bill checkRatingBill(int idUser,int idRoom){
-        String SELECT_BILL_BY_ID = "SELECT * FROM quanlykhachsan.bill WHERE user_id = ? and room_id = ?;";
+        String SELECT_BILL_BY_ID = "SELECT * FROM bill WHERE user_id = ? and room_id = ?;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILL_BY_ID)) {
             preparedStatement.setInt(1, idUser);
@@ -244,7 +244,7 @@ public class BillDAO extends DatabaseConnection{
     }
 
     public void updateBill(int id, EStatusBill statusBill){
-        String UPDATE_STATUS_BILL = "UPDATE `bill` SET `status` = ? WHERE (`id` = ?)";
+        String UPDATE_STATUS_BILL = "UPDATE bill SET `status` = ? WHERE (`id` = ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_BILL)) {
             preparedStatement.setString(1, String.valueOf(statusBill));

@@ -112,7 +112,7 @@ public class RoomDAO extends DatabaseConnection {
     }
 
     public int create(Room room){
-        String CREATE = "INSERT INTO `rooms` (`name`, `roomclass`, `type`, `price`, `description`, `amenities`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        String CREATE = "INSERT INTO rooms (`name`, `roomclass`, `type`, `price`, `description`, `amenities`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?);";
         String SELECT_MAX_ID = "SELECT MAX(id) as max_id FROM `case3`.`rooms`";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE)) {
@@ -176,7 +176,7 @@ public class RoomDAO extends DatabaseConnection {
     }
 
     public void update(Room room){
-        String UPDATE_ROOM = "UPDATE `rooms` SET `name` = ?, `roomclass` = ?, `type` = ?, `price` = ?, `description` = ?, `amenities` = ?, `status` = ? WHERE (`id` = ?)";
+        String UPDATE_ROOM = "UPDATE rooms SET `name` = ?, `roomclass` = ?, `type` = ?, `price` = ?, `description` = ?, `amenities` = ?, `status` = ? WHERE (`id` = ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ROOM)) {
             preparedStatement.setString(1, room.getName());
@@ -194,7 +194,7 @@ public class RoomDAO extends DatabaseConnection {
     }
 
     public void delete(int id) {
-        String UPDATE_DELETED = "UPDATE `rooms` SET `deleted` = '1' WHERE (`id` = ?)";
+        String UPDATE_DELETED = "UPDATE rooms SET `deleted` = '1' WHERE (`id` = ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_DELETED)) {
             preparedStatement.setInt(1, id);

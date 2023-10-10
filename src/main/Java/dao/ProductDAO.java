@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ProductDAO extends DatabaseConnection {
     public List<Product> selectAll() {
-        String SELECT_ALL_SQL = "SELECT * FROM quanlykhachsan.products;";
+        String SELECT_ALL_SQL = "SELECT * FROM products;";
         try {
             Connection connection = getConnection();
             PreparedStatement pre = connection.prepareStatement(SELECT_ALL_SQL);
@@ -32,7 +32,7 @@ public class ProductDAO extends DatabaseConnection {
     }
 
     public Product findById(int id) {
-        String SELECT_ID_SQL = "SELECT * FROM quanlykhachsan.products where id = ?;";
+        String SELECT_ID_SQL = "SELECT * FROM products where id = ?;";
         try {
             Connection connection = getConnection();
             PreparedStatement pre = connection.prepareStatement(SELECT_ID_SQL);
