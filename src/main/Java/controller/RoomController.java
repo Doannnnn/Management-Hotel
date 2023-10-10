@@ -61,7 +61,7 @@ public class RoomController extends HttpServlet {
 
     private void showBillDetails(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("bill", billService.findById(Integer.parseInt(req.getParameter("id"))));
-        req.getRequestDispatcher("admin/bill-details.jsp").forward(req,resp);
+        req.getRequestDispatcher("admin/bill.jsp").forward(req,resp);
     }
 
     private void showUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -114,7 +114,7 @@ public class RoomController extends HttpServlet {
         if (pageString == null) {
             pageString = "1";
         }
-        req.setAttribute("role", "ADMIN");
+//        req.setAttribute("role", "ADMIN");
 //        req.setAttribute("auth",authService.findByID(Integer.parseInt(req.getParameter("id"))));
         req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
         req.setAttribute("search", req.getParameter("search"));

@@ -212,8 +212,8 @@ public class HotelController extends HttpServlet {
         bill.setBooking(new Booking(idBook));
         bill.setRoom(room);
         bill.setTotalAmount(total);
+        bill.setStatusBill(EStatusBill.Pending);
         bill.setAuth(auth);
-        bill.setStatusBill(EStatusBill.PAID);
         billService.create(bill);
         resp.sendRedirect("/hotel-page?action=show-bill-detail&message=Payment Success&id="+idUser);
 

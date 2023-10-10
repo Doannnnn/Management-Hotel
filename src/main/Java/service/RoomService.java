@@ -32,7 +32,7 @@ public class RoomService {
         return roomDAO.findById(id);
     }
     public Room findById(HttpServletRequest req){
-        int id = Integer.parseInt("id");
+        int id = Integer.parseInt(req.getParameter("id"));
         return roomDAO.findById(id);
     }
 

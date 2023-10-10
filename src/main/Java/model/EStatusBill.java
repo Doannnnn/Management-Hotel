@@ -1,5 +1,5 @@
 package model;
 
 public enum EStatusBill {
-    PAID, UNPAID
+    Pending, Processing, Completed, Cancelled
 }

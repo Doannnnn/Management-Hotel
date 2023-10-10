@@ -32,6 +32,7 @@
     <!-- Template Stylesheet -->
     <link href="/admin/css/style.css" rel="stylesheet">
     <link href="/admin/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -239,7 +240,7 @@
                         <th style="padding-left: 32px;">TYPE</th>
                         <th style="padding-left: 30px;">NUMBER</th>
                         <th>TOTAL</th>
-                        <th>STATUS</th>
+                        <th style="padding-left: 30px">STATUS</th>
                         <th>BIll-DETAILS</th>
                     </tr>
                     </thead>
@@ -253,15 +254,85 @@
                             <td>${bill.room.type}</td>
                             <td style="padding-left: 32px;">${bill.booking.numberRoom}</td>
                             <td>${bill.totalAmount}</td>
-                            <td>${bill.statusBill}</td>
+                            <td>
+                                <select name="billStatus" class="form-control" style="width: 70%">
+                                    <option value="Pending" ${bill.statusBill == 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Processing" ${bill.statusBill == 'Processing' ? 'selected' : ''}>Processing</option>
+                                    <option value="Completed" ${bill.statusBill == 'Completed' ? 'selected' : ''}>Completed</option>
+                                    <option value="Cancelled" ${bill.statusBill == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                </select>
+                            </td>
                             <td>
                                 <div class="text-right" style="margin-left: 15px">
-                                    <a href="/admin?action=bill-details&id=${bill.id}" class="icon-link">
+                                    <a href="#" class="icon-link detail-btn" data-bs-toggle="modal" data-bs-target="#billDetailModal${bill.id}" data-bill-id="${bill.id}">
                                         <i class="fas fa-info-circle" style="font-size: 30px; margin-left: 20px"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
+                        <div class="modal fade" id="billDetailModal${bill.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="card" style="max-width: 730px; margin: 50px auto;">
+                                    <div class="card-body mx-4">
+                                        <div class="container">
+                                            <p class="my-3" style="font-size: 27px; text-align: center;">BILL-DETAIL</p>
+                                                <div class="row">
+                                                    <ul class="list-unstyled">
+                                                        <li class="text-black"><span class="text-black" style="padding-right: 10px">Client: </span>${bill.auth.name}</li>
+                                                        <li class="text-muted mt-1"><span class="text-black" style="padding-right: 10px">Code Bill: </span>${bill.code}</li>
+                                                        <li class="text-black mt-1"><span class="text-black" style="padding-right: 10px">Issue Date: </span>${bill.dateOfInvoice}</li>
+                                                    </ul>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-xl-10">
+                                                        <p>Check-In</p>
+                                                    </div>
+                                                    <div class="col-xl-2">
+                                                        <p class="float-end">${bill.booking.checkInDate}</p>
+                                                    </div>
+                                                    <div class="col-xl-10">
+                                                        <p>Check-Out</p>
+                                                    </div>
+                                                    <div class="col-xl-2">
+                                                        <p class="float-end">${bill.booking.checkOutDate}</p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-xl-10">
+                                                        <p>${bill.room.name}</p>
+                                                    </div>
+                                                    <div class="col-xl-2">
+                                                        <p class="float-end">$${bill.room.price}</p>
+                                                    </div>
+                                                    <div class="col-xl-10">
+                                                        <p>${bill.room.type}</p>
+                                                    </div>
+                                                    <div class="col-xl-10">
+                                                        <p>Quantity: ${bill.booking.numberRoom}</p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-xl-10">
+                                                        <p>${bill.product.name}</p>
+                                                    </div>
+                                                    <div class="col-xl-2">
+                                                        <p class="float-end">$${bill.product.price}</p>
+                                                    </div>
+                                                </div>
+                                                <hr style="border: 2px solid black;">
+                                                <div class="row text-black">
+                                                    <div class="col-xl-12">
+                                                        <p class="float-end fw-bold">Total: $${bill.totalAmount}</p>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </c:forEach>
                     </tbody>
                 </table>
@@ -292,6 +363,10 @@
             </ul>
         </nav>
         <!-- Table End -->
+
+        <!-- Bill-detail -->
+
+        <!-- Bill-detail End -->
 
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">
@@ -331,6 +406,21 @@
 <script>
     function confirmDelete() {
         return confirm("Bạn có chắc chắn muốn xóa?");
+    }
+
+    // Lấy bill ID từ thuộc tính data-bill-id của nút chi tiết
+    const billId = btn.getAttribute('data-bill-id');
+
+    // Kiểm tra xem billId có tồn tại
+    if (billId) {
+        // Đặt giá trị id vào action của form
+        const form = document.querySelector(`#billDetailModal${billId} form`);
+        form.action = `/admin?action=bill-details&id=${billId}`;
+
+        // Hiển thị modal
+        $(`#billDetailModal${billId}`).modal('show');
+    } else {
+        console.error('ID của hóa đơn không hợp lệ.');
     }
 
 </script>
