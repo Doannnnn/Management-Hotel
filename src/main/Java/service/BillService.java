@@ -2,6 +2,7 @@ package service;
 
 import dao.BillDAO;
 import model.Bill;
+import model.EStatusBill;
 import service.dto.Page;
 
 import java.util.List;
@@ -27,9 +28,10 @@ public class BillService {
     public List<Bill> findByIdUser(int id){
         return billDAO.findByIdUser(id);
     }
-
-
     public Page<Bill> findAllBill(int page, String search){
         return billDAO.findAllBill(page, search);
+    }
+    public void updateBill(int id, EStatusBill statusBill){
+        billDAO.updateBill(id, statusBill);
     }
 }

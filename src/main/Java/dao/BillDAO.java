@@ -34,10 +34,9 @@ public class BillDAO extends DatabaseConnection{
     }
 
     public List<Bill> getAllBill() {
-        String SELECT_ALL_BILL = "SELECT b.id, b.code, r.name AS room_name, r.type, " +
-                "p.name AS service, u.name AS user_name, u.phone, bk.number_room,bk.number_guests, b.total_amount AS total, b.status " +
-                "FROM bill b " +
-                "JOIN user u ON b.user_id = u.id " +
+        String SELECT_ALL_BILL = "SELECT b.id, b.code, b.date_invoice date_invoice, r.price price, p.price price_product, r.name AS room_name, " +
+                "r.type, bk.check_in check_in, bk.check_out check_out,bk.number_guests, p.name AS service, u.name AS user_name, u.phone, bk.number_room, b.total_amount AS total, b.status " +
+                "FROM bill b JOIN user u ON b.user_id = u.id " +
                 "JOIN bookings bk ON b.booking_id = bk.id " +
                 "JOIN rooms r ON b.room_id = r.id " +
                 "JOIN products p ON b.product_id = p.id";
@@ -157,9 +156,9 @@ public class BillDAO extends DatabaseConnection{
             search = "";
         }
         search = "%" + search.toLowerCase() + "%";
-        var SELECT_ALL = "SELECT b.id, b.code, u.name AS user_name, u.phone, r.type, bk.number_room, b.total_amount AS total, b.status " +
-                "FROM bill b " +
-                "JOIN user u ON b.user_id = u.id " +
+        var SELECT_ALL = "SELECT b.id, b.code, b.date_invoice date_invoice, r.price price, p.price price_product, r.name AS room_name, " +
+                "r.type, bk.check_in check_in, bk.check_out check_out,bk.number_guests, p.name AS service, u.name AS user_name, u.phone, bk.number_room, b.total_amount AS total, b.status " +
+                "FROM bill b JOIN user u ON b.user_id = u.id " +
                 "JOIN bookings bk ON b.booking_id = bk.id " +
                 "JOIN rooms r ON b.room_id = r.id " +
                 "JOIN products p ON b.product_id = p.id " +
@@ -180,20 +179,31 @@ public class BillDAO extends DatabaseConnection{
                 bill.setId(rs.getInt("id"));
                 bill.setCode(rs.getString("code"));
                 bill.setTotalAmount(rs.getBigDecimal("total"));
+                bill.setDateOfInvoice(rs.getDate("date_invoice"));
 
                 Room room = new Room();
+                room.setName(rs.getString("room_name"));
                 room.setType(EType.valueOf(rs.getString("type")));
+                room.setPrice(rs.getBigDecimal("price"));
 
                 Booking booking = new Booking();
                 booking.setNumberRoom(rs.getInt("number_room"));
+                booking.setNumberGuests(rs.getInt("number_guests"));
+                booking.setCheckInDate(rs.getDate("check_in"));
+                booking.setCheckOutDate(rs.getDate("check_out"));
 
                 Auth auth = new Auth();
                 auth.setName(rs.getString("user_name"));
                 auth.setPhone(rs.getString("phone"));
 
+                Product product= new Product();
+                product.setName(rs.getString("service"));
+                product.setPrice(rs.getBigDecimal("price_product"));
+
                 bill.setRoom(room);
                 bill.setBooking(booking);
                 bill.setAuth(auth);
+                bill.setProduct(product);
 
                 // Lấy giá trị trạng thái và gán vào Enum EStatusBill
                 String statusStr = rs.getString("status");
@@ -218,4 +228,15 @@ public class BillDAO extends DatabaseConnection{
         return result;
     }
 
+    public void updateBill(int id, EStatusBill statusBill){
+        String UPDATE_STATUS_BILL = "UPDATE `bill` SET `status` = ? WHERE (`id` = ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_BILL)) {
+            preparedStatement.setString(1, String.valueOf(statusBill));
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

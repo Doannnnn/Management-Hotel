@@ -48,7 +48,7 @@ public class AuthService {
                 session.setAttribute("auth",auth);
             if (auth.getRole().getName().equals("ADMIN")) {
                 session.setAttribute("role","ADMIN");
-                resp.sendRedirect(req.getContextPath() + "/admin?id="+ auth.getId() );
+                resp.sendRedirect(req.getContextPath() + "/admin");
             } else {
                 session.setAttribute("role","USER");
                 resp.sendRedirect(req.getContextPath() + "/hotel-page?id="+ auth.getId());

@@ -214,8 +214,8 @@
                     <div class="modal-body">
                         <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label for="img" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
-                                <input type="file" name="img" id="img" accept="image/*" value="${auth.img}">
+                                <label for="imgBackground" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
+                                <input type="file" name="img" id="imgBackground" accept="image/*" value="${auth.img}">
                             </div>
                             <div class="mb-3">
                                 <label for="name" class="col-form-label">Name</label>
@@ -447,6 +447,66 @@
         // Sau khi thêm tệp vào ô input, cần cập nhật lại giao diện người dùng
         renderUploadedFiles(currentFiles);
     }
+</script>
+<script>
+    const nameInput = document.getElementById("name");
+    const nameError = document.getElementById("name-error");
+
+    // Sử dụng sự kiện input để kiểm tra sau mỗi lần nhập
+    nameInput.addEventListener("input", function () {
+        validateName();
+    });
+    function validateName() {
+        const nameValue = nameInput.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng đầu và cuối
+        // Sử dụng biểu thức chính quy để kiểm tra xem có ký tự không phải chữ cái không
+        const regex = /^[a-zA-Z\s]+$/
+        if (!regex.test(nameValue)) {
+            nameError.textContent = "Please enter letters only.";
+        } else {
+            nameError.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    const priceInput = document.getElementById("price");
+    const priceError = document.getElementById("price-error");
+
+    // Sử dụng sự kiện input để kiểm tra sau mỗi lần nhập
+    priceInput.addEventListener("input", function () {
+        validatePrice();
+    });
+
+    function validatePrice() {
+        const priceValue = priceInput.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng đầu và cuối
+        // Sử dụng biểu thức chính quy để kiểm tra xem giá tiền là một số hợp lệ (không chứa ký tự đặc biệt)
+        const regex = /^[0-9]+(\.[0-9]{1,2})?$/;
+        if (!regex.test(priceValue) || parseFloat(priceValue) <= 0) {
+            priceError.textContent = "Price is not valid or cannot be negative.";
+        } else {
+            priceError.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    function validateForm() {
+        // Lấy danh sách các checkbox có name="selectedAmenities"
+        const checkboxes = document.querySelectorAll('input[name="selectedAmenities"]');
+
+        // Kiểm tra nếu không có checkbox nào được chọn
+        let isAtLeastOneChecked = false;
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                isAtLeastOneChecked = true;
+            }
+        });
+
+        if (!isAtLeastOneChecked) {
+            // Hiển thị thông báo trong phần tử HTML với id="error-message"
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = "Please select at least one option.";
+            return false;
+        }
+        return true; // Cho phép gửi biểu mẫu nếu ít nhất một checkbox được chọn
+    }
+
 </script>
 <script>
     $(document).ready(function () {

@@ -51,16 +51,18 @@ public class RoomController extends HttpServlet {
             case "user":
                 showUser(req, resp);
                 break;
-            case "bill-details":
-                showBillDetails(req, resp);
+            case "updateBill":
+                updateBill(req, resp);
                 break;
             default:
                 showRoom(req, resp);
         }
     }
 
-    private void showBillDetails(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("bill", billService.findById(Integer.parseInt(req.getParameter("id"))));
+    private void updateBill(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        EStatusBill statusBill = EStatusBill.valueOf(req.getParameter("status"));
+        billService.updateBill(id, statusBill);
         req.getRequestDispatcher("admin/bill.jsp").forward(req,resp);
     }
 
@@ -98,7 +100,7 @@ public class RoomController extends HttpServlet {
         req.setAttribute("types", EType.values());
         req.setAttribute("amenities", EAmenities.values());
         req.setAttribute("status", EStatus.values());
-        req.getRequestDispatcher("admin/").forward(req,resp);
+        req.getRequestDispatcher("admin/edit.jsp").forward(req,resp);
     }
 
     private void showCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -114,7 +116,7 @@ public class RoomController extends HttpServlet {
         if (pageString == null) {
             pageString = "1";
         }
-//        req.setAttribute("role", "ADMIN");
+        req.setAttribute("role", "ADMIN");
 //        req.setAttribute("auth",authService.findByID(Integer.parseInt(req.getParameter("id"))));
         req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
         req.setAttribute("search", req.getParameter("search"));
@@ -135,6 +137,8 @@ public class RoomController extends HttpServlet {
             case "edit":
                 edit(req, resp);
                 break;
+            default:
+                showRoom(req, resp);
         }
     }
 

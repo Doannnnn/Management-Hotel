@@ -204,7 +204,7 @@
             </div>
         </nav>
         <!-- Navbar End -->
-        hiển thị thông tin     --%>
+        <%-- hiển thị thông tin     --%>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -214,8 +214,8 @@
                     <div class="modal-body">
                         <form action="/auth?action=edit&id=${auth.id}" method="POST" id="editForm" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label for="img" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
-                                <input type="file" name="img" id="img" accept="image/*" value="${auth.img}">
+                                <label for="imgBackground" class="form-label" style="padding-right: 10px;">Ảnh bìa</label>
+                                <input type="file" name="img" id="imgBackground" accept="image/*" value="${auth.img}">
                             </div>
                             <div class="mb-3">
                                 <label for="name" class="col-form-label">Name</label>
@@ -246,7 +246,7 @@
         <!-- Table Start -->
         <div class="container">
             <h3 class="text-center" style="margin: 1.5rem">CREATE ROOM</h3>
-            <form action="admin?action=create" method="post" enctype="multipart/form-data">
+            <form action="admin?action=create" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" required="required">
@@ -270,11 +270,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="price" name="price" required>
+                    <input type="number" class="form-control" id="price" name="price" required min="0">
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" id="description" name="description" required></textarea>
+                    <div id="description-error" class="text-danger" style="margin: 5px"></div>
                 </div>
                 <div class="mb-3">
                     <label for="img" class="form-label">Image</label>
@@ -284,9 +285,10 @@
                 <div class="mb-3">
                     <%--@declare id="amenities"--%><label for="amenities" class="form-label">Amenities</label> <br>
                     <c:forEach var="amenity" items="${amenities}">
-                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}">
+                        <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" id="selectedAmenities" value="${amenity}" id="${amenity}">
                         <label style="margin-left: 5px" for="${amenity}">${amenity}</label>
                     </c:forEach>
+                        <div id="error-message" class="text-danger" style="margin: 5px"></div>
                 </div>
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
@@ -336,6 +338,7 @@
 
 <!-- Template Javascript -->
 <script src="/admin/js/main.js"></script>
+
 <script>
     var preview = document.getElementById("image-preview");
     var fileNames = []; // Mảng lưu trữ tên tệp
@@ -368,7 +371,8 @@
 
     function previewImages() {
         var input = document.getElementById("img");
-        var files = document.querySelector('input[type=file]').files;
+        // var files = document.querySelector('input[type=file]').files;
+        var files = document.querySelector('#img').files;
 
         addFilesToInput(input, files); // Thêm các tệp mới vào ô input
 
@@ -383,6 +387,9 @@
 
             reader.readAsDataURL(file);
         }
+
+
+
     }
 
     function createImagePreview(file, fileName) {
@@ -445,6 +452,47 @@
             nameError.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
         }
     }
+
+    const priceInput = document.getElementById("price");
+    const priceError = document.getElementById("price-error");
+
+    // Sử dụng sự kiện input để kiểm tra sau mỗi lần nhập
+    priceInput.addEventListener("input", function () {
+        validatePrice();
+    });
+
+    function validatePrice() {
+        const priceValue = priceInput.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng đầu và cuối
+        // Sử dụng biểu thức chính quy để kiểm tra xem giá tiền là một số hợp lệ (không chứa ký tự đặc biệt)
+        const regex = /^[0-9]+(\.[0-9]{1,2})?$/;
+        if (!regex.test(priceValue) || parseFloat(priceValue) <= 0) {
+            priceError.textContent = "Price is not valid or cannot be negative.";
+        } else {
+            priceError.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    function validateForm() {
+        // Lấy danh sách các checkbox có name="selectedAmenities"
+        const checkboxes = document.querySelectorAll('input[name="selectedAmenities"]');
+
+        // Kiểm tra nếu không có checkbox nào được chọn
+        let isAtLeastOneChecked = false;
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                isAtLeastOneChecked = true;
+            }
+        });
+
+        if (!isAtLeastOneChecked) {
+            // Hiển thị thông báo trong phần tử HTML với id="error-message"
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = "Please select at least one option.";
+            return false;
+        }
+        return true; // Cho phép gửi biểu mẫu nếu ít nhất một checkbox được chọn
+    }
+
 </script>
 <script>
     $(document).ready(function () {

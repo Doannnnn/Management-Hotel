@@ -255,24 +255,24 @@
                             <td style="padding-left: 32px;">${bill.booking.numberRoom}</td>
                             <td>${bill.totalAmount}</td>
                             <td>
-                                <select name="billStatus" class="form-control" style="width: 70%">
-                                    <option value="Pending" ${bill.statusBill == 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="Processing" ${bill.statusBill == 'Processing' ? 'selected' : ''}>Processing</option>
-                                    <option value="Completed" ${bill.statusBill == 'Completed' ? 'selected' : ''}>Completed</option>
-                                    <option value="Cancelled" ${bill.statusBill == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                <select name="billStatus" class="form-control" style="width: 70%" onchange="updateBillStatus(this)" data-bill-id="${bill.id}">
+                                    <option value="Pending" class="${bill.statusBill == 'Pending' ? 'bill-status-pending' : ''}" ${bill.statusBill == 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Processing" class="${bill.statusBill == 'Processing' ? 'bill-status-processing' : ''}" ${bill.statusBill == 'Processing' ? 'selected' : ''}>Processing</option>
+                                    <option value="Completed" class="${bill.statusBill == 'Completed' ? 'bill-status-completed' : ''}" ${bill.statusBill == 'Completed' ? 'selected' : ''}>Completed</option>
+                                    <option value="Cancelled" class="${bill.statusBill == 'Cancelled' ? 'bill-status-cancelled' : ''}" ${bill.statusBill == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                                 </select>
                             </td>
                             <td>
                                 <div class="text-right" style="margin-left: 15px">
-                                    <a href="#" class="icon-link detail-btn" data-bs-toggle="modal" data-bs-target="#billDetailModal${bill.id}" data-bill-id="${bill.id}">
-                                        <i class="fas fa-info-circle" style="font-size: 30px; margin-left: 20px"></i>
+                                    <a href="" class="icon-link detail-btn" data-bs-toggle="modal" data-bs-target="#billDetailModal${bill.id}" data-bill-id="${bill.id}">
+                                        <i class="fas fa-info-circle" style="font-size: 30px; margin-left: 20px; text-decoration: none;"></i>
                                     </a>
                                 </div>
                             </td>
                         </tr>
                         <div class="modal fade" id="billDetailModal${bill.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="card" style="max-width: 730px; margin: 50px auto;">
+                                <div class="card" style="width: 730px; margin: 80px auto; right: 70px">
                                     <div class="card-body mx-4">
                                         <div class="container">
                                             <p class="my-3" style="font-size: 27px; text-align: center;">BILL-DETAIL</p>
@@ -286,13 +286,13 @@
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col-xl-10">
-                                                        <p>Check-In</p>
+                                                        <p>Date: <span style="margin-left: 25px">Check-In</span></p>
                                                     </div>
                                                     <div class="col-xl-2">
                                                         <p class="float-end">${bill.booking.checkInDate}</p>
                                                     </div>
                                                     <div class="col-xl-10">
-                                                        <p>Check-Out</p>
+                                                        <p>Date: <span style="margin-left: 25px">Check-Out</span></p>
                                                     </div>
                                                     <div class="col-xl-2">
                                                         <p class="float-end">${bill.booking.checkOutDate}</p>
@@ -301,22 +301,22 @@
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col-xl-10">
-                                                        <p>${bill.room.name}</p>
+                                                        <p>Room: <span style="margin-left: 17px">${bill.room.name}</span></p>
                                                     </div>
                                                     <div class="col-xl-2">
                                                         <p class="float-end">$${bill.room.price}</p>
                                                     </div>
                                                     <div class="col-xl-10">
-                                                        <p>${bill.room.type}</p>
+                                                        <p>Type: <span style="margin-left: 25px">${bill.room.type}</span></p>
                                                     </div>
                                                     <div class="col-xl-10">
-                                                        <p>Quantity: ${bill.booking.numberRoom}</p>
+                                                        <p>Quantity: <span style="margin-left: 25px">${bill.booking.numberRoom}</span></p>
                                                     </div>
                                                 </div>
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col-xl-10">
-                                                        <p>${bill.product.name}</p>
+                                                        <p>Service: <span style="margin-left: 25px">${bill.product.name}</span></p>
                                                     </div>
                                                     <div class="col-xl-2">
                                                         <p class="float-end">$${bill.product.price}</p>
@@ -408,19 +408,37 @@
         return confirm("Bạn có chắc chắn muốn xóa?");
     }
 
-    // Lấy bill ID từ thuộc tính data-bill-id của nút chi tiết
-    const billId = btn.getAttribute('data-bill-id');
+    // Hàm xử lý sự kiện thay đổi select
+    async function updateBillStatus(select) {
 
-    // Kiểm tra xem billId có tồn tại
-    if (billId) {
-        // Đặt giá trị id vào action của form
-        const form = document.querySelector(`#billDetailModal${billId} form`);
-        form.action = `/admin?action=bill-details&id=${billId}`;
+        // Lấy id và status mới
+        const billId = select.dataset.billId;
+        const newStatus = select.value;
 
-        // Hiển thị modal
-        $(`#billDetailModal${billId}`).modal('show');
-    } else {
-        console.error('ID của hóa đơn không hợp lệ.');
+        // Disable select để tránh thay đổi nhiều lần
+        select.disabled = true;
+
+        try {
+
+            // Gửi request lên server để cập nhật
+            const response = await fetch('/admin?action=updateBill&id=' + billId + '&status=' + newStatus);
+
+            // Kiểm tra response có ok không
+            if(!response.ok) {
+                throw new Error('Cập nhật không thành công');
+            }
+
+            // Cập nhật thành công, báo cho người dùng
+            alert('Cập nhật trạng thái bill thành công');
+
+        } catch (error) {
+            // Hiển thị lỗi cho người dùng
+            alert(error.message);
+        } finally {
+            // Mở khóa select để cho phép thay đổi tiếp
+            select.disabled = false;
+        }
+
     }
 
 </script>
