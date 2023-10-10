@@ -19,6 +19,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @WebServlet(name = "hotelController", urlPatterns = "/hotel-page")
@@ -52,7 +53,7 @@ public class HotelController extends HttpServlet {
     private void showBillDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int idUser = Integer.parseInt(req.getParameter("id"));
         req.setAttribute("auth", authService.findByID(idUser));
-        req.setAttribute("bills",billService.findByIdUser(idUser));
+        req.setAttribute("bills", billService.findByIdUser(idUser));
         req.getRequestDispatcher("hotel/bill.jsp").forward(req, resp);
     }
 
@@ -90,7 +91,7 @@ public class HotelController extends HttpServlet {
             req.setAttribute("products", productService.findAll());
             req.setAttribute("message", req.getParameter("message"));
             req.getRequestDispatcher("bill/bill-detail.jsp").forward(req, resp);
-        }else {
+        } else {
             req.getRequestDispatcher("bill/bill-detail.jsp").forward(req, resp);
         }
 
@@ -140,7 +141,7 @@ public class HotelController extends HttpServlet {
 
     private void bookingRoom(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idRoom = Integer.parseInt(req.getParameter("idroom"));
-        getBooking("/hotel-page?action=room-detail&message=Booking Successful&idroom="+idRoom+"&iduser=", "/hotel-page?action=room-detail&message=Check In/Check out is invalid&idroom="+idRoom+"&iduser=", req, resp);
+        getBooking("/hotel-page?action=room-detail&message=Booking Successful&idroom=" + idRoom + "&iduser=", "/hotel-page?action=room-detail&message=Check In/Check out is invalid&idroom=" + idRoom + "&iduser=", req, resp);
     }
 
     private void getBooking(String sq, String sqr, HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -170,7 +171,7 @@ public class HotelController extends HttpServlet {
     }
 
     private void booking(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        getBooking("/hotel-page?message=Booking Successful&id=", "/hotel-page?message=Check In/Check out is invalid&id=", req, resp);
+        getBooking("/hotel-page?action=room&message=Booking Successful&id=", "/hotel-page?message=Check In/Check out is invalid&id=", req, resp);
     }
 
     public Date getDateCheck(String str, HttpServletRequest req) {
@@ -216,22 +217,23 @@ public class HotelController extends HttpServlet {
         bill.setStatusBill(EStatusBill.Pending);
         bill.setAuth(auth);
         billService.create(bill);
-        resp.sendRedirect("/hotel-page?action=show-bill-detail&message=Payment Success&id="+idUser);
+        resp.sendRedirect("/hotel-page?action=show-bill-detail&message=Payment Success&id=" + idUser);
 
     }
 
     public void saveRating(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("usernhap");
         String email = req.getParameter("emailnhap");
-
+        int idRoom = Integer.parseInt(req.getParameter("room_id"));
         Auth auth = authService.findByNameAndEmail(name, email);
         if (auth != null) {
-            int id = Integer.parseInt(req.getParameter("room_id"));
             int authId = auth.getId();
-            ratingService.saveRating(getRating(req, authId), id);
-            resp.sendRedirect("hotel-page?action=room-detail&idroom="+id+"&iduser="+authId);
-        } else {
-            resp.sendRedirect("/auth/login.jsp");
+            if (billService.checkBillRating(auth.getId(), idRoom)) {
+                ratingService.saveRating(getRating(req, authId), idRoom);
+                resp.sendRedirect("hotel-page?action=room-detail&idroom=" + idRoom + "&iduser=" + authId);
+            } else {
+                resp.sendRedirect("hotel-page?action=room-detail&idroom=" + idRoom + "&iduser=" + authId);
+            }
         }
     }
 

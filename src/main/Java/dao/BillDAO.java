@@ -145,7 +145,22 @@ public class BillDAO extends DatabaseConnection{
         }
         return bill;
     }
-
+    public Bill checkRatingBill(int idUser,int idRoom){
+        String SELECT_BILL_BY_ID = "SELECT * FROM quanlykhachsan.bill WHERE user_id = ? and room_id = ?;";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILL_BY_ID)) {
+            preparedStatement.setInt(1, idUser);
+            preparedStatement.setInt(2, idRoom);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return getById(rs);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
 
     public Page<Bill> findAllBill(int page, String search){
         var result = new Page<Bill>();

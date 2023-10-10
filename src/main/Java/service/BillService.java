@@ -28,6 +28,11 @@ public class BillService {
     public List<Bill> findByIdUser(int id){
         return billDAO.findByIdUser(id);
     }
+
+    public boolean checkBillRating(int idUser, int idRoom){
+        return billDAO.checkRatingBill(idUser, idRoom) != null;
+    }
+
     public Page<Bill> findAllBill(int page, String search){
         return billDAO.findAllBill(page, search);
     }
