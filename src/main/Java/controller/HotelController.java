@@ -228,7 +228,7 @@ public class HotelController extends HttpServlet {
             int id = Integer.parseInt(req.getParameter("room_id"));
             int authId = auth.getId();
             ratingService.saveRating(getRating(req, authId), id);
-            resp.sendRedirect("hotel-page?action=room-detail&id=1");
+            resp.sendRedirect("hotel-page?action=room-detail");
         } else {
             resp.sendRedirect("/auth/login.jsp");
         }
