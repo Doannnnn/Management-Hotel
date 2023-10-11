@@ -13,6 +13,7 @@ public class BookingService {
         return bookingDAO.findById(idAuth);
     }
 
+
     public void create(Booking booking) {
         bookingDAO.create(booking);
     }

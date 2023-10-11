@@ -40,12 +40,14 @@ public class HotelController extends HttpServlet {
         switch (action) {
             case "room" -> showRoom(req, resp);
             case "room-detail" -> showRoomDetail(req, resp);
+            case "room-detail-booking-null" -> showRoomDetailBookingNull(req, resp);
             case "about-us" -> showAboutUS(req, resp);
             case "bill-detail" -> showBill(req, resp);
             case "blog-details" -> showBlogDetail(req, resp);
             case "blog" -> showBlog(req, resp);
             case "contact" -> showContact(req, resp);
             case "show-bill-detail" -> showBillDetail(req, resp);
+            case "delete" -> delete(req, resp);
             default -> showIndex(req, resp);
         }
     }
@@ -53,8 +55,7 @@ public class HotelController extends HttpServlet {
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idUser = Integer.parseInt(req.getParameter("id"));
         int idRoom = Integer.parseInt(req.getParameter("idRoom"));
-        bookingService.delete(idUser);
-        resp.sendRedirect("/hotel-page?action=room-detail&message=Booking Successful&idroom=" + idRoom + "&iduser=" + idUser);
+        resp.sendRedirect("/hotel-page?action=room-detail-booking-null&message=Booking Successful&idroom=" + idRoom + "&iduser=" + idUser);
     }
 
     private void showBillDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -67,13 +68,20 @@ public class HotelController extends HttpServlet {
     private void showRoomDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int idRoom = Integer.parseInt(req.getParameter("idroom"));
         int idUser = Integer.parseInt(req.getParameter("iduser"));
+        req.setAttribute("book", bookingService.findByIDAuth(idUser));
+        getRoomDetail(idRoom,req,resp);
+    }
+    private void showRoomDetailBookingNull(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int idRoom = Integer.parseInt(req.getParameter("idroom"));
+        int idUser = Integer.parseInt(req.getParameter("iduser"));
+        getRoomDetail(idRoom,req,resp);
+    }
+    private void getRoomDetail(int idRoom,HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         req.setAttribute("room", roomService.findById(idRoom));
         req.setAttribute("star", ratingService.findStar(idRoom));
         req.setAttribute("ratings", ratingService.findAll(idRoom));
-        req.setAttribute("book", bookingService.findByIDAuth(idUser));
         req.setAttribute("message", req.getParameter("message"));
         req.getRequestDispatcher("hotel/room-details.jsp").forward(req, resp);
-
     }
 
     private void showContact(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -155,7 +163,7 @@ public class HotelController extends HttpServlet {
 
     private void bookingRoom(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idRoom = Integer.parseInt(req.getParameter("idroom"));
-        getBooking("/hotel-page?action=room-detail&message=Booking Successful&idroom=" + idRoom + "&iduser=", "/hotel-page?action=room-detail&message=Check In/Check out is invalid&idroom=" + idRoom + "&iduser=", req, resp);
+        getBooking("/hotel-page?action=room-detail&message=Booking Successful&idroom=" + idRoom + "&iduser=", "/hotel-page?action=delete&message=Check In/Check out is invalid&idRoom=" + idRoom + "&id=", req, resp);
     }
 
     private void getBooking(String sq, String sqr, HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -175,7 +183,6 @@ public class HotelController extends HttpServlet {
         Date checkin = getDateCheck("checkin", req);
         Date checkout = getDateCheck("checkout", req);
         if (checkout.after(checkin)) {
-            bookingService.delete(idUser);
             Booking booking = new Booking();
             booking.setAuth(new Auth(idUser));
             booking.setCheckInDate(checkin);

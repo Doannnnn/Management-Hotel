@@ -14,11 +14,17 @@ import java.util.stream.Collectors;
 public class BookingDAO extends DatabaseConnection{
 
     public Booking findById(int id){
-        String SELECT_BOOKING_BY_ID = "SELECT b.*, u.img img,u.`name` name, u.phone phone, u.address address,u.email email " +
-                "FROM bookings b join `user` u on b.user_id = u.id WHERE u.id = ?";
+        String SELECT_BOOKING_BY_ID = "SELECT b.*, u.img AS img, u.`name` AS name, u.phone AS phone, u.address AS address, u.email AS email\n" +
+                "FROM bookings b\n" +
+                "JOIN `user` u ON b.user_id = u.id\n" +
+                "WHERE u.id = ? \n" +
+                "AND b.id = (SELECT MAX(bk.id)\n" +
+                "            FROM  bookings bk \n" +
+                "            WHERE bk.user_id = ?);";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKING_BY_ID)) {
             preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, id);
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()){

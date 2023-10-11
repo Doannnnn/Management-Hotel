@@ -30,7 +30,7 @@ public class BillService {
     }
 
     public boolean checkBillRating(int idUser, int idRoom){
-        return billDAO.checkRatingBill(idUser, idRoom) != null;
+        return billDAO.checkRatingBill(idUser, idRoom) > 0;
     }
 
     public Page<Bill> findAllBill(int page, String search){

@@ -452,7 +452,7 @@
                 </div>
                 <div class="review-add">
                     <h4>Add Review</h4>
-                    <form id="comment-form" action="/hotel-page?action=comment" class="ra-form" method="POST">
+                    <form id="comment-form" action="/hotel-page?action=comment" class="ra-form" method="post">
                         <div class="row">
                             <input type="hidden" name="room_id" value="${room.id}">
                             <div class="col-lg-6">

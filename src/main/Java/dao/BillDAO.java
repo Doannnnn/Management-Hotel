@@ -145,8 +145,11 @@ public class BillDAO extends DatabaseConnection{
         }
         return bill;
     }
-    public Bill checkRatingBill(int idUser,int idRoom){
-        String SELECT_BILL_BY_ID = "SELECT * FROM bill WHERE user_id = ? and room_id = ?;";
+    public int checkRatingBill(int idUser,int idRoom){
+        String SELECT_BILL_BY_ID = "SELECT COUNT(*) AS bill_count \n" +
+                "FROM bill\n" +
+                "WHERE user_id = ? AND room_id = ? \n" +
+                "GROUP BY user_id;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILL_BY_ID)) {
             preparedStatement.setInt(1, idUser);
@@ -154,12 +157,12 @@ public class BillDAO extends DatabaseConnection{
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                return getById(rs);
+                return rs.getInt("bill_count");
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return null;
+        return 0;
     }
 
     public Page<Bill> findAllBill(int page, String search){
