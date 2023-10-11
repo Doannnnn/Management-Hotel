@@ -243,15 +243,16 @@ public class HotelController extends HttpServlet {
     public void saveRating(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("usernhap");
         String email = req.getParameter("emailnhap");
+        req.setAttribute("message", req.getParameter("message"));
         int idRoom = Integer.parseInt(req.getParameter("room_id"));
         Auth auth = authService.findByNameAndEmail(name, email);
         if (auth != null) {
             int authId = auth.getId();
             if (billService.checkBillRating(auth.getId(), idRoom)) {
                 ratingService.saveRating(getRating(req, authId), idRoom);
-                resp.sendRedirect("hotel-page?action=room-detail&idroom=" + idRoom + "&iduser=" + authId);
+                resp.sendRedirect("hotel-page?action=room-detail&idroom=" + idRoom + "&iduser=" + authId + "&message=rating_success");
             } else {
-                resp.sendRedirect("hotel-page?action=room-detail&idroom=" + idRoom + "&iduser=" + authId);
+                resp.sendRedirect("hotel-page?action=room-detail&idroom=" + idRoom + "&iduser=" + authId + "&message=rating_failure");
             }
         }
     }

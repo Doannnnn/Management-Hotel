@@ -468,6 +468,12 @@
 <script src="../hotel/js/owl.carousel.min.js"></script>
 <script src="../hotel/js/main.js"></script>
 <script>
+    const message = document.getElementById('message');
+    if (message !== null && message.innerHTML) {
+        toastr.success(message.innerHTML);
+    }
+</script>
+<script>
     var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
         keyboard: false
     });

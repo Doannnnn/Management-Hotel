@@ -73,6 +73,7 @@ public class AuthController extends HttpServlet {
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
         session.invalidate();
+        req.setAttribute("message", req.getParameter("message"));
         req.getRequestDispatcher("/auth/login.jsp").forward(req, resp);
     }
 
@@ -102,13 +103,13 @@ public class AuthController extends HttpServlet {
 
     private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String role = getRoleFromSomewhere(req);
-        String password = getPasswordFromSomewhere(req);
         Part part = req.getPart("img");
         int id = Integer.parseInt(req.getParameter("id"));
         Auth auth =getAuthRequest(req, part,id);
         authService.update(auth,id);
         HttpSession session = req.getSession();
         Auth user = (Auth) session.getAttribute("auth");
+        user.setImg(req.getParameter("img"));
         user.setName(req.getParameter("name"));
         user.setEmail(req.getParameter("email"));
         user.setPhone(req.getParameter("phone"));
@@ -137,10 +138,6 @@ public class AuthController extends HttpServlet {
     private String getRoleFromSomewhere(HttpServletRequest req) {
         HttpSession session = req.getSession();
         return (String) session.getAttribute("role");
-    }
-    private String getPasswordFromSomewhere(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        return (String) session.getAttribute("password");
     }
 
     private void handleImageUpload(Part part, String filePath) throws IOException {
@@ -179,18 +176,22 @@ public class AuthController extends HttpServlet {
 
     private void changepassword(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         authService.updatePassword(req, resp);
+        req.setAttribute("message", req.getParameter("message"));
         resp.sendRedirect("/auth?message=change-password Success");
     }
 
     private void ForgotPassword(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (!authService.checkEmail(req, resp)) {
-            resp.sendRedirect("/auth?message=Invalid username ");
+            req.setAttribute("message", req.getParameter("message"));
+            resp.sendRedirect("/auth?action=reset-password&message=Invalid email ");
         } else {
+            req.setAttribute("message", req.getParameter("message"));
             req.getRequestDispatcher("/auth/change-password.jsp").forward(req, resp);
         }
     }
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.setAttribute("message", req.getParameter("message"));
         authService.login(req, resp);
     }
 

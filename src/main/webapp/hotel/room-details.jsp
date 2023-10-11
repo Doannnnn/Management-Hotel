@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
     <!-- Css Styles -->
     <link rel="stylesheet" href="../hotel/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/font-awesome.min.css" type="text/css">
@@ -28,6 +29,9 @@
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
     <link rel="stylesheet" href="../owlcarousel/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="../owlcarousel/assets/owl.theme.default.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
     <style>
         .icon_star_alt {
             /* Màu mặc định là xám */
@@ -191,6 +195,9 @@
 
 <!-- Header Section Begin -->
 <header class="header-section header-normal">
+    <c:if test="${message != null}">
+        <h6 class="d-none" id="message">${message}</h6>
+    </c:if>
     <div class="top-nav">
         <div class="container">
             <div class="row">
@@ -479,12 +486,12 @@
                         <form action="/hotel-page?action=booking-room-detail&id=${auth.id}&idroom=${room.id}" method="post">
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in" name="checkin" required>
+                                <input type="text" class="date-input" id="date-in" name="checkin" onchange="validateDates()" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out" name="checkout" required>
+                                <input type="text" class="date-input" id="date-out" name="checkout" onchange="validateDates()" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
@@ -630,6 +637,13 @@
 <script src="../hotel/js/update-book.js"></script>
 <script src="../owlcarousel/jquery.min.js"></script>
 <script src="../owlcarousel/owl.carousel.min.js"></script>
+
+<script>
+    const message = document.getElementById('message');
+    if (message !== null && message.innerHTML) {
+        toastr.success(message.innerHTML);
+    }
+</script>
 <script>
     $('.owl-carousel').owlCarousel({
         items: 1,
@@ -689,6 +703,22 @@
             $("#modalProductId").text(productId);
         });
     });
+</script>
+<script>
+    function validateDates() {
+        var checkInDate = new Date(document.getElementById('date-in').value);
+        var checkOutDate = new Date(document.getElementById('date-out').value);
+        var checkInDayMonth = checkInDate.getDate() + '-' + (checkInDate.getMonth() + 1);
+        var checkOutDayMonth = checkOutDate.getDate() + '-' + (checkOutDate.getMonth() + 1);
+
+        if (checkOutDate <= checkInDate || checkOutDate.getDate() - checkInDate.getDate() <= 0) {
+            alert('Ngày "Check Out" không hợp lệ. Vui lòng chọn ngày khác.');
+            document.getElementById('date-out').value = '';
+            return false;
+        }
+
+        return true;
+    }
 </script>
 </body>
 
