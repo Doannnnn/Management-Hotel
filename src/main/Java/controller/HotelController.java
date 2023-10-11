@@ -50,6 +50,13 @@ public class HotelController extends HttpServlet {
         }
     }
 
+    private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int idUser = Integer.parseInt(req.getParameter("id"));
+        int idRoom = Integer.parseInt(req.getParameter("idRoom"));
+        bookingService.delete(idUser);
+        resp.sendRedirect("/hotel-page?action=room-detail&message=Booking Successful&idroom=" + idRoom + "&iduser=" + idUser);
+    }
+
     private void showBillDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int idUser = Integer.parseInt(req.getParameter("id"));
         req.setAttribute("auth", authService.findByID(idUser));
@@ -86,11 +93,17 @@ public class HotelController extends HttpServlet {
         String id = req.getParameter("id");
         if (idRoom != null) {
             req.setAttribute("room", roomService.findById(Integer.parseInt(idRoom)));
-            req.setAttribute("book", bookingService.findByIDAuth(Integer.parseInt(id)));
-            req.setAttribute("auth", authService.findByID(Integer.parseInt(id)));
-            req.setAttribute("products", productService.findAll());
-            req.setAttribute("message", req.getParameter("message"));
-            req.getRequestDispatcher("bill/bill-detail.jsp").forward(req, resp);
+            Booking booking = bookingService.findByIDAuth(Integer.parseInt(id));
+            if (booking != null) {
+                req.setAttribute("book",booking);
+                req.setAttribute("auth", authService.findByID(Integer.parseInt(id)));
+                req.setAttribute("products", productService.findAll());
+                req.setAttribute("message", req.getParameter("message"));
+                req.getRequestDispatcher("bill/bill-detail.jsp").forward(req, resp);
+            }else {
+                resp.sendRedirect("/hotel-page?action=room-detail&message=Booking invalid!&idroom=" + idRoom + "&iduser=" + id);
+            }
+
         } else {
             req.getRequestDispatcher("bill/bill-detail.jsp").forward(req, resp);
         }
@@ -135,6 +148,7 @@ public class HotelController extends HttpServlet {
             case "comment" -> saveRating(req, resp);
             case "pay" -> pay(req, resp); //lam lai
             case "booking" -> booking(req, resp);
+            case "delete" -> delete(req, resp);
             case "booking-room-detail" -> bookingRoom(req, resp);
         }
     }
@@ -149,9 +163,14 @@ public class HotelController extends HttpServlet {
         int idUser = Integer.parseInt(req.getParameter("id"));
         int numberGuests = 0;
         int a = 1;
-        for (int i = 0; i < numberRoom; i++) {
-            numberGuests += Integer.parseInt(req.getParameter("guests" + a));
-            a++;
+        String guest = req.getParameter("guests" + a);
+        if (guest != null) {
+            for (int i = 0; i < numberRoom; i++) {
+                numberGuests += Integer.parseInt(guest);
+                a++;
+            }
+        } else {
+            numberGuests = 2;
         }
         Date checkin = getDateCheck("checkin", req);
         Date checkout = getDateCheck("checkout", req);

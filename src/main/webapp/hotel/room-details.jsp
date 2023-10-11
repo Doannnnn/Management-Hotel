@@ -506,7 +506,7 @@
 
                     </c:if>
                     <c:if test="${book != null}">
-                        <form action="#">
+                        <form action="/hotel-page?action=delete&id=${auth.id}&idRoom=${room.id}" method="post">
                             <div class="mb-3">
                                 <p class="dis fw-bold mb-2">Check In:</p>
                                 <p class="form-control">${book.checkInDate}</p>
@@ -523,6 +523,7 @@
                                 <p class="dis fw-bold mb-2">Room: </p>
                                 <p class="form-control">${book.numberRoom}</p>
                             </div>
+                            <button type="submit" class="btn btn-warning">Change Reservation</button>
                         </form>
                     </c:if>
                 </div>
