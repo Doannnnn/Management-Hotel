@@ -27,6 +27,9 @@
     <link rel="stylesheet" href="../hotel/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../hotel/css/style.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
     <style>
         a:hover, a:focus {
             text-decoration: none;
@@ -170,6 +173,9 @@
 
 <!-- Header Section Begin -->
 <header class="header-section header-normal">
+    <c:if test="${message != null}">
+        <h6 class="d-none" id="message">${message}</h6>
+    </c:if>
     <div class="top-nav">
         <div class="container">
             <div class="row">
@@ -492,6 +498,12 @@
             $("#exampleModal").modal("show");
         });
     });
+</script>
+<script>
+    const message = document.getElementById('message');
+    if (message !== null && message.innerHTML) {
+        toastr.success(message.innerHTML);
+    }
 </script>
 </body>
 

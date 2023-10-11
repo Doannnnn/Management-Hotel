@@ -109,7 +109,6 @@ public class AuthController extends HttpServlet {
         authService.update(auth,id);
         HttpSession session = req.getSession();
         Auth user = (Auth) session.getAttribute("auth");
-        user.setImg(req.getParameter("img"));
         user.setName(req.getParameter("name"));
         user.setEmail(req.getParameter("email"));
         user.setPhone(req.getParameter("phone"));
