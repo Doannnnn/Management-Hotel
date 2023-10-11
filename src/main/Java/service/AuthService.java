@@ -53,6 +53,8 @@ public class AuthService {
                 session.setAttribute("role","USER");
                 resp.sendRedirect(req.getContextPath() + "/hotel-page?id="+ auth.getId());
             }
+        } else {
+            resp.sendRedirect("/auth?message=PassWord UserName Invalid");
         }
 
     }

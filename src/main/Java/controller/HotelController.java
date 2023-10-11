@@ -55,7 +55,7 @@ public class HotelController extends HttpServlet {
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idUser = Integer.parseInt(req.getParameter("id"));
         int idRoom = Integer.parseInt(req.getParameter("idRoom"));
-        resp.sendRedirect("/hotel-page?action=room-detail-booking-null&message=Booking Successful&idroom=" + idRoom + "&iduser=" + idUser);
+        resp.sendRedirect("/hotel-page?action=room-detail-booking-null&message=Change Successful&idroom=" + idRoom + "&iduser=" + idUser);
     }
 
     private void showBillDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -127,7 +127,7 @@ public class HotelController extends HttpServlet {
         if (pageString == null) {
             pageString = "1";
         }
-        req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search"),1));
         req.setAttribute("message", req.getParameter("message"));
         req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("rooms", roomService.findAllRoom());

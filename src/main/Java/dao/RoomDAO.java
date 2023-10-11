@@ -51,7 +51,7 @@ public class RoomDAO extends DatabaseConnection {
         return rooms;
     }
 
-    public Page<Room> findAll(int page, String search){
+    public Page<Room> findAll(int page, String search,int index){
         var result = new Page<Room>();
         final int TOTAL_ELEMENT = 6;
         result.setCurrentPage(page);
@@ -60,13 +60,25 @@ public class RoomDAO extends DatabaseConnection {
             search = "";
         }
         search = "%" + search.toLowerCase() + "%";
-        var SELECT_ALL = "SELECT r.*, group_concat(i.url) as images " +
-                "FROM rooms r JOIN images i ON r.id = i.room_id WHERE r.deleted = '0' " +
-                "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?) group by r.id  " +
-                " LIMIT ? OFFSET ?";
+        var SELECT_ALL = " ";
+        var SELECT_COUNT = " ";
+        if (index == 0){
+            SELECT_ALL += "SELECT r.*, group_concat(i.url) as images " +
+                    "FROM rooms r JOIN images i ON r.id = i.room_id WHERE r.deleted = '0' " +
+                    "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?) group by r.id  " +
+                    " LIMIT ? OFFSET ?";
+            SELECT_COUNT += "SELECT COUNT(1) cnt FROM rooms r WHERE r.deleted = '0' " +
+                    "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?)";
+        } else {
+            SELECT_ALL += "SELECT r.*, group_concat(i.url) as images " +
+                    "FROM rooms r JOIN images i ON r.id = i.room_id WHERE r.deleted = '0' and r.status = 'Available' " +
+                    "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?) group by r.id  " +
+                    " LIMIT ? OFFSET ?";
+            SELECT_COUNT += "SELECT COUNT(1) cnt FROM rooms r WHERE r.deleted = '0' and r.status = 'Available' " +
+                    "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?)";
+        }
 
-        var SELECT_COUNT = "SELECT COUNT(1) cnt FROM rooms r WHERE r.deleted = '0' " +
-                "AND (LOWER(r.name) LIKE ? OR LOWER(r.description) LIKE ?)";
+
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL)) {
             preparedStatement.setString(1, search);

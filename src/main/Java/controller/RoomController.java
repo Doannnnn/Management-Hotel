@@ -128,7 +128,7 @@ public class RoomController extends HttpServlet {
         }
         req.setAttribute("role", "ADMIN");
 //        req.setAttribute("auth",authService.findByID(Integer.parseInt(req.getParameter("id"))));
-        req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
+        req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search"),0));
         req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("rooms", roomService.findAllRoom());
         req.setAttribute("message", req.getParameter("message"));

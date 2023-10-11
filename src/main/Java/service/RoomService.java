@@ -21,8 +21,8 @@ public class RoomService {
         return roomDAO.findAllRoom();
     }
 
-    public Page<Room> getRooms(int page, String search){
-        return roomDAO.findAll(page, search);
+    public Page<Room> getRooms(int page, String search,int index){
+        return roomDAO.findAll(page, search,index);
     }
 
     public int create(Room room){
