@@ -148,6 +148,12 @@ public class RoomController extends HttpServlet {
             case "edit":
                 edit(req, resp);
                 break;
+            case "bill":
+                showBill(req, resp);
+                break;
+            case "user":
+                showUser(req, resp);
+                break;
             default:
                 showRoom(req, resp);
         }

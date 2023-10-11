@@ -169,7 +169,7 @@
             <a href="#" class="sidebar-toggler flex-shrink-0">
                 <i class="fa fa-bars"></i>
             </a>
-            <form class="d-none d-md-flex ms-4" action="/admin?page=${page.currentPage}">
+            <form class="d-none d-md-flex ms-4" action="/admin?action=user&page=${page.currentPage}" method="post">
                 <div class="input-group">
                     <input class="form-control border-0" type="text" value="${search}" name="search" style="width: 300px" placeholder="Search">
                     <button id="searchButton" class="btn btn-primary">
