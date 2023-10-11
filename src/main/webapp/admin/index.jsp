@@ -32,6 +32,9 @@
     <!-- Template Stylesheet -->
     <link href="/admin/css/style.css" rel="stylesheet">
     <link href="/admin/css/app.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
     <style>
         .select-room-detail{
             width: 100%;
@@ -302,6 +305,9 @@
         <div class="container-fluid" >
             <div id="main-container" class="card container px-6" style="height: 75vh">
                 <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT ROOM</h3>
+                <c:if test="${message != null}">
+                    <h6 class="d-none" id="message">${message}</h6>
+                </c:if>
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -313,7 +319,7 @@
                         <th style="padding-left: 30px;">DESCRIPTION</th>
                         <th style="padding-left: 22px;">IMAGE</th>
                         <th >AMENITIES</th>
-                        <th style="padding-left: 10px;">STATUS</th>
+                        <th style="padding-left: 21px;">STATUS</th>
                         <th style="padding-left: 34px;">ACTION</th>
                     </tr>
                     </thead>
@@ -328,14 +334,20 @@
                             <td>${room.description}</td>
                             <td><img src="/image${room.images[0].url}" style="width: 100px; height: auto"></td>
                             <td>${room.getStringList()}</td>
-                            <td>${room.status}</td>
+                            <td>
+                                <select name="roomStatus" class="form-control room-status" style="width: 80%" onchange="updateRoomStatus(this)" data-room-id="${room.id}">
+                                    <option value="Available" ${room.status == 'Available' ? 'selected' : ''}>Available</option>
+                                    <option value="Reserved" ${room.status == 'Reserved' ? 'selected' : ''}>Reserved</option>
+                                    <option value="Occupied" ${room.status == 'Occupied' ? 'selected' : ''}>Occupied</option>
+                                </select>
+                            </td>
                             <td>
                                 <div class="text-right">
                                     <a href="/admin?action=edit&id=${room.id}" class="icon-link">
                                         <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
                                     <a href="/admin?action=delete&id=${room.id}" class="icon-link" onclick="return confirmDelete()">
-                                        <i class="fas fa-trash-alt"  style="font-size: 24px; margin-left: 20px"></i>
+                                        <i class="fas fa-trash-alt" style="font-size: 24px; margin-left: 20px; color: red;"></i>
                                     </a>
                                 </div>
                             </td>
@@ -394,7 +406,7 @@
 </div>
 
 <!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/admin/lib/chart/chart.min.js"></script>
 <script src="/admin/lib/easing/easing.min.js"></script>
@@ -408,9 +420,79 @@
 <script src="/admin/js/main.js"></script>
 
 <script>
+    const message = document.getElementById('message');
+    if (message !== null && message.innerHTML) {
+        toastr.success(message.innerHTML);
+    }
+
     function confirmDelete() {
         return confirm("Bạn có chắc chắn muốn xóa?");
     }
+
+    async function updateRoomStatus(select) {
+        // Lấy id và status mới
+        const roomId = select.dataset.roomId;
+        const newStatus = select.value;
+
+        // Disable select để tránh thay đổi nhiều lần
+        select.disabled = true;
+
+        try {
+            // Gửi request lên server để cập nhật
+            const response = await fetch('/admin?action=updateRoom&id=' + roomId + '&status=' + newStatus);
+
+            // Kiểm tra response có ok không
+            if (!response.ok) {
+                throw new Error('Update failed');
+            }
+
+            // Cập nhật thành công, hiển thị thông báo sử dụng toastr
+            toastr.success('Update successful');
+        } catch (error) {
+            // Hiển thị lỗi cho người dùng bằng toastr với type là 'error'
+            toastr.error(error.message, 'Error');
+        } finally {
+            // Mở khóa select để cho phép thay đổi tiếp
+            select.disabled = false;
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy tất cả các select dropdown
+        const selects = document.querySelectorAll('.room-status');
+
+        // Hàm để xử lý sự kiện thay đổi select option
+        function handleSelectChange(event) {
+            const select = event.target;
+            const value = select.value;
+
+            // Xóa các lớp CSS và màu nền trước khi cập nhật
+            select.classList.remove('status-available', 'status-reserved', 'status-occupied');
+
+            if (value === 'Available') {
+                select.classList.add('status-available');
+                select.style.backgroundColor = '#7cfbb9';
+            } else if (value === 'Reserved') {
+                select.classList.add('status-reserved');
+                select.style.backgroundColor = '#ffff86';
+            } else if (value === 'Occupied') {
+                select.classList.add('status-occupied');
+                select.style.backgroundColor = '#f6a4b0';
+            }
+        }
+
+        // Gắn sự kiện change cho mỗi select dropdown
+        selects.forEach(select => {
+            select.addEventListener('change', handleSelectChange);
+        });
+
+        // Gọi hàm handleSelectChange khi trang web được tải
+        selects.forEach(select => {
+            handleSelectChange({ target: select });
+        });
+    });
+
 </script>
 <script>
     $(document).ready(function () {

@@ -11,7 +11,7 @@ import java.util.List;
 public class ImageDAO extends DatabaseConnection {
 
     public void create(List<Image> images, int roomId){
-        String CREATE = "INSERT INTO images (`url`, `room_id`) VALUES (?, ?)";
+        String CREATE = "INSERT INTO `images` (`url`, `room_id`) VALUES (?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE)) {
             for(Image image : images) {
@@ -25,7 +25,7 @@ public class ImageDAO extends DatabaseConnection {
     }
 
     public void delete(int id){
-        String DELETE_IMAGE_ROOM = "DELETE FROM images WHERE (`room_id` = ?)";
+        String DELETE_IMAGE_ROOM = "DELETE FROM `images` WHERE (`room_id` = ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_IMAGE_ROOM)) {
             preparedStatement.setInt(1,id);

@@ -33,6 +33,9 @@
     <link href="/admin/css/style.css" rel="stylesheet">
     <link href="/admin/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -176,7 +179,7 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                         <img class="rounded-circle me-lg-2" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
-                        <span class="d-none d-lg-inline-flex">{auth.name}</span>
+                        <span class="d-none d-lg-inline-flex">${auth.name}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                         <a href="#" class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="${auth.id}"  >Information</a>
@@ -230,6 +233,9 @@
         <div class="container-fluid" >
             <div id="main-container" class="card container px-6" style="height: 80vh">
                 <h3 class="text-center" style="margin: 1.5rem">MANAGEMENT BILL</h3>
+                <c:if test="${message != null}">
+                    <h6 class="d-none" id="message">${message}</h6>
+                </c:if>
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -255,17 +261,17 @@
                             <td style="padding-left: 32px;">${bill.booking.numberRoom}</td>
                             <td>${bill.totalAmount}</td>
                             <td>
-                                <select name="billStatus" class="form-control" style="width: 70%" onchange="updateBillStatus(this)" data-bill-id="${bill.id}">
-                                    <option value="Pending" class="${bill.statusBill == 'Pending' ? 'bill-status-pending' : ''}" ${bill.statusBill == 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="Processing" class="${bill.statusBill == 'Processing' ? 'bill-status-processing' : ''}" ${bill.statusBill == 'Processing' ? 'selected' : ''}>Processing</option>
-                                    <option value="Completed" class="${bill.statusBill == 'Completed' ? 'bill-status-completed' : ''}" ${bill.statusBill == 'Completed' ? 'selected' : ''}>Completed</option>
-                                    <option value="Cancelled" class="${bill.statusBill == 'Cancelled' ? 'bill-status-cancelled' : ''}" ${bill.statusBill == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                <select name="billStatus" class="form-control bill-status" style="width: 70%" onchange="updateBillStatus(this)" data-bill-id="${bill.id}">
+                                    <option value="Pending" ${bill.statusBill == 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Processing" ${bill.statusBill == 'Processing' ? 'selected' : ''}>Processing</option>
+                                    <option value="Completed" ${bill.statusBill == 'Completed' ? 'selected' : ''}>Completed</option>
+                                    <option value="Cancelled" ${bill.statusBill == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                                 </select>
                             </td>
                             <td>
                                 <div class="text-right" style="margin-left: 15px">
                                     <a href="" class="icon-link detail-btn" data-bs-toggle="modal" data-bs-target="#billDetailModal${bill.id}" data-bill-id="${bill.id}">
-                                        <i class="fas fa-info-circle" style="font-size: 30px; margin-left: 20px; text-decoration: none;"></i>
+                                        <i class="fas fa-edit" style="font-size: 26px; margin-left: 20px; text-decoration: none;"></i>
                                     </a>
                                 </div>
                             </td>
@@ -391,7 +397,7 @@
 </div>
 
 <!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/admin/lib/chart/chart.min.js"></script>
 <script src="/admin/lib/easing/easing.min.js"></script>
@@ -404,13 +410,51 @@
 <!-- Template Javascript -->
 <script src="/admin/js/main.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy tất cả các select dropdown
+        const selects = document.querySelectorAll('.bill-status');
+        // Hàm để xử lý sự kiện thay đổi select option
+        function handleSelectChange(event) {
+            const select = event.target;
+            const value = select.value;
+            select.classList.remove('status-pending', 'status-processing', 'status-completed', 'status-cancelled');
+            if (value === 'Pending') {
+                select.classList.add('status-pending');
+                select.style.backgroundColor = '#7cf5f2';
+            } else if (value === 'Processing') {
+                select.classList.add('status-processing');
+                select.style.backgroundColor = '#ffff86';
+            } else if (value === 'Completed') {
+                select.classList.add('status-completed');
+                select.style.backgroundColor = '#7cfbb9';
+            } else if (value === 'Cancelled') {
+                select.classList.add('status-cancelled');
+                select.style.backgroundColor = '#f6a4b0';
+            }
+        }
+        // Gắn sự kiện change cho mỗi select dropdown
+        selects.forEach(select => {
+            select.addEventListener('change', handleSelectChange);
+        });
+        // Gọi hàm handleSelectChange khi trang web được tải
+        selects.forEach(select => {
+            handleSelectChange({ target: select });
+        });
+    });
+
+</script>
+<script>
+    const message = document.getElementById('message');
+    if (message !== null && message.innerHTML) {
+        toastr.success(message.innerHTML);
+    }
+
     function confirmDelete() {
         return confirm("Bạn có chắc chắn muốn xóa?");
     }
 
     // Hàm xử lý sự kiện thay đổi select
     async function updateBillStatus(select) {
-
         // Lấy id và status mới
         const billId = select.dataset.billId;
         const newStatus = select.value;
@@ -419,26 +463,23 @@
         select.disabled = true;
 
         try {
-
             // Gửi request lên server để cập nhật
             const response = await fetch('/admin?action=updateBill&id=' + billId + '&status=' + newStatus);
 
             // Kiểm tra response có ok không
-            if(!response.ok) {
-                throw new Error('Cập nhật không thành công');
+            if (!response.ok) {
+                throw new Error('Update failed');
             }
 
-            // Cập nhật thành công, báo cho người dùng
-            alert('Cập nhật trạng thái bill thành công');
-
+            // Cập nhật thành công, hiển thị thông báo sử dụng toastr
+            toastr.success('Update successful');
         } catch (error) {
-            // Hiển thị lỗi cho người dùng
-            alert(error.message);
+            // Hiển thị lỗi cho người dùng bằng toastr với type là 'error'
+            toastr.error(error.message, 'Error');
         } finally {
             // Mở khóa select để cho phép thay đổi tiếp
             select.disabled = false;
         }
-
     }
 
 </script>

@@ -71,7 +71,7 @@
             </a>
             <div class="d-flex align-items-center ms-4 mb-4">
                 <div class="position-relative">
-                    <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                    <img class="rounded-circle" src="../hotel/img/room/avatar/${auth.img}" alt="" style="width: 40px; height: 40px;">
                     <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                 </div>
                 <div class="ms-3">
@@ -246,10 +246,11 @@
         <!-- Table Start -->
         <div class="container">
             <h3 class="text-center" style="margin: 1.5rem">EDIT ROOM</h3>
-            <form action="admin?action=edit&id=${room.id}" method="post" enctype="multipart/form-data">
+            <form action="admin?action=edit&id=${room.id}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" value="${room.name}" required>
+                    <div id="name-error" class="text-danger" style="margin: 5px"></div>
                 </div>
                 <div class="mb-3">
                     <label for="roomClass" class="form-label">RoomClass</label>
@@ -269,7 +270,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="price" name="price" value="${room.price}" required>
+                    <input type="number" class="form-control" id="price" name="price" value="${room.price}" required min="0">
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
@@ -277,7 +278,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="img" class="form-label">Image</label>
-                    <input type="file" class="form-control" id="img" name="img" accept="image/*" multiple>
+                    <input type="file" class="form-control" id="img" name="img" accept="image/*" multiple required>
                     <div id="image-preview"></div>
                 </div>
                 <div class="mb-3">
@@ -286,6 +287,7 @@
                         <input type="checkbox" style="transform: scale(1.3); margin-left: 21px;" name="selectedAmenities" value="${amenity}" id="${amenity}" ${room.amenities.contains(amenity) ? 'checked' : ''}>
                         <label style="margin-left: 5px" for="${amenity}">${amenity}</label>
                     </c:forEach>
+                        <div id="error-message" class="text-danger" style="margin: 5px"></div>
                 </div>
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>

@@ -323,7 +323,7 @@
                                         <i class="fas fa-edit" style="font-size: 24px; margin-left: 20px"></i>
                                     </a>
                                     <a href="#" class="icon-link" onclick="return confirmDelete()">
-                                        <i class="fas fa-trash-alt"  style="font-size: 24px; margin-left: 20px"></i>
+                                        <i class="fas fa-trash-alt"  style="font-size: 24px; margin-left: 20px; color: red;"></i>
                                     </a>
                                 </div>
                             </td>

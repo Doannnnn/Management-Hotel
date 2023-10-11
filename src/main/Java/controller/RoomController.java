@@ -54,9 +54,19 @@ public class RoomController extends HttpServlet {
             case "updateBill":
                 updateBill(req, resp);
                 break;
+            case "updateRoom":
+                updateRoom(req, resp);
+                break;
             default:
                 showRoom(req, resp);
         }
+    }
+
+    private void updateRoom(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        EStatus eStatus = EStatus.valueOf(req.getParameter("status"));
+        roomService.updateStatus(id, eStatus);
+        req.getRequestDispatcher("admin/").forward(req,resp);
     }
 
     private void updateBill(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -91,7 +101,7 @@ public class RoomController extends HttpServlet {
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         roomService.delete(req);
-        resp.sendRedirect("/admin");
+        resp.sendRedirect("/admin?message=Deleted");
     }
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -121,6 +131,7 @@ public class RoomController extends HttpServlet {
         req.setAttribute("page", roomService.getRooms(Integer.parseInt(pageString), req.getParameter("search")));
         req.setAttribute("search", req.getParameter("search"));
         req.setAttribute("rooms", roomService.findAllRoom());
+        req.setAttribute("message", req.getParameter("message"));
         req.getRequestDispatcher("admin/index.jsp").forward(req,resp);
     }
 
@@ -159,7 +170,7 @@ public class RoomController extends HttpServlet {
             if(!fileName.isEmpty()){
                 fileName = new File(fileName).getName();
 
-                if (!fileName.isEmpty() && part.getContentType().startsWith("image/")) {
+                if (!fileName.isEmpty() && (part.getContentType().startsWith("image/")) || part.getContentType().contains("application/octet-stream")) {
                     fileName = new File(fileName).getName();
                     part.write(pathProjectImage + File.separator + fileName);
                     String dbImageUrl = File.separator + fileName;
@@ -193,7 +204,7 @@ public class RoomController extends HttpServlet {
         room.setStatus(status);
         roomService.update(room);
         imageService.create(imageList, id);
-        resp.sendRedirect("/admin");
+        resp.sendRedirect("/admin?message=Updated");
     }
 
     private void create(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -244,7 +255,7 @@ public class RoomController extends HttpServlet {
         room.setStatus(status);
         int roomId = roomService.create(room);
         imageService.create(imageList, roomId);
-        resp.sendRedirect("/admin");
+        resp.sendRedirect("/admin?message=Created");
     }
     @Override
     public void init() throws ServletException {

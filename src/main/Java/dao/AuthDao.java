@@ -19,7 +19,7 @@ public class AuthDao extends DatabaseConnection {
 
     public List<Auth> getAllAuth(){
         List<Auth> results = new ArrayList<>();
-        final String query = "SELECT * FROM `quanlykhachsan`.`user`";
+        final String query = "SELECT * FROM `user`";
         try {
             Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -240,7 +240,7 @@ public class AuthDao extends DatabaseConnection {
             search = "";
         }
         search = "%" + search.toLowerCase() + "%";
-        var SELECT_ALL = "SELECT u.id, img, u.name, email, phone, address, r.name role \n" +
+        var SELECT_ALL = "SELECT u.id, img, u.name, email, phone, address, r.name role " +
                 "FROM user u JOIN roles r ON u.role_id = r.id WHERE (LOWER(u.name) LIKE ? OR LOWER(u.email) LIKE ?) GROUP BY u.id, img, u.name, email, phone, address, r.name   LIMIT ? OFFSET ?";
 
         var SELECT_COUNT = "SELECT COUNT(1) cnt FROM user u " +

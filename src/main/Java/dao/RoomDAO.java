@@ -204,5 +204,15 @@ public class RoomDAO extends DatabaseConnection {
         }
     }
 
-
+    public void updateStatus(int id, EStatus status){
+        String UPDATE_STATUS_ROOM = "UPDATE `rooms` SET `status` = ? WHERE (`id` = ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_ROOM)) {
+            preparedStatement.setString(1, String.valueOf(status));
+            preparedStatement.setInt(2, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
