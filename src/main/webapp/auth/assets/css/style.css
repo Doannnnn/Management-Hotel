@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #f6f5f7;
+    background-image:url(/auth/assets/R.jpg);
     display: flex;
     justify-content: center;
     align-items: center;
