@@ -4,6 +4,7 @@ package controller;
 import dao.AuthDao;
 import model.Auth;
 import model.Role;
+import model.Room;
 import service.AuthService;
 import service.RoleService;
 
@@ -101,12 +102,18 @@ public class AuthController extends HttpServlet {
 
     private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String role = getRoleFromSomewhere(req);
+        String password = getPasswordFromSomewhere(req);
         Part part = req.getPart("img");
         int id = Integer.parseInt(req.getParameter("id"));
-        Auth auth = getAuthRequest(req, part,id);
+        Auth auth =getAuthRequest(req, part,id);
         authService.update(auth,id);
         HttpSession session = req.getSession();
-        session.setAttribute("auth",auth);
+        Auth user = (Auth) session.getAttribute("auth");
+        user.setName(req.getParameter("name"));
+        user.setEmail(req.getParameter("email"));
+        user.setPhone(req.getParameter("phone"));
+        user.setAddress(req.getParameter("address"));
+        session.setAttribute("auth",user);
         if (role.equals("ADMIN")) {
             resp.sendRedirect(req.getContextPath() + "/admin" );
         } else if (role.equals("USER")) {
@@ -130,6 +137,10 @@ public class AuthController extends HttpServlet {
     private String getRoleFromSomewhere(HttpServletRequest req) {
         HttpSession session = req.getSession();
         return (String) session.getAttribute("role");
+    }
+    private String getPasswordFromSomewhere(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        return (String) session.getAttribute("password");
     }
 
     private void handleImageUpload(Part part, String filePath) throws IOException {

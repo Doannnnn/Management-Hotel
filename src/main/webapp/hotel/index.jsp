@@ -800,7 +800,7 @@
         var checkInDayMonth = checkInDate.getDate() + '-' + (checkInDate.getMonth() + 1);
         var checkOutDayMonth = checkOutDate.getDate() + '-' + (checkOutDate.getMonth() + 1);
 
-        if (checkOutDate <= checkInDate || checkOutDate.getDate() - checkInDate.getDate() <= 1) {
+        if (checkOutDate <= checkInDate || checkOutDate.getDate() - checkInDate.getDate() <= 0) {
             alert('Ngày "Check Out" không hợp lệ. Vui lòng chọn ngày khác.');
             document.getElementById('date-out').value = '';
             return false;
