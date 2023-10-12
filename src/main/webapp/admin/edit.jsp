@@ -298,6 +298,7 @@
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">UPDATE</button>
+                <a href="/admin" class="btn btn-danger">Cancel</a>
             </form>
         </div>
 
