@@ -16,11 +16,11 @@ public class HotelFilter implements Filter {
         HttpSession session = ((HttpServletRequest)request).getSession();
         Auth auth = (Auth) session.getAttribute("auth");
         if(auth == null){
-            ((HttpServletResponse)response).sendRedirect("/auth?message=You_need_Login");
+            ((HttpServletResponse)response).sendRedirect("/auth?message=You need Login");
             return;
         }
         if((!auth.getRole().getName().equalsIgnoreCase("USER")&&!auth.getRole().getName().equalsIgnoreCase("ADMIN"))){
-            ((HttpServletResponse)response).sendRedirect("/auth?message=You_need_Login");
+            ((HttpServletResponse)response).sendRedirect("/auth?message=You need Login");
             return;
         }
         chain.doFilter(request, response);

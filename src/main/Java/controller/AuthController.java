@@ -190,7 +190,6 @@ public class AuthController extends HttpServlet {
     }
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
         req.setAttribute("message", req.getParameter("message"));
         authService.login(req, resp);
     }
