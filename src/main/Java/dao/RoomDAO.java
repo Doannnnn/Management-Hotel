@@ -125,7 +125,7 @@ public class RoomDAO extends DatabaseConnection {
 
     public int create(Room room){
         String CREATE = "INSERT INTO rooms (`name`, `roomclass`, `type`, `price`, `description`, `amenities`, `status`) VALUES (?, ?, ?, ?, ?, ?, ?);";
-        String SELECT_MAX_ID = "SELECT MAX(id) as max_id FROM `case3`.`rooms`";
+        String SELECT_MAX_ID = "SELECT MAX(id) as max_id FROM `rooms`";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE)) {
             preparedStatement.setString(1, room.getName());

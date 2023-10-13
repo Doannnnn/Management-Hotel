@@ -168,7 +168,7 @@ public class RoomController extends HttpServlet {
         BigDecimal price = new BigDecimal(req.getParameter("price"));
         String description = req.getParameter("description");
         String pathServerImage = getServletContext().getRealPath("/") + "image";
-        String pathProjectImage  = "D:\\Management-Hotel\\src\\main\\webapp\\image";
+        String pathProjectImage  = "E:\\Management-Hotel\\src\\main\\webapp\\image";
         List<Image> imageList = new ArrayList<>();
         for (Part part : req.getParts()) {
             String fileName = extractFileName(part);
@@ -220,7 +220,7 @@ public class RoomController extends HttpServlet {
         BigDecimal price = new BigDecimal(req.getParameter("price"));
         String description = req.getParameter("description");
         String pathServerImage = getServletContext().getRealPath("/") + "image";
-        String pathProjectImage  = "D:\\Management-Hotel\\src\\main\\webapp\\image";
+        String pathProjectImage  = "E:\\Management-Hotel\\src\\main\\webapp\\image";
         List<Image> imageList = new ArrayList<>();
         for (Part part : req.getParts()) {
             String fileName = extractFileName(part);

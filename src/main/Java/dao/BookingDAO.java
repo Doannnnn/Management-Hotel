@@ -17,7 +17,7 @@ public class BookingDAO extends DatabaseConnection{
         String SELECT_BOOKING_BY_ID = "SELECT b.*, u.img AS img, u.`name` AS name, u.phone AS phone, u.address AS address, u.email AS email\n" +
                 "FROM bookings b\n" +
                 "JOIN `user` u ON b.user_id = u.id\n" +
-                "WHERE u.id = ? \n" +
+                "WHERE u.id = ? AND b.deleted = 0 \n" +
                 "AND b.id = (SELECT MAX(bk.id)\n" +
                 "            FROM  bookings bk \n" +
                 "            WHERE bk.user_id = ?);";
@@ -43,6 +43,7 @@ public class BookingDAO extends DatabaseConnection{
         return null;
     }
 
+
     public void create(Booking booking){
         String CREATE_BOOKING = "INSERT INTO bookings (`check_in`, `check_out`, `number_guests`, `number_room`, `user_id`) VALUES (?, ?, ?, ?, ?);";
         try (Connection connection = getConnection();
@@ -58,7 +59,7 @@ public class BookingDAO extends DatabaseConnection{
         }
     }
     public void delete(int id){
-        String DELETE_BOOKING = "DELETE FROM bookings WHERE (`user_id` = ?)";
+        String DELETE_BOOKING = "UPDATE `bookings` SET `deleted` = 1 WHERE (`user_id` = ?);";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOKING)) {
             preparedStatement.setInt(1,id);

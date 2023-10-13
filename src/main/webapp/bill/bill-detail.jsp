@@ -246,7 +246,7 @@
                     </div>
                     <div class="owl-carousel owl-theme">
                         <c:forEach var="img" items="${room.images}">
-                            <img class="owl-lazy" data-src="../hotel/img/room/${img.url}" alt=""
+                            <img class="owl-lazy" data-src="/image${img.url}" alt=""
                                  style="width: 100%; height: 100%;">
                         </c:forEach>
                     </div>
@@ -316,8 +316,8 @@
                         <div class="d-flex flex-column dis">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <p>Subtotal</p>
-                                <p id="roomfee" data-price="${room.price * book.numberRoom}"><span
-                                        class="fas fa-dollar-sign"></span>${room.price * book.numberRoom} $</p>
+                                <p id="roomfee" data-price="${room.price * book.numberRoom*book.getDate()}"><span
+                                        class="fas fa-dollar-sign"></span>${room.price * book.numberRoom*book.getDate()} $</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <p>Product</p>

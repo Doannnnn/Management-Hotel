@@ -16,7 +16,7 @@ import java.io.*;
 
 @WebServlet(name = "authController", urlPatterns = "/auth")
 @MultipartConfig(
-        location = "D:\\Management-Hotel\\src\\main\\webapp\\hotel\\img\\room\\avatar",
+        location = "E:\\Management-Hotel\\src\\main\\webapp\\hotel\\img\\room\\avatar",
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 50, // 50MB
         maxRequestSize = 1024 * 1024 * 50) // 50MB
@@ -148,7 +148,7 @@ public class AuthController extends HttpServlet {
     }
     private Auth getAuthRequest(HttpServletRequest req, Part part, int id) throws IOException {
         String img = extractFileName(part);
-        String imagePath = "D:\\Management-Hotel\\src\\main\\webapp\\hotel\\img\\room\\avatar";
+        String imagePath = "E:\\Management-Hotel\\src\\main\\webapp\\hotel\\img\\room\\avatar";
         String filePath = imagePath + File.separator + img;
         if (img != null && !img.isEmpty()) {
             handleImageUpload(part, filePath);

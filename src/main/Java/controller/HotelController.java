@@ -55,6 +55,7 @@ public class HotelController extends HttpServlet {
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idUser = Integer.parseInt(req.getParameter("id"));
         int idRoom = Integer.parseInt(req.getParameter("idRoom"));
+        bookingService.delete(idUser);
         resp.sendRedirect("/hotel-page?action=room-detail-booking-null&message=Change Successful&idroom=" + idRoom + "&iduser=" + idUser);
     }
 

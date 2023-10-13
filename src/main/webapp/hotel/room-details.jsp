@@ -348,7 +348,7 @@
                             <div class="rdt-right">
                                 <div class="rating" id="starRating" data-score="${star}">
                                 </div>
-                                <a href="/hotel-page?action=bill-detail&idroom=${room.id}&id=${auth.id}">Booking Now</a>
+                                <c:if test="${book != null}"><a href="/hotel-page?action=bill-detail&idroom=${room.id}&id=${auth.id}">Booking Now</a></c:if>
                             </div>
                         </div>
                         <h2>${room.price}$<span>/Pernight</span></h2>
